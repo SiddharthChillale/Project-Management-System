@@ -1,0 +1,1 @@
+1. Since I'm using node version ^20, I do not need the dotenv package to read env files.
