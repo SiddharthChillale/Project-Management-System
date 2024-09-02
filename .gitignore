@@ -1,1 +1,10 @@
+# Node modules
 node_modules/*
+
+#Environment vars 
+.env
+*.env
+env/*
+
+# Linting
+

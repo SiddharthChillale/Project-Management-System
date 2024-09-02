@@ -1,17 +1,13 @@
+/*
+This file exists to divert api requests to latest api-version. 
+In case of damage control, change api-version to the most stable one.
+*/
 
-// import process from "dotenv";
+import app from './api/v1/app.js';
 
-import express from "express";
-
-
-const app = express();
 const port = process.env.PORT;
-
-app.get("/", (req, res)=>{
-    console.log("Hit the home route");
-    res.send("hello world");
-})
+const base_url = process.env.BASE_URL;
 
 app.listen(port, ()=>{
-    console.log(`Listening on http://localhost:${port}`);
+    console.log(`Listening on ${base_url}:${port}`);
 })
