@@ -1,4 +1,4 @@
-import app from "../api/v1/app.js";
+import app from "../app.js";
 import request from "supertest";
 
 describe("GET /", () => {
@@ -9,4 +9,7 @@ describe("GET /", () => {
             .expect("Content-Type", /json/)
             .expect(200, done);
     });
+
+    it.todo("should return with code 200");
+    it.todo("should throw error if response body is not HTML.");
 });
