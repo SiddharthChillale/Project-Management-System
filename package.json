@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watchAll --verbose",
     "dev": "nodemon --env-file=src/.env src/index.js"
   },
   "keywords": [],
@@ -13,11 +13,29 @@
   "description": "",
   "nodemonConfig": {
     "verbose": true,
-    "ignore": ["**/test/**", "**/docs/**", "README.md"]
+    "ignore": [
+      "**/test/**",
+      "**/docs/**",
+      "README.md"
+    ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
+  },
+  "prettier":{
+    "tabWidth": 4
   },
   "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
+    "@types/jest": "^29.5.12",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.4",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "supertest": "^7.0.0"
   },
   "dependencies": {
     "express": "^4.19.2",
