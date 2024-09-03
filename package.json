@@ -25,7 +25,9 @@
     }
   },
   "prettier":{
-    "tabWidth": 4
+    "tabWidth": 4,
+    "semi": true
+
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

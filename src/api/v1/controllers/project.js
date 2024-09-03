@@ -1,4 +1,4 @@
-import projects from "../models/project.js";
+import projects from "../../../test/mock/project.js";
 let _projects = projects;
 
 export function getProjects(req, res, err) {
