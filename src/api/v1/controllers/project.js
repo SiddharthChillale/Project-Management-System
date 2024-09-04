@@ -1,32 +1,34 @@
 import projects from "../../../test/mock/project.js";
+import ProjectDB from "../services/project.js";
 let _projects = projects;
 
-export function getProjects(req, res, err) {
+export async function getProjects(req, res, err) {
     let body = {};
     if (req.query?.id) {
-        if (req.query.id > 5) {
-            res.status(404).send({});
-            return;
-        }
-        body = _projects[req.query.id];
-    } else body = _projects;
+        body = await ProjectDB.get({ id: req.query.id });
+    } else {
+        body = await ProjectDB.getAll();
+    }
     res.status(200).send(body);
 }
 
-export function addProject(req, res, err) {
+export async function addProject(req, res, err) {
     const project = req.body.project;
-    _projects.push(project);
-    const pid = { project_id: _projects.length - 1 };
+    const pid = await ProjectDB.add(project);
     res.status(200).send(pid);
 }
 
-export function editProject(req, res, err) {
-    const pid = req.query.id;
-    _projects[pid] = req.body.project;
-    res.status(200).send(_projects[pid]);
+export async function editProject(req, res, err) {
+    const data = {
+        id: req.query.id,
+        project: req.body.project
+    };
+    const status = await ProjectDB.updateOne(data);
+    res.status(200).send(status);
 }
 
-export function deleteProject(req, res, err) {
+export async function deleteProject(req, res, err) {
     const pid = req.query.id;
-    res.status(200).send({ id: pid });
+    const status = await ProjectDB.delete({ id: pid });
+    res.status(200).send(status);
 }
