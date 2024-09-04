@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Projects {
+  id                 String   @id @default(cuid()) //primary key is collision-avoidant unique identifier.
+  name               String   @db.VarChar(255) // project name
+  description        String?
+  teamSize           Int?
+  publicAttachments  Json? // public by default 
+  privateAttachments Json? // seen only by few individuals
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
