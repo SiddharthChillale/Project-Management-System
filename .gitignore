@@ -9,4 +9,5 @@ node_modules
 env/*
 
 # Editor
-.vscode
+.vscode/settings.json
+
