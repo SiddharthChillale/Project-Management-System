@@ -8,17 +8,19 @@ async function dbGetAllProjects() {
     return [response, error];
 }
 
-async function dbGetOneProject(data) {
+export async function dbGetOneProject(data) {
     const goFindUnique = goStyleExceptionWrapper(prisma.projects.findUnique);
-    const [response, error] = await goFindUnique({
+    let [response, error] = await goFindUnique({
         where: {
-            id: data
+            id: data.id
         }
     });
 
-    if (response == null) {
-        //if broken here, it's an error thrown by developer. This particular error is for object not existing in db.
-        throw Error(`ProjectDoesnotExist id:${data}`);
+    if (response == null && !error) {
+        //if broken here, it's an error thrown by developer.
+        error = Error(`Project of id: ${data.id} does not exist`, {
+            cause: { code: "ProjectDoesNotExist" }
+        });
     }
 
     return [response, error];
