@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "test": "jest --watchAll --verbose",
-    "dev": "nodemon --env-file=src/.env src/index.js"
+    "test-debug": "jest --verbose",
+    "dev": "nodemon --env-file=src/.env src/index.js",
+    "debug": "node --env-file=src/.env src/index.js"
   },
   "keywords": [],
   "author": "",

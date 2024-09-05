@@ -28,6 +28,7 @@ if (process.env.DB_MIGRATE == "YES") {
 app.use(helmet());
 
 // default route to root
+// TODO: Put it in its own controller
 app.get("/", (req, res) => {
     // res.sendFile(path.join(__rootdir, "public", "index.html"));
     res.send({}).status(200);
