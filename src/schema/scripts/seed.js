@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 // import ProjectDB from "../../api/v1/services/project";
-import mock from "../../test/mock/project.js";
+import mock from "../../../test/mock_data/project.js";
 
 // FILL TABLE-PROJECTS
 async function main() {

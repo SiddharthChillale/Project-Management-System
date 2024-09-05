@@ -1,8 +1,8 @@
-import app from "../app.js";
+import app from "../../../src/app.js";
 import request from "supertest";
 
 describe("GET /", () => {
-    it("returns json object with code 200", (done) => {
+    it("should pass if reponse code is 200 and a JSON object", (done) => {
         request(app)
             .get("/")
             .set("Accept", "application/json")
@@ -10,6 +10,5 @@ describe("GET /", () => {
             .expect(200, done);
     });
 
-    it.todo("should return with code 200");
     it.todo("should throw error if response body is not HTML.");
 });
