@@ -1,56 +1,72 @@
 import { PrismaClient } from "@prisma/client";
+import { goStyleExceptionWrapper } from "../utils/exceptionHandler";
 const prisma = new PrismaClient();
 
 async function dbGetAllProjects() {
-    const projects = await prisma.projects.findMany();
-    return projects;
+    const goFindAll = goStyleExceptionWrapper(prisma.projects.findMany);
+    const [response, error] = await goFindAll();
+    return [response, error];
 }
 
 async function dbGetOneProject(data) {
-    const project = await prisma.projects.findUnique({
+    const goFindUnique = goStyleExceptionWrapper(prisma.projects.findUnique);
+    const [response, error] = await goFindUnique({
         where: {
-            id: data.id
+            id: data
         }
     });
-    return project;
+
+    if (response == null) {
+        //if broken here, it's an error thrown by developer. This particular error is for object not existing in db.
+        throw Error(`ProjectDoesnotExist id:${data}`);
+    }
+
+    return [response, error];
 }
 
 async function dbAddProject(data) {
     // data is a projectObject. validation middleware handles format validation of data object.
-    const addedProject = await prisma.projects.create({
+    const goCreate = goStyleExceptionWrapper(prisma.projects.create);
+    const [response, error] = await goCreate({
         select: {
             id: true,
             name: true
         },
         data: data
     });
-    return addedProject;
+    return [response, error];
 }
 
 async function dbUpdateProject(data) {
-    const status = await prisma.projects.update({
+    const goUpdate = goStyleExceptionWrapper(prisma.projects.update);
+
+    const [response, error] = await goUpdate({
         where: {
             id: data.id
         },
         data: data.project
     });
-    return status;
+    return [response, error];
 }
 
 async function dbDeleteProject(data) {
-    const status = await prisma.projects.delete({
+    const goDelete = goStyleExceptionWrapper(prisma.projects.delete);
+
+    const [response, error] = await goDelete({
         where: {
             id: data.id
         }
     });
-    return status;
+    return [response, error];
 }
-const ProjectDB = {
-    add: dbAddProject,
+
+const ProjectService = {
+    getOne: dbGetOneProject,
     getAll: dbGetAllProjects,
-    get: dbGetOneProject,
+    addOne: dbAddProject,
     updateOne: dbUpdateProject,
-    delete: dbDeleteProject
+    deleteOne: dbDeleteProject
 };
 
-export default ProjectDB;
+export const getOneProject = dbGetOneProject;
+export default ProjectService;
