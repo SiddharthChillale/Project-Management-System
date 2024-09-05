@@ -4,15 +4,51 @@ import {
     getProjects,
     addProject,
     editProject,
-    deleteProject,
+    deleteProject
 } from "../controllers/project.js";
+import { checkProjectExistenceById } from "../middleware/project.js";
 
-router.get("/", getProjects);
+router.get(
+    "/",
+    [
+        //validateToken, validateHeaders,
+    ],
+    getProjects
+);
 
-router.post("/", addProject);
+router.get(
+    "/:id",
+    [
+        //validateToken, validateHeaders
+    ],
+    getProjects
+);
 
-router.put("/", editProject);
+router.post(
+    "/",
+    [
+        // validateToken, validateHeaders, validateRequestFor(body)({"project": {"name"}})
+    ],
+    addProject
+);
 
-router.delete("/", deleteProject);
+router.put(
+    "/:id",
+    [
+        //validateToken, validateHeaders, validateRequestFor(body)({"project"})
+
+        checkProjectExistenceById
+    ],
+    editProject
+);
+
+router.delete(
+    "/:id",
+    [
+        //validateToken, validateHeaders, validateProjectExistence("id")
+        checkProjectExistenceById
+    ],
+    deleteProject
+);
 
 export default router;
