@@ -7,6 +7,8 @@ import {
     deleteProject
 } from "../controllers/project.js";
 import { checkProjectExistenceById } from "../middleware/project.js";
+import validateRequestBody from "../middleware/validation.js";
+import project_schema from "../middleware/project_schema.js";
 
 router.get(
     "/",
@@ -28,6 +30,7 @@ router.post(
     "/",
     [
         // validateToken, validateHeaders, validateRequestFor(body)({"project": {"name"}})
+        validateRequestBody(project_schema)
     ],
     addProject
 );
@@ -36,7 +39,7 @@ router.put(
     "/:id",
     [
         //validateToken, validateHeaders, validateRequestFor(body)({"project"})
-
+        validateRequestBody(project_schema),
         checkProjectExistenceById
     ],
     editProject
@@ -45,7 +48,7 @@ router.put(
 router.delete(
     "/:id",
     [
-        //validateToken, validateHeaders, validateProjectExistence("id")
+        //validateToken, validateHeaders,
         checkProjectExistenceById
     ],
     deleteProject

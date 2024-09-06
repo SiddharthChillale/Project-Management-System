@@ -21,19 +21,14 @@
       "README.md"
     ]
   },
-  "jest": {
-    "transform": {
-      "^.+\\.[t|j]sx?$": "babel-jest"
-    }
-  },
   "prettier": {
     "tabWidth": 4,
     "semi": true,
     "trailingComma": "none"
   },
-  "prisma":{
+  "prisma": {
     "schema": "./src/schema/schema.prisma",
-    "seed":"node ./src/schema/scripts/seed.js"
+    "seed": "node ./src/schema/scripts/seed.js"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -48,6 +43,8 @@
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "express": "^4.19.2",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0"
