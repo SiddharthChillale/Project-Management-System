@@ -9,7 +9,7 @@ datasource db {
 
 model Projects {
   id                 String   @id @default(cuid()) //primary key is collision-avoidant unique identifier.
-  name               String   @db.VarChar(255) // project name
+  name               String?  @default("Default Project") @db.VarChar(255) // project name
   description        String?
   teamSize           Int?
   publicAttachments  Json? // public by default 
