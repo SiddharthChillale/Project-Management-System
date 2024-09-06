@@ -1,24 +1,5 @@
 import ajv_instance from "./ajv_instance.js";
 
-const project_schema = {
-    type: "object",
-    properties: {
-        name: { type: "string" },
-        teamSize: { type: "integer" },
-        description: { type: "string" },
-        privateAttachments: {
-            type: "array",
-            items: { type: "object" }
-        },
-        publicAttachments: {
-            type: "array",
-            items: { type: "object" }
-        }
-    },
-    required: ["name"],
-    additionalProperties: { type: "string", format: "date-time" }
-};
-
 const body_project_schema = {
     type: "object",
     properties: {

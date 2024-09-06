@@ -8,7 +8,7 @@ async function dbGetAllProjects() {
     return [response, error];
 }
 
-export async function dbGetOneProject(data) {
+async function dbGetOneProject(data) {
     const goFindUnique = goStyleExceptionWrapper(prisma.projects.findUnique);
     let [response, error] = await goFindUnique({
         where: {
