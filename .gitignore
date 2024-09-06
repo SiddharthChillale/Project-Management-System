@@ -11,3 +11,6 @@ env/*
 # Editor
 .vscode/settings.json
 
+#test coverage files
+coverage/*
+coverage
