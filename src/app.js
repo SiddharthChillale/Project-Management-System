@@ -6,6 +6,7 @@ import helmet from "helmet";
 const app = express();
 // const __rootdir = path.join(import.meta.dirname, "../");
 
+import rootRouter from "./api/v1/routes/index.js";
 import projectRouter from "./api/v1/routes/project.js";
 
 // inform express how to deal with static files
@@ -19,20 +20,13 @@ if (process.env.NODE_ENV !== "test") {
 // inform express about content-type to be json
 app.use(express.json());
 
-// handle db migration
-if (process.env.DB_MIGRATE == "YES") {
-    console.log("DB migrated \n");
-}
+// handle db migration = done via command line
 
 // handle request headers + CORS
 app.use(helmet());
 
 // default route to root
-// TODO: Put it in its own controller
-app.get("/", (req, res) => {
-    // res.sendFile(path.join(__rootdir, "public", "index.html"));
-    res.send({}).status(200);
-});
+app.get("/", rootRouter);
 
 // all other routes
 app.use("/projects", projectRouter);
