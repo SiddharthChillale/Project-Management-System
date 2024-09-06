@@ -20,6 +20,7 @@ model Projects {
 
 model Users {
   id         String   @id @default(uuid())
+  userName   String
   firstName  String
   lastName   String?
   email      String   @unique
