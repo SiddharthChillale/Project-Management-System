@@ -8,6 +8,7 @@ const app = express();
 
 import rootRouter from "./api/v1/routes/index.js";
 import projectRouter from "./api/v1/routes/project.js";
+import userRouter from "./api/v1/routes/user.js";
 
 // inform express how to deal with static files
 // inform express how to deal with filesystem
@@ -31,6 +32,7 @@ app.get("/", rootRouter);
 // all other routes
 app.use("/projects", projectRouter);
 
+app.use("/users", userRouter);
 // error handling routes
 
 export default app;
