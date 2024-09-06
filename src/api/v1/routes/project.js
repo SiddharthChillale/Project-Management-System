@@ -13,7 +13,7 @@ import project_schema from "../middleware/project_schema.js";
 router.get(
     "/",
     [
-        //validateToken, validateHeaders,
+        //validateHeaders, authentication, checkAuthorization
     ],
     getProjects
 );
@@ -21,7 +21,7 @@ router.get(
 router.get(
     "/:id",
     [
-        //validateToken, validateHeaders
+        //validateHeaders, authentication,  checkAuthorization
     ],
     getProjects
 );
@@ -29,7 +29,7 @@ router.get(
 router.post(
     "/",
     [
-        // validateToken, validateHeaders, validateRequestFor(body)({"project": {"name"}})
+        //validateHeaders, authentication, checkAuthorization
         validateRequestBody(project_schema)
     ],
     addProject
@@ -38,7 +38,7 @@ router.post(
 router.put(
     "/:id",
     [
-        //validateToken, validateHeaders, validateRequestFor(body)({"project"})
+        //validateHeaders, authentication, checkAuthorization
         validateRequestBody(project_schema),
         checkProjectExistenceById
     ],
@@ -48,7 +48,7 @@ router.put(
 router.delete(
     "/:id",
     [
-        //validateToken, validateHeaders,
+        //authentication, validateHeaders, checkAuthorization
         checkProjectExistenceById
     ],
     deleteProject

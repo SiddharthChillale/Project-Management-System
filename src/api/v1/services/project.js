@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { goStyleExceptionWrapper } from "../utils/exceptionHandler";
+import { goStyleExceptionWrapper } from "../utils/exceptionHandler.js";
 const prisma = new PrismaClient();
 
 async function dbGetAllProjects() {

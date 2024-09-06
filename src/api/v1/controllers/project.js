@@ -24,6 +24,8 @@ export async function getProjects(req, res, err) {
 }
 
 export async function addProject(req, res, err) {
+    // should be able to add multiple projects since the URI doesn't specify operation on one particular project
+    // TODO: allow insertion of multiple projects.
     const project = req.body.project;
     const [pid, error] = await ProjectService.addOne(project);
     if (error) {
