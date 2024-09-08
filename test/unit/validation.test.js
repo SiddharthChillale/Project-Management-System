@@ -1,6 +1,6 @@
 import checkForSchema from "../../src/api/v1/middlewares/schemaValidation.middlewares";
 import aproject_schema from "../../src/api/v1/ajv_schemas/project.schema.js";
-import mock from "../mock_data/project";
+import mock from "../mock_data/project.mock.js";
 
 const mockReq = (body) => ({ body });
 const mockRes = () => {

@@ -1,7 +1,7 @@
 import request from "supertest";
 
 import app from "../../../src/app.js";
-import mock from "../../mock_data/project.js";
+import mock from "../../mock_data/project.mock.js";
 
 const projectObject = {
     name: expect.any(String),
