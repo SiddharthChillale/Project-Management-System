@@ -6,8 +6,8 @@ import {
     editProject,
     deleteProject
 } from "../controllers/project.controllers.js";
-import { checkProjectExistenceById } from "../middleware/project.js";
-import validateRequestBody from "../middleware/validation.js";
+import { checkProjectExistenceById } from "../middlewares/projectValidation.middlewares.js";
+import checkForSchema from "../middlewares/schemaValidation.middlewares.js";
 import project_schema from "../ajv_schemas/project.schema.js";
 
 router
@@ -21,7 +21,7 @@ router
     .post(
         [
             //validateHeaders, authentication, checkAuthorization
-            validateRequestBody(project_schema)
+            checkForSchema(project_schema)
         ],
         addProject
     );
@@ -37,7 +37,7 @@ router
     .put(
         [
             //validateHeaders, authentication, checkAuthorization
-            validateRequestBody(project_schema),
+            checkForSchema(project_schema),
             checkProjectExistenceById
         ],
         editProject

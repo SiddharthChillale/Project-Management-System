@@ -1,4 +1,4 @@
-import validateRequestBody from "../../src/api/v1/middleware/validation";
+import checkForSchema from "../../src/api/v1/middlewares/schemaValidation.middlewares";
 import aproject_schema from "../../src/api/v1/ajv_schemas/project.schema.js";
 import mock from "../mock_data/project";
 
@@ -24,7 +24,7 @@ describe("Mandatory Fields check", () => {
         const req = mockReq({ project: mock.upd, user: "myself" });
         const res = mockRes();
 
-        const validateMiddleware = validateRequestBody(ajvCompiledMock);
+        const validateMiddleware = checkForSchema(ajvCompiledMock);
 
         // Act: Call the middleware
         validateMiddleware(req, res, mockNext);
@@ -44,7 +44,7 @@ describe("Mandatory Fields check", () => {
         const req = mockReq({ namaste: "" }); // Invalid request data
         const res = mockRes();
 
-        const validateMiddleware = validateRequestBody(ajvCompiledMock);
+        const validateMiddleware = checkForSchema(ajvCompiledMock);
 
         // Act: Call the middleware
         validateMiddleware(req, res, mockNext);
