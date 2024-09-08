@@ -11,15 +11,15 @@ export async function getProjects(req, res, err) {
 
     if (error) {
         if (error.cause?.code == "ProjectDoesNotExist") {
-            res.status(404).send(error);
+            res.status(404).json(error);
             return;
         }
 
-        res.status(500).send(error);
+        res.status(500).json(error);
         return;
     }
 
-    res.status(200).send(body);
+    res.status(200).json(body);
     return;
 }
 
@@ -29,10 +29,10 @@ export async function addProject(req, res, err) {
     const project = req.body.project;
     const [pid, error] = await ProjectService.addOne(project);
     if (error) {
-        res.status(400).send(error);
+        res.status(400).json(error);
         return;
     }
-    res.status(200).send(pid);
+    res.status(200).json(pid);
     return;
 }
 
@@ -43,10 +43,10 @@ export async function editProject(req, res, err) {
     };
     const [status, error] = await ProjectService.updateOne(data);
     if (error) {
-        res.status(400).send(error);
+        res.status(400).json(error);
         return;
     }
-    res.status(200).send(status);
+    res.status(200).json(status);
     return;
 }
 
@@ -54,9 +54,9 @@ export async function deleteProject(req, res, err) {
     const pid = req.params.id;
     const [status, error] = await ProjectService.deleteOne({ id: pid });
     if (error) {
-        res.status(400).send(error);
+        res.status(400).json(error);
         return;
     }
-    res.status(200).send(status);
+    res.status(200).json(status);
     return;
 }

@@ -57,12 +57,23 @@ describe("GET /projects/:id", () => {
 });
 
 describe("POST /projects", () => {
-    it("should throw error when request body doesn't have a projectObject", async () => {
+    it("should throw error when request body doesn't have a project", async () => {
         const response = await request(app)
             .post("/projects")
             .set("Accept", "application/json")
-            .send({ random_request_body: "bogus" })
-            .expect(400);
+            .send({ random_request_body: "bogus" });
+
+        expect(response.statusCode).toBe(400);
+        // expect(response).toMatch("No project body provided");
+    });
+
+    it("should throw error when request body has project but it is not an object", async () => {
+        const response = await request(app)
+            .post("/projects")
+            .set("Accept", "application/json")
+            .send({ project: "bogus" });
+
+        expect(response.statusCode).toBe(400);
 
         // expect(response).toMatch("No project body provided");
     });

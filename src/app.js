@@ -10,19 +10,23 @@ const app = express();
 // inform express how to deal with static files
 // inform express how to deal with filesystem
 
-// inform express about logging
+// middleware: set logging
 if (process.env.NODE_ENV !== "test") {
     app.use(morgan("dev"));
 }
 
-// inform express about content-type to be json
+// middleware: set content-type to be json
 app.use(express.json());
 
-// handle db migration = done via command line
-app.use(routes);
-// handle request headers + CORS
+// middleware: handle request headers + CORS
 app.use(helmet());
 
+app.use(routes);
+
+app.use("/", (err, req, res, next) => {
+    console.log(`Error caught after all routes: ${err}`);
+    res.status(500).json("Internal appServer Error\n");
+});
 // error handling routes
 
 export default app;
