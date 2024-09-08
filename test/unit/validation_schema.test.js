@@ -1,5 +1,5 @@
 import validateRequestBody from "../../src/api/v1/middleware/validation";
-import aproject_schema from "../../src/api/v1/middleware/project_schema";
+import aproject_schema from "../../src/api/v1/ajv_schemas/project.schema.js";
 import mock from "../mock_data/project";
 
 const mockReq = (body) => ({ body });

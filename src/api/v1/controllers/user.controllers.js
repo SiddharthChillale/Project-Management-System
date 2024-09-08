@@ -1,4 +1,4 @@
-import UserService from "../services/user.js";
+import UserService from "../services/user.services.js";
 
 export async function getUsers(req, res, err) {
     let body = {};

@@ -4,7 +4,7 @@ import {
     deleteUser,
     editUser,
     getUsers
-} from "../controllers/user.js";
+} from "../controllers/user.controllers.js";
 const router = express.Router();
 
 router.get("/", getUsers); //get all users

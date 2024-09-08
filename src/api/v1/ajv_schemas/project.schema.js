@@ -1,4 +1,4 @@
-import ajv_instance from "./ajv_instance.js";
+import ajv_instance from "./ajv.index.js";
 
 const body_project_schema = {
     type: "object",

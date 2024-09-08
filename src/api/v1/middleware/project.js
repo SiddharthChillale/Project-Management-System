@@ -1,4 +1,4 @@
-import { getOneProject } from "../services/project.js";
+import { getOneProject } from "../services/project.services.js";
 
 export async function checkProjectExistenceById(req, res, next) {
     const [response, error] = await getOneProject({ id: req.params.id });
