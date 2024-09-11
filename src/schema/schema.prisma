@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -19,13 +20,14 @@ model Projects {
 }
 
 model Users {
-  id         String   @id @default(uuid())
-  userName   String
-  firstName  String
-  lastName   String?
-  email      String   @unique
-  password   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  profilePic String?
+  id           String   @id @default(uuid())
+  userName     String   @unique @default("<None>") // possible to construct this from the part before email? abc.xyz@email.com: extract abc.xyz as username. give option to change username
+  firstName    String? // how to combine firstName and lastName to single name
+  lastName     String?
+  email        String   @unique
+  password     String   @db.VarChar(255) //make to hash it before saving into the db
+  refreshToken String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  profilePic   Json? // can be url or a localFilePath
 }
