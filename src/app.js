@@ -3,7 +3,7 @@ import path from "path";
 import morgan from "morgan";
 import helmet from "helmet";
 import routes from "./api/v1/routes/index.routes.js";
-
+import cookieParser from "cookie-parser";
 const app = express();
 // const __rootdir = path.join(import.meta.dirname, "../");
 
@@ -20,12 +20,23 @@ app.use(express.json());
 
 // middleware: handle request headers + CORS
 app.use(helmet());
-
+app.use(cookieParser());
 app.use(routes);
 
-app.use("/", (err, req, res, next) => {
-    console.log(`Error caught after all routes: ${err}`);
-    res.status(500).json("Internal appServer Error\n");
+app.use((req, res, next) => {
+    const error = new Error("Error: Not found");
+    error.status = 404;
+    next(error);
+});
+
+// 500 error middleware ...
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    });
 });
 // error handling routes
 

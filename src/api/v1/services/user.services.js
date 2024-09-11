@@ -1,58 +1,84 @@
 import { PrismaClient } from "@prisma/client";
 import { goStyleExceptionWrapper } from "../utils/wrapper.utils.js";
 
-const prisma = new PrismaClient();
-
-async function dbGetAllUsers(data) {
-    const goGetAll = goStyleExceptionWrapper(prisma.users.findMany);
-    const [result, error] = await goGetAll();
-    return [result, error];
-}
-
-async function dbGetOneUser(data) {
-    const goGetOne = goStyleExceptionWrapper(prisma.users.findUnique);
-    let [result, error] = await goGetOne({
-        where: { id: data.id }
-    });
-    if (result == null && !error) {
-        error = Error(`User of id:${data.id} does not exists`, {
-            cause: { code: "UserDoesNotExist" }
-        });
+export const prisma = new PrismaClient({
+    omit: {
+        users: {
+            password: true,
+            refreshToken: true,
+            updatedAt: true
+        }
     }
+});
+
+// const xprisma = prisma.$extends({
+//     name: "tokenizer",
+//     model:{
+//         user:{
+//             async generateAccessToken() {
+
+//             },
+//             async generaterefreshToken(){
+
+//             }
+//         }
+//     }
+// })
+
+async function dbGetAllUsers(filterClause) {
+    const goGetAll = goStyleExceptionWrapper(prisma.users.findMany);
+    const [result, error] = await goGetAll(filterClause);
     return [result, error];
 }
 
-async function dbAddUser(data) {
-    // data is a userObject. validation middleware handles format validation of data object.
+async function dbGetOneUser(filterClause) {
+    const goGetOne = goStyleExceptionWrapper(prisma.users.findUniqueOrThrow);
+
+    const [result, error] = await goGetOne(filterClause);
+    return [result, error];
+}
+async function dbGetFirstUser(filterClause) {
+    const goFindOne = goStyleExceptionWrapper(prisma.users.findFirstOrThrow);
+
+    const [result, error] = await goFindOne(filterClause);
+    return [result, error];
+}
+async function dbAddUser(email, encryptedPassword) {
+    const userName = email.split("@")[0];
     const goCreate = goStyleExceptionWrapper(prisma.users.create);
+
     const [response, error] = await goCreate({
         select: {
             id: true,
             userName: true
+        },
+        data: {
+            email: email,
+            userName: userName,
+            password: encryptedPassword
+        }
+    });
+    return [response, error];
+}
+
+async function dbUpdateUserById(id, data) {
+    const goUpdate = goStyleExceptionWrapper(prisma.users.update);
+
+    const [response, error] = await goUpdate({
+        where: {
+            id: id
         },
         data: data
     });
     return [response, error];
 }
 
-async function dbUpdateUser(data) {
-    const goUpdate = goStyleExceptionWrapper(prisma.users.update);
-
-    const [response, error] = await goUpdate({
-        where: {
-            id: data.id
-        },
-        data: data.user
-    });
-    return [response, error];
-}
-
-async function dbDeleteUser(data) {
+async function dbDeleteUserById(id) {
     const goDelete = goStyleExceptionWrapper(prisma.users.delete);
 
     const [response, error] = await goDelete({
         where: {
-            id: data.id
+            id: id
         }
     });
     return [response, error];
@@ -61,9 +87,10 @@ async function dbDeleteUser(data) {
 const UserService = {
     getOne: dbGetOneUser,
     getAll: dbGetAllUsers,
-    addOne: dbAddUser,
-    updateOne: dbUpdateUser,
-    deleteOne: dbDeleteUser
+    findOne: dbGetFirstUser,
+    updateOneById: dbUpdateUserById,
+    deleteOneById: dbDeleteUserById,
+    register: dbAddUser
 };
 
 export default UserService;

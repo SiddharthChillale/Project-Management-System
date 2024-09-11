@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "jest --watchAll --verbose",
-    "test-debug": "jest --verbose",
+    "test-debug": "jest  --verbose",
     "dev": "nodemon --env-file=src/.env src/index.js",
     "debug": "node --env-file=src/.env src/index.js"
   },
@@ -45,9 +45,11 @@
     "@prisma/client": "^5.19.1",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
+    "cookie-parser": "^1.4.6",
     "express": "^4.19.2",
     "express-validator": "^7.2.0",
     "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0"
   }
 }
