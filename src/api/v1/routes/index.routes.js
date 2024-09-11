@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/", rootHandler);
 
 // all other routes
-router.use("/projects", projectRouter);
-router.use("/users", userRouter);
+router.use("/api/v1/projects", projectRouter);
+router.use("/api/v1/users", userRouter);
 
 export default router;
