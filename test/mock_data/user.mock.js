@@ -1,62 +1,48 @@
 const users = [
     {
-        userName: "john_doe",
         email: "john.doe@example.com",
         firstName: "John",
         lastName: "Doe",
-        password: "p@ssword123",
-        profilePic: "https://example.com/images/john_doe.jpg"
+        password: "p@ssword123"
     },
     {
-        userName: "jane_smith",
         email: "jane.smith@example.com",
         firstName: "Jane",
         lastName: "Smith",
-        password: "Sm1th!Jane",
-        profilePic: "https://example.com/images/jane_smith.jpg"
+        password: "Sm1th!Jane"
     },
     {
-        userName: "alice_brown",
         email: "alice.brown@example.com",
         firstName: "Alice",
         lastName: "Brown",
-        password: "alice_321Brown",
-        profilePic: "https://example.com/images/alice_brown.jpg"
+        password: "alice_321Brown"
     },
     {
-        userName: "bob_jones",
         email: "bob.jones@example.com",
         firstName: "Bob",
         lastName: "Jones",
-        password: "b0b_jones!abc",
-        profilePic: "https://example.com/images/bob_jones.jpg"
+        password: "b0b_jones!abc"
     },
     {
-        userName: "emma_wilson",
         email: "emma.wilson@example.com",
         firstName: "Emma",
         lastName: "Wilson",
-        password: "emma_W!1lson",
-        profilePic: "https://example.com/images/emma_wilson.jpg"
+        password: "emma_W!1lson"
     }
 ];
 
 const new_user = {
-    userName: "michael_clark",
     email: "michael.clark@example.com",
     firstName: "Michael",
     lastName: "Clark",
-    password: "Cl@rk1234",
-    profilePic: "https://example.com/images/michael_clark.jpg"
+    password: "Cl@rk1234"
 };
 
 const upd_user = {
-    userName: "sophia_davis",
     email: "sophia.davis@example.com",
     firstName: "Sophia",
     lastName: "Davis",
-    password: "s0ph1a_D@vis",
-    profilePic: "https://example.com/images/sophia_davis.jpg"
+    password: "s0ph1a_D@vis"
 };
 
 const mock_user = {

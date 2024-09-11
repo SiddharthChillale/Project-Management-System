@@ -24,13 +24,11 @@ afterAll(() => {});
 describe("GET /projects", () => {
     it("should pass with response code 200 when response body array is an array of projectObjects", async () => {
         await request(app)
-            .get("/projects")
+            .get("/api/v1/projects")
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)
             .expect(200);
     });
-
-    it.todo("should throw error when db connection is unsuccessful");
 });
 
 describe("GET /projects/:id", () => {
@@ -53,13 +51,12 @@ describe("GET /projects/:id", () => {
             .set("Accept", "application/json")
             .expect(404);
     });
-    it.todo("should throw error when db connection is unsuccessful");
 });
 
 describe("POST /projects", () => {
     it("should throw error when request body doesn't have a project", async () => {
         const response = await request(app)
-            .post("/projects")
+            .post("/api/v1/projects")
             .set("Accept", "application/json")
             .send({ random_request_body: "bogus" });
 
@@ -69,7 +66,7 @@ describe("POST /projects", () => {
 
     it("should throw error when request body has project but it is not an object", async () => {
         const response = await request(app)
-            .post("/projects")
+            .post("/api/v1/projects")
             .set("Accept", "application/json")
             .send({ project: "bogus" });
 
@@ -78,11 +75,10 @@ describe("POST /projects", () => {
         // expect(response).toMatch("No project body provided");
     });
 
-    it.todo("should throw error when db connection is not successful");
-    it.todo("should throw error when insertion is not successful");
+    it.todo("should throw error when insertion is not reflected in the db");
     it("Should pass with code 200 when response body has project Id of inserted project.", async () => {
         const response = await request(app)
-            .post("/projects")
+            .post("/api/v1/projects")
             .set("Accept", "application/json")
             .send({ project: mock.new })
             .expect("Content-Type", /json/)
@@ -95,51 +91,53 @@ describe("PUT /projects/:id", () => {
     it("should throw error when request body is missing project object to update with", async () => {
         const legit_prj_id = "000abc";
         await request(app)
-            .put(`/projects/${legit_prj_id}`)
+            .put(`/api/v1/projects/${legit_prj_id}`)
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)
             .expect(400);
     });
 
-    it.todo("should throw error when db connection is not successful");
     it("should throw error when requested project is not present in db", async () => {
         const bogus_prj_id = "000abc";
         await request(app)
-            .put(`/projects/${bogus_prj_id}`)
+            .put(`/api/v1/projects/${bogus_prj_id}`)
             .set("Accept", "application/json")
             .send({ project: mock.upd })
             .expect(404);
     });
-    it.todo("should throw error when updation is not successful");
-    it.skip("should return with code 200 when update is successful.", async () => {
-        const legit_prj_id = "000abc"; // TODO: find legit id
-        const response = await request(app)
-            .put(`/projects/${legit_prj_id}`)
-            .set("Accept", "application/json")
-            .send({ project: mock.upd });
+    it.todo(
+        "should throw error when updated project is not reflected in the db"
+    );
+    // it.skip("should return with code 200 when update is successful.", async () => {
+    //     const legit_prj_id = "000abc"; // TODO: find legit id
+    //     const response = await request(app)
+    //         .put(`/projects/${legit_prj_id}`)
+    //         .set("Accept", "application/json")
+    //         .send({ project: mock.upd });
 
-        expect(response.statusCode).toBe(200);
-        expect(response).toMatchObject({ id: expect.any(String) });
-        // expect(response).toMatchSnapshot(mock.upd);
-    });
+    //     expect(response.statusCode).toBe(200);
+    //     expect(response).toMatchObject({ id: expect.any(String) });
+    //     // expect(response).toMatchSnapshot(mock.upd);
+    // });
 });
 
 describe("DELETE /projects/:id", () => {
-    it.todo("should throw error when db connection is not successful.");
     it("should throw error when requested project is not found", async () => {
         const bogus_prj_id = "000abc";
         await request(app)
-            .delete(`/projects/${bogus_prj_id}`)
+            .delete(`/api/v1/projects/${bogus_prj_id}`)
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)
             .expect(404);
     });
-    it.todo("should throw error when deletion is not succesful.");
+    it.todo(
+        "should throw error when deleted project is able to be retrieved after deletion."
+    );
 
-    it.skip("should pass with response code 200 when deletion is successful.", async () => {
+    it.skip("should pass with response code 200 when deleted project is reflected in the db.", async () => {
         const legit_prj_id = "000abc"; // TODO: figure  out how to get legit prj id
         await request(app)
-            .delete(`/projects/${legit_prj_id}`)
+            .delete(`/api/v1/projects/${legit_prj_id}`)
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)
             .expect(200);
