@@ -9,6 +9,7 @@ datasource db {
 }
 
 enum Role {
+    PUBLIC
     DEVELOPER
     PROJECT_MANAGER
     REVIEWER
@@ -36,18 +37,18 @@ model Project {
     teamSize           Int?
     publicAttachments  Json? // public by default 
     privateAttachments Json? // seen only by few individuals
-    isArchived         Boolean
+    isArchived         Boolean  @default(false)
     createdAt          DateTime @default(now())
     updatedAt          DateTime @updatedAt
 
     eventId Int?
-    events  Event? @relation(fields: [eventId], references: [id])
+    events  Event? @relation(fields: [eventId], references: [id], onDelete: SetNull)
 
     courseId Int?
-    courses  Course? @relation(fields: [courseId], references: [id])
+    courses  Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
-    ProjectAssociation ProjectAssociation[]
-    Ratings            Ratings[]
+    ProjectAssociations ProjectAssociation[]
+    Ratings             Ratings[]
 }
 
 model User {
@@ -66,67 +67,83 @@ model User {
 
 model UserProfile {
     id         Int     @id @default(autoincrement())
-    userName   String  @unique @default("<None>") // possible to construct this from the part before email? abc.xyz@email.com: extract abc.xyz as username. give option to change username
+    userName   String  @default("<None>") // possible to construct this from the part before email? abc.xyz@email.com: extract abc.xyz as username. give option to change username
     profilePic Json? // can be url or a localFilePath
     isActive   Boolean @default(true)
-    email      String
-    role       Role
-    userId     Int // foreign key
-    user       User    @relation(fields: [userId], references: [id])
+    email      String // this must be same as email from the User with id "userId"
+    role       Role    @default(PUBLIC)
 
-    ProjectAssociation ProjectAssociation[]
-    Ratings            Ratings[]
+    userId Int // foreign key
+    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    ProjectAssociations ProjectAssociation[]
+    Ratings             Ratings[]
+    Events              Event[]
+    Courses             Course[]
 }
 
 model Event {
-    id        Int       @id @default(autoincrement())
+    id        Int      @id @default(autoincrement())
     name      String
     startDate DateTime
     endDate   DateTime
-    Projects  Project[]
+
+    Projects     Project[]
+    UserProfiles UserProfile[]
 }
 
 model Course {
-    id           Int        @id @default(autoincrement())
-    name         String
-    code         String
-    semester     String
-    year         Int
+    id       Int    @id @default(autoincrement())
+    name     String
+    code     String
+    semester String
+    year     Int
+
     departmentId Int
-    department   Department @relation(fields: [departmentId], references: [id])
+    department   Department @relation(fields: [departmentId], references: [id], onDelete: SetDefault)
+
     Projects     Project[]
+    UserProfiles UserProfile[]
 }
 
 model Department {
-    id      Int      @id @default(autoincrement())
-    name    String
+    id   Int    @id @default(autoincrement())
+    name String @default("deleted")
+
     Courses Course[]
 }
 
 model ProjectAssociation {
-    id            Int         @id @default(autoincrement())
-    status        Status
-    createdAt     DateTime
-    userRole      Role
+    id        Int      @id @default(autoincrement())
+    status    Status
+    userRole  Role     @default(PUBLIC)
+    createdAt DateTime @default(now())
+    updateAt  DateTime @updatedAt
+
     userProfileId Int
     userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
-    projectId     Int
-    project       Project     @relation(fields: [projectId], references: [id])
+
+    projectId Int
+    project   Project @relation(fields: [projectId], references: [id])
 }
 
 model ScoreCategory {
-    id      Int       @id @default(autoincrement())
-    name    String    @unique
+    id   Int    @id @default(autoincrement())
+    name String @default("unkown") // business logic, can be "default" or "unknown" or anything else.
+
     Ratings Ratings[]
 }
 
 model Ratings {
-    id              Int           @id @default(autoincrement())
-    score           Int           @default(0)
-    scoreCategory   ScoreCategory @relation(fields: [scoreCategoryId], references: [id])
-    scoreCategoryId Int
-    project         Project       @relation(fields: [projectId], references: [id])
-    projectId       Int
-    userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
-    userProfileId   Int
+    id    Int @id @default(autoincrement())
+    score Int @default(0)
+
+    scoreCategory   ScoreCategory @relation(fields: [scoreCategoryId], references: [id], onDelete: SetDefault)
+    scoreCategoryId Int // A rating should exist without a score
+
+    project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade) // If a project is removed, keeping it's score doesn't make sense.
+    projectId Int
+
+    userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+    userProfileId Int // this is to store the project-"reviewer" relation. Other roles+project relation is not satisfied in this table
 }
