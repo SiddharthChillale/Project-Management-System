@@ -71,7 +71,7 @@ model UserProfile {
     profilePic Json? // can be url or a localFilePath
     isActive   Boolean @default(true)
     email      String // this must be same as email from the User with id "userId"
-    role       Role    @default(PUBLIC)
+    role       Role
 
     userId Int // foreign key
     user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -116,7 +116,7 @@ model Department {
 model ProjectAssociation {
     id        Int      @id @default(autoincrement())
     status    Status
-    userRole  Role     @default(PUBLIC)
+    userRole  Role
     createdAt DateTime @default(now())
     updateAt  DateTime @updatedAt
 
