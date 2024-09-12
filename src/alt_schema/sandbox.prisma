@@ -42,10 +42,10 @@ model Project {
     updatedAt          DateTime @updatedAt
 
     eventId Int?
-    events  Event? @relation(fields: [eventId], references: [id], onDelete: SetNull)
+    event   Event? @relation(fields: [eventId], references: [id], onDelete: SetNull)
 
     courseId Int?
-    courses  Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+    course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
     ProjectAssociations ProjectAssociation[]
     Ratings             Ratings[]
@@ -66,15 +66,15 @@ model User {
 }
 
 model UserProfile {
-    id         Int     @id @default(autoincrement())
-    userName   String  @default("<None>") // possible to construct this from the part before email? abc.xyz@email.com: extract abc.xyz as username. give option to change username
-    profilePic Json? // can be url or a localFilePath
-    isActive   Boolean @default(true)
-    email      String // this must be same as email from the User with id "userId"
-    role       Role
-
-    userId Int // foreign key
-    user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id          Int     @id @default(autoincrement())
+    userName    String  @default("<None>") // possible to construct this from the part before email? abc.xyz@email.com: extract abc.xyz as username. give option to change username
+    profilePic  Json? // can be url or a localFilePath
+    isActive    Boolean @default(true)
+    email       String // this must be same as email from the User with id "userId"
+    role        Role
+    socialLinks Json?
+    userId      Int // foreign key
+    user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     ProjectAssociations ProjectAssociation[]
     Ratings             Ratings[]
