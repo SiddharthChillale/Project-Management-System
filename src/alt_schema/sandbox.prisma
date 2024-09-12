@@ -23,7 +23,7 @@ enum Semester {
     SUMMER
 }
 
-enum status {
+enum Status {
     IS_FINAL
     IS_WAITLIST
     IS_ENROLL
@@ -47,6 +47,7 @@ model Project {
     courses  Course? @relation(fields: [courseId], references: [id])
 
     ProjectAssociation ProjectAssociation[]
+    Ratings            Ratings[]
 }
 
 model User {
@@ -74,6 +75,7 @@ model UserProfile {
     user       User    @relation(fields: [userId], references: [id])
 
     ProjectAssociation ProjectAssociation[]
+    Ratings            Ratings[]
 }
 
 model Event {
@@ -103,11 +105,28 @@ model Department {
 
 model ProjectAssociation {
     id            Int         @id @default(autoincrement())
-    status        status
+    status        Status
     createdAt     DateTime
     userRole      Role
     userProfileId Int
     userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
     projectId     Int
     project       Project     @relation(fields: [projectId], references: [id])
+}
+
+model ScoreCategory {
+    id      Int       @id @default(autoincrement())
+    name    String    @unique
+    Ratings Ratings[]
+}
+
+model Ratings {
+    id              Int           @id @default(autoincrement())
+    score           Int           @default(0)
+    scoreCategory   ScoreCategory @relation(fields: [scoreCategoryId], references: [id])
+    scoreCategoryId Int
+    project         Project       @relation(fields: [projectId], references: [id])
+    projectId       Int
+    userProfile     UserProfile   @relation(fields: [userProfileId], references: [id])
+    userProfileId   Int
 }
