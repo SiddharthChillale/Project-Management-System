@@ -34,7 +34,7 @@ router
     .get(
         [
             //validateHeaders, authentication,  checkAuthorization
-            param("id").notEmpty().isAlphanumeric(),
+            param("id").notEmpty().toInt(),
             validate
         ],
         getProjects
@@ -42,7 +42,7 @@ router
     .put(
         [
             //validateHeaders, authentication, checkAuthorization
-            param("id").notEmpty().isAlphanumeric(),
+            param("id").notEmpty().toInt(),
             body("project").isObject(),
             validate,
             checkForSchema(project_schema),
@@ -53,7 +53,7 @@ router
     .delete(
         [
             //authentication, validateHeaders, checkAuthorization
-            param("id").notEmpty().isAlphanumeric(),
+            param("id").notEmpty().toInt(),
             validate,
             checkProjectExistenceById
         ],

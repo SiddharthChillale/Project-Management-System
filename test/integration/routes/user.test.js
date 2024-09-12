@@ -32,7 +32,7 @@ describe("Protected routes", () => {
         });
         afterAll(async () => {
             try {
-                await prisma.users.delete({
+                await prisma.user.delete({
                     where: {
                         email: userObj.email
                     }
@@ -107,7 +107,7 @@ describe("Login /login", () => {
         await UserService.register(userObj.email, hashedPassword);
     });
     afterAll(async () => {
-        await prisma.users.delete({
+        await prisma.user.delete({
             where: {
                 email: userObj.email
             }
@@ -227,7 +227,7 @@ describe("Logout /logout", () => {
     afterAll(async () => {
         cookies = undefined;
         try {
-            await prisma.users.delete({
+            await prisma.user.delete({
                 where: {
                     email: userObj.email
                 }
@@ -288,7 +288,7 @@ describe("Register /register", () => {
 
         expect(response2.statusCode).toBe(400);
         try {
-            await prisma.users.delete({
+            await prisma.user.delete({
                 where: { email: "register.user@example.com" }
             });
         } catch (err) {
@@ -304,7 +304,7 @@ describe("Register /register", () => {
                 password: "abcd"
             });
         try {
-            await prisma.users.delete({
+            await prisma.user.delete({
                 where: { email: "register.user@example.com" }
             });
         } catch (err) {

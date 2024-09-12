@@ -33,7 +33,7 @@ describe("GET /projects", () => {
 
 describe("GET /projects/:id", () => {
     it.skip("should pass with response code 200 when response body JSON object matches projectObject", async () => {
-        const legit_prj_id = "000abc"; // TODO: legit project id
+        const legit_prj_id = 2; // TODO: legit project id
         await request(app)
             .get(`/projects/${legit_prj_id}`)
             .set("Accept", "application/json")
@@ -45,7 +45,7 @@ describe("GET /projects/:id", () => {
     });
 
     it("should throw error 404 when requested project is not found", async () => {
-        const bogus_prj_id = "000abc";
+        const bogus_prj_id = 999;
         await request(app)
             .get(`/projects/${bogus_prj_id}`)
             .set("Accept", "application/json")
@@ -83,22 +83,22 @@ describe("POST /projects", () => {
             .send({ project: mock.new })
             .expect("Content-Type", /json/)
             .expect(200);
-        expect(response.body).toHaveProperty("id", expect.any(String));
+        expect(response.body).toHaveProperty("id", expect.any(Number));
     });
 });
 
 describe("PUT /projects/:id", () => {
     it("should throw error when request body is missing project object to update with", async () => {
-        const legit_prj_id = "000abc";
+        const prj_id = 2;
         await request(app)
-            .put(`/api/v1/projects/${legit_prj_id}`)
+            .put(`/api/v1/projects/${prj_id}`)
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)
             .expect(400);
     });
 
     it("should throw error when requested project is not present in db", async () => {
-        const bogus_prj_id = "000abc";
+        const bogus_prj_id = 999;
         await request(app)
             .put(`/api/v1/projects/${bogus_prj_id}`)
             .set("Accept", "application/json")
@@ -123,7 +123,7 @@ describe("PUT /projects/:id", () => {
 
 describe("DELETE /projects/:id", () => {
     it("should throw error when requested project is not found", async () => {
-        const bogus_prj_id = "000abc";
+        const bogus_prj_id = 999;
         await request(app)
             .delete(`/api/v1/projects/${bogus_prj_id}`)
             .set("Accept", "application/json")
@@ -135,7 +135,7 @@ describe("DELETE /projects/:id", () => {
     );
 
     it.skip("should pass with response code 200 when deleted project is reflected in the db.", async () => {
-        const legit_prj_id = "000abc"; // TODO: figure  out how to get legit prj id
+        const legit_prj_id = 2; // TODO: figure  out how to get legit prj id
         await request(app)
             .delete(`/api/v1/projects/${legit_prj_id}`)
             .set("Accept", "application/json")

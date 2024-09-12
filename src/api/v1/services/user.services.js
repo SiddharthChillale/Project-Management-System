@@ -3,7 +3,7 @@ import { goStyleExceptionWrapper } from "../utils/wrapper.utils.js";
 
 export const prisma = new PrismaClient({
     omit: {
-        users: {
+        user: {
             password: true,
             refreshToken: true,
             updatedAt: true
@@ -26,26 +26,26 @@ export const prisma = new PrismaClient({
 // })
 
 async function dbGetAllUsers(filterClause) {
-    const goGetAll = goStyleExceptionWrapper(prisma.users.findMany);
+    const goGetAll = goStyleExceptionWrapper(prisma.user.findMany);
     const [result, error] = await goGetAll(filterClause);
     return [result, error];
 }
 
 async function dbGetOneUser(filterClause) {
-    const goGetOne = goStyleExceptionWrapper(prisma.users.findUniqueOrThrow);
+    const goGetOne = goStyleExceptionWrapper(prisma.user.findUniqueOrThrow);
 
     const [result, error] = await goGetOne(filterClause);
     return [result, error];
 }
 async function dbGetFirstUser(filterClause) {
-    const goFindOne = goStyleExceptionWrapper(prisma.users.findFirstOrThrow);
+    const goFindOne = goStyleExceptionWrapper(prisma.user.findFirstOrThrow);
 
     const [result, error] = await goFindOne(filterClause);
     return [result, error];
 }
 async function dbAddUser(email, encryptedPassword) {
     const userName = email.split("@")[0];
-    const goCreate = goStyleExceptionWrapper(prisma.users.create);
+    const goCreate = goStyleExceptionWrapper(prisma.user.create);
 
     const [response, error] = await goCreate({
         select: {
@@ -62,7 +62,7 @@ async function dbAddUser(email, encryptedPassword) {
 }
 
 async function dbUpdateUserById(id, data) {
-    const goUpdate = goStyleExceptionWrapper(prisma.users.update);
+    const goUpdate = goStyleExceptionWrapper(prisma.user.update);
 
     const [response, error] = await goUpdate({
         where: {
@@ -74,7 +74,7 @@ async function dbUpdateUserById(id, data) {
 }
 
 async function dbDeleteUserById(id) {
-    const goDelete = goStyleExceptionWrapper(prisma.users.delete);
+    const goDelete = goStyleExceptionWrapper(prisma.user.delete);
 
     const [response, error] = await goDelete({
         where: {

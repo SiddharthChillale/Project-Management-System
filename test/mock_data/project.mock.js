@@ -106,48 +106,28 @@ const new_project = {
     description:
         "A pioneering effort to create a high-performance web framework.",
     teamSize: 4,
-    createdAt: "2024-07-12T08:25:00Z",
-    privateAttachments: [
-        {
-            link: "http://example.com/private-doc2",
-            image: "http://example.com/private-screenshot1.png"
-        },
-        {
-            audio: "http://example.com/private-audio2.mp3"
-        }
-    ],
-    publicAttachments: [
-        {
-            video: "http://example.com/public-framework-presentation.mp4"
-        },
-        {
-            gif: "http://example.com/public-feature-demo.gif"
-        }
-    ]
+    privateAttachments: {
+        link: "http://example.com/private-doc2",
+        image: "http://example.com/private-screenshot1.png"
+    },
+    publicAttachments: {
+        video: "http://example.com/public-framework-presentation.mp4",
+        gif: "http://example.com/public-feature-demo.gif"
+    }
 };
 const update_project = {
     name: "Project Eta",
     description:
         "An ambitious project to optimize enterprise-level data analytics.",
     teamSize: 10,
-    createdAt: "2024-09-18T15:40:00Z",
-    privateAttachments: [
-        {
-            image: "http://example.com/private-analytics-diagram.png",
-            folder: "http://example.com/private-analytics-data"
-        },
-        {
-            video: "http://example.com/private-demo2.mp4"
-        }
-    ],
-    publicAttachments: [
-        {
-            link: "http://example.com/public-analytics-tool"
-        },
-        {
-            audio: "http://example.com/public-podcast2.mp3"
-        }
-    ]
+    privateAttachments: {
+        link: "http://example.com/private-doc2",
+        image: "http://example.com/private-screenshot1.png"
+    },
+    publicAttachments: {
+        video: "http://example.com/public-framework-presentation.mp4",
+        gif: "http://example.com/public-feature-demo.gif"
+    }
 };
 const mock = {
     all: projects,

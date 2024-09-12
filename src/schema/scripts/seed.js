@@ -7,11 +7,11 @@ import mock_user from "../../../test/mock_data/user.mock.js";
 // FILL TABLE-PROJECTS
 async function main() {
     console.log("Deleting all previous data");
-    await prisma.projects.deleteMany();
-    await prisma.users.deleteMany();
+    await prisma.project.deleteMany();
+    await prisma.user.deleteMany();
 
     console.log("Filling table projects with mock data");
-    prisma.projects
+    prisma.project
         .createManyAndReturn({ data: mock.all })
         .then((results) =>
             results.forEach((result) =>
@@ -20,7 +20,7 @@ async function main() {
         )
         .catch((err) => console.log(err));
 
-    prisma.users
+    prisma.user
         .createManyAndReturn({ data: mock_user.all })
         .then((results) =>
             results.forEach((result) =>

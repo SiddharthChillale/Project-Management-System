@@ -3,13 +3,13 @@ import { goStyleExceptionWrapper } from "../utils/wrapper.utils.js";
 const prisma = new PrismaClient();
 
 async function dbGetAllProjects() {
-    const goFindAll = goStyleExceptionWrapper(prisma.projects.findMany);
+    const goFindAll = goStyleExceptionWrapper(prisma.project.findMany);
     const [response, error] = await goFindAll();
     return [response, error];
 }
 
 async function dbGetOneProject(data) {
-    const goFindUnique = goStyleExceptionWrapper(prisma.projects.findUnique);
+    const goFindUnique = goStyleExceptionWrapper(prisma.project.findUnique);
     let [response, error] = await goFindUnique({
         where: {
             id: data.id
@@ -28,7 +28,7 @@ async function dbGetOneProject(data) {
 
 async function dbAddProject(data) {
     // data is a projectObject. validation middleware handles format validation of data object.
-    const goCreate = goStyleExceptionWrapper(prisma.projects.create);
+    const goCreate = goStyleExceptionWrapper(prisma.project.create);
     const [response, error] = await goCreate({
         select: {
             id: true,
@@ -40,7 +40,7 @@ async function dbAddProject(data) {
 }
 
 async function dbUpdateProject(data) {
-    const goUpdate = goStyleExceptionWrapper(prisma.projects.update);
+    const goUpdate = goStyleExceptionWrapper(prisma.project.update);
 
     const [response, error] = await goUpdate({
         where: {
@@ -52,7 +52,7 @@ async function dbUpdateProject(data) {
 }
 
 async function dbDeleteProject(data) {
-    const goDelete = goStyleExceptionWrapper(prisma.projects.delete);
+    const goDelete = goStyleExceptionWrapper(prisma.project.delete);
 
     const [response, error] = await goDelete({
         where: {
