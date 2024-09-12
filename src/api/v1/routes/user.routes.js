@@ -6,6 +6,7 @@ import {
     getUserProfileOne,
     loginHandler,
     logoutHandler,
+    refreshAccessToken,
     registerHandler,
     verifyTokenAndAttachUser
 } from "../controllers/user.controllers.js";
@@ -36,7 +37,7 @@ router
         validate,
         registerHandler
     );
-// router.route("/refresh-token").post();
+router.route("/refresh-token").post(refreshAccessToken);
 
 router.route("/logout").post(verifyTokenAndAttachUser, logoutHandler);
 

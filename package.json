@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "jest --watchAll --verbose",
-    "test-debug": "jest  --verbose",
+    "test-debug": "jest -i -w=1 --verbose",
     "dev": "nodemon --env-file=src/.env src/index.js",
     "debug": "node --env-file=src/.env src/index.js"
   },
@@ -21,14 +21,17 @@
       "README.md"
     ]
   },
+  "jest": {
+    "verbose": true
+  },
   "prettier": {
     "tabWidth": 4,
     "semi": true,
     "trailingComma": "none"
   },
   "prisma": {
-    "schema": "./src/schema/schema.prisma",
-    "seed": "node ./src/schema/scripts/seed.js"
+    "schema": "./src/alt_schema/sandbox.prisma",
+    "seed": "node ./src/alt_schema/scripts/seed.js"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

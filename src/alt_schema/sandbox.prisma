@@ -1,0 +1,113 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["omitApi"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("SANDBOX_DATABASE_URL")
+}
+
+enum Role {
+    DEVELOPER
+    PROJECT_MANAGER
+    REVIEWER
+    ADMIN
+    CLIENT
+}
+
+enum Semester {
+    FALL
+    SPRING
+    WINTER
+    SUMMER
+}
+
+enum status {
+    IS_FINAL
+    IS_WAITLIST
+    IS_ENROLL
+}
+
+model Project {
+    id                 Int      @id @default(autoincrement()) //primary key is collision-avoidant unique identifier.
+    name               String?  @default("Default Project") @db.VarChar(255) // project name
+    description        String?
+    teamSize           Int?
+    publicAttachments  Json? // public by default 
+    privateAttachments Json? // seen only by few individuals
+    isArchived         Boolean
+    createdAt          DateTime @default(now())
+    updatedAt          DateTime @updatedAt
+
+    eventId Int?
+    events  Event? @relation(fields: [eventId], references: [id])
+
+    courseId Int?
+    courses  Course? @relation(fields: [courseId], references: [id])
+
+    ProjectAssociation ProjectAssociation[]
+}
+
+model User {
+    id Int @id @default(autoincrement())
+
+    email        String   @unique
+    password     String   @db.VarChar(255)
+    salt         String?
+    refreshToken String?
+    oneTimeToken String?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    UserProfiles UserProfile[]
+}
+
+model UserProfile {
+    id         Int     @id @default(autoincrement())
+    userName   String  @unique @default("<None>") // possible to construct this from the part before email? abc.xyz@email.com: extract abc.xyz as username. give option to change username
+    profilePic Json? // can be url or a localFilePath
+    isActive   Boolean @default(true)
+    email      String
+    role       Role
+    userId     Int // foreign key
+    user       User    @relation(fields: [userId], references: [id])
+
+    ProjectAssociation ProjectAssociation[]
+}
+
+model Event {
+    id        Int       @id @default(autoincrement())
+    name      String
+    startDate DateTime
+    endDate   DateTime
+    Projects  Project[]
+}
+
+model Course {
+    id           Int        @id @default(autoincrement())
+    name         String
+    code         String
+    semester     String
+    year         Int
+    departmentId Int
+    department   Department @relation(fields: [departmentId], references: [id])
+    Projects     Project[]
+}
+
+model Department {
+    id      Int      @id @default(autoincrement())
+    name    String
+    Courses Course[]
+}
+
+model ProjectAssociation {
+    id            Int         @id @default(autoincrement())
+    status        status
+    createdAt     DateTime
+    userRole      Role
+    userProfileId Int
+    userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+    projectId     Int
+    project       Project     @relation(fields: [projectId], references: [id])
+}
