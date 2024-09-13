@@ -38,7 +38,7 @@ export async function generatefakeData(xprisma) {
             email: userEmail,
             password: "root",
             salt: "salt",
-            UserProfiles: {
+            profiles: {
                 createMany: {
                     data: [
                         {
