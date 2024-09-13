@@ -47,6 +47,9 @@ model Project {
     courseId Int?
     course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
+    creator          UserProfile? @relation(fields: [creatorProfileId], references: [id])
+    creatorProfileId Int?
+
     projectAssociations ProjectAssociation[]
     ratings             Ratings[]
 }
@@ -78,18 +81,22 @@ model UserProfile {
 
     projectAssociations ProjectAssociation[]
     ratings             Ratings[]
-    events              Event[]
+    participantEvents   Event[]              @relation("participants")
     courses             Course[]
+    createdEvents       Event[]              @relation("creator")
+    createdProjects     Project[]
 }
 
 model Event {
-    id        Int      @id @default(autoincrement())
-    name      String
-    startDate DateTime
-    endDate   DateTime
+    id               Int          @id @default(autoincrement())
+    name             String
+    startDate        DateTime
+    endDate          DateTime
+    creator          UserProfile? @relation("creator", fields: [creatorProfileId], references: [id])
+    creatorProfileId Int?
 
-    projects Project[]
-    profiles UserProfile[]
+    projects     Project[]
+    participants UserProfile[] @relation("participants")
 }
 
 model Course {
