@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role, Status } from "@prisma/client";
 import { goStyleExceptionWrapper } from "../utils/wrapper.utils.js";
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
@@ -247,4 +247,12 @@ export const ProfileService = {
     findOne: dbFindFirstProfile,
     update: dbUpdateProfileById,
     delete: dbDeleteProfileById
+};
+
+export const PrismaEnums = {
+    DEVELOPER: Role.DEVELOPER,
+    CLIENT: Role.CLIENT,
+    PROJECT_MANAGER: Role.PROJECT_MANAGER,
+    REVIEWER: Role.REVIEWER,
+    ADMIN: Role.ADMIN
 };

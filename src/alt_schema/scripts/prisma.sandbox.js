@@ -1,5 +1,8 @@
 import { createUsers } from "../../api/v1/controllers/user.controllers.js";
-import { ProfileService } from "../../api/v1/services/user.services.js";
+import {
+    ProfileService,
+    PrismaEnums
+} from "../../api/v1/services/user.services.js";
 import { UserService } from "../../api/v1/services/user.services.js";
 import { faker } from "@faker-js/faker";
 
@@ -26,7 +29,7 @@ async function testBulkCreation() {
 
 async function testBulkCreationreq(role = undefined) {
     const manyUserEmails = Array.from({ length: 5 }, () => createUser());
-    const req = { body: { dataArray: manyUserEmails, role: undefined } };
+    const req = { body: { dataArray: manyUserEmails, role: role } };
     const [response, error] = await createUsers(req, null, null);
     console.log(`error: ${error}`);
     console.log(`response: ${response}`);
@@ -34,7 +37,12 @@ async function testBulkCreationreq(role = undefined) {
 
 async function main() {
     console.log("started");
-    await testBulkCreationreq();
+    const roles = { ...PrismaEnums, undef: undefined };
+    const role = faker.helpers.objectValue(roles);
+    let timenow = performance.now();
+    await testBulkCreationreq(role);
+    timenow = performance.now() - timenow;
+    console.log(`Time taken: ${timenow.toFixed(2)} milliseconds`);
     console.log("ended");
 }
 
