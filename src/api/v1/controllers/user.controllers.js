@@ -17,8 +17,81 @@ export async function getUsers(req, res, err) {
     }
     return res.status(200).json(profiles);
 }
-//TODO: create one user or nulk-users alongwith their roles
-export async function createUsers(req, res, err) {}
+
+export async function createUsers(req, res, err) {
+    const dataArray = req.body.dataArray;
+    const role = req.body.role || undefined;
+
+    let [response, error] = await UserService.createForToken(dataArray);
+    if (error) {
+        console.log(`bulk-creation error: ${error}`);
+        // return [response, error];
+        return res.status(500).json(error);
+    }
+
+    let allErrors = [];
+    let resArray = [];
+
+    if (role) {
+        for (const user of response) {
+            const [res, err] = await ProfileService.create(
+                user.email,
+                user.id,
+                role
+            );
+            if (err) {
+                allErrors.push(err);
+            }
+            resArray.push(res);
+        }
+
+        let resError = null;
+        if (allErrors.length > 0) {
+            resError = Error(
+                `profile creation error during bulk-create: ${allErrors}`
+            );
+        }
+        return res.status(200).json({
+            message: "Created Users but Profile Attachment failed.",
+            response: resArray,
+            error: resError
+        });
+        // return [resArray, resError];
+    }
+
+    return res.status(200).json({
+        message:
+            "User Creation succesfull. If role was provided, roles also created",
+        body: response
+    });
+    // return [response, error];
+}
+
+export async function createUserProfile(req, res, err) {
+    const { email, id, role } = req.body;
+
+    const [profileExists, _] = await dbFindFirstProfile({
+        where: {
+            userId: id,
+            role: role
+        }
+    });
+    if (profileExists) {
+        const error = Error(
+            `Profile with role: ${role} for user-email: ${email} already exists`
+        );
+        console.log(`${error}`);
+        return res.status(409).json(error);
+    }
+
+    const [response, error] = await ProfileService.create(email, id, role);
+    if (error) {
+        console.log(`error creating Profile for user ${email}: ${error}`);
+        return res.status(409).json(error);
+    }
+
+    return res.status(200).json(response);
+}
 
 export async function getUserProfile(req, res, err) {
     const { id, profile_id } = req.params.id;

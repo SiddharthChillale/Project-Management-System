@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { goStyleExceptionWrapper } from "../utils/wrapper.utils.js";
 import crypto from "node:crypto";
-
+import jwt from "jsonwebtoken";
+import assert from "node:assert";
 export const prisma = new PrismaClient({
     omit: {
         user: {
@@ -46,12 +47,55 @@ async function dbCreateUser(email, password) {
 
 //meant for bulk creating users, or creating individual user with oneTimeToken. can create
 //TODO
-async function dbCreateUsersForToken(dataArray, role = undefined) {
-    // dataArray is array of {email}
-    // generate random-password for each
-    // generate oneTimeToken for each email+password
-    // store tokens in array
-    // add users to user table in bulk, get all ids
+export async function generateOneTimeToken(email) {
+    // const JWTSecret = process.env.JWT_TOKEN;
+    const JWTSecret = "randtoken";
+    let ott;
+    try {
+        ott = jwt.sign({ email: email }, JWTSecret, {
+            expiresIn: "7 days"
+        });
+    } catch (error) {
+        console.log(`${error}`);
+    }
+    return ott;
+}
+
+async function dbCreateUsersForOTToken(dataArray) {
+    // dataArray is array of [{email, ...whatever else}]
+
+    let userArray = [];
+    for (const data of dataArray) {
+        const ott = await generateOneTimeToken(data.email);
+        userArray.push({ email: data.email, password: ott, oneTimeToken: ott });
+    }
+
+    assert(userArray.length != 0, "email array empty");
+
+    const goCreateMany = goStyleExceptionWrapper(
+        prisma.user.createManyAndReturn
+    );
+
+    const [response, error] = await goCreateMany({
+        select: {
+            id: true,
+            email: true,
+            oneTimeToken: true
+        },
+        data: userArray
+    });
+
+    if (error) {
+        console.log(`error in bulk creation: ${error}`);
+
+        return [response, error];
+    }
+    assert(
+        response.length == userArray.length,
+        "output length doesn't match input length "
+    );
+
+    return [response, error];
     // map tokens to their ids
     // create a UserProfile for each user if role is defined.
     // return token array
@@ -126,12 +170,32 @@ async function dbDeleteUserById(id) {
 
 // ProfileService functions
 
-//TODO
-async function dbCreateProfile(id, role) {
-    // get email of user with id:id
-    // create/connect an entry in UserProfile
-    // with email, userId:id, role,
-    // return with created profile-id
+/**
+ *
+ * Used when a user with id `id` exists and the creator wants to create a new user-profile with the role `role`.
+ *
+ *
+ * */
+
+async function dbCreateProfile(email, id, role) {
+    const goUserCreateProfile = goStyleExceptionWrapper(
+        prisma.userProfile.create
+    );
+
+    const [response, error] = await goUserCreateProfile({
+        data: {
+            email: email,
+            role: role,
+            userName: email.split("@")[0],
+            user: {
+                connect: {
+                    id: id
+                }
+            }
+        }
+    });
+
+    return [response, error];
 }
 
 async function dbFindFirstProfile(filterClause) {
@@ -173,7 +237,7 @@ async function dbDeleteProfileById(profile_id) {
 export const UserService = {
     get: dbGetUsers,
     create: dbCreateUser,
-    createForToken: dbCreateUsersForToken,
+    createForToken: dbCreateUsersForOTToken,
     updateTokenById: dbUpdateTokenById,
     deleteById: dbDeleteUserById
 };
