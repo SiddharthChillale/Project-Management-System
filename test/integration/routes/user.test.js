@@ -1,9 +1,11 @@
 import app from "../../../src/app.js";
 import request from "supertest";
 import crypto from "node:crypto";
-import UserService, {
+import {
+    UserService,
     prisma
 } from "../../../src/api/v1/services/user.services.js";
+import assert from "node:assert";
 
 beforeAll(() => {});
 
@@ -21,12 +23,8 @@ describe("Protected routes", () => {
 
         // beforeEach(async () => {
         //     try {
-        //         const hashedPassword = crypto
-        //             .scryptSync(userObj.password, "salt", 12)
-        //             .toString("base64");
-        //         await UserService.register(
+        //         await UserService.create(
         //             "upDate.email@gngn.com",
-        //             "salt",
         //             hashedPassword
         //         );
         //     } catch (error) {
@@ -102,16 +100,14 @@ describe("Protected routes", () => {
     });
 });
 
+//TODO write tests for oneTimeToken Logins
 describe("Login /login", () => {
     const userObj = {
         email: "login.user@xyz.com",
         password: "root"
     };
     beforeAll(async () => {
-        const hashedPassword = crypto
-            .scryptSync(userObj.password, "salt", 12)
-            .toString("base64");
-        await UserService.register(userObj.email, "salt", hashedPassword);
+        await UserService.create(userObj.email, userObj.password);
     });
     afterAll(async () => {
         await prisma.user.delete({
@@ -156,9 +152,11 @@ describe("Login /login", () => {
         expect(cookies).toContain("accessToken");
         expect(cookies).toContain("refreshToken");
 
-        await UserService.updateTokenById(response.body.user.id, {
-            refreshToken: null
-        });
+        await UserService.updateTokenById(
+            response.body.user.id,
+            "refreshToken",
+            null
+        );
     });
 
     it("should throw code 409: Conflict when a logged-in user attempts to login again.", async () => {
@@ -175,10 +173,12 @@ describe("Login /login", () => {
             .send(userObj);
         expect(response2.statusCode).toBe(409);
 
-        await UserService.updateTokenById(response1.body.user.id, {
-            refreshToken: null
-        });
-    }, 50000);
+        await UserService.updateTokenById(
+            response1.body.user.id,
+            "refreshToken",
+            null
+        );
+    });
 });
 describe("Logout /logout", () => {
     const userObj = {
@@ -189,13 +189,9 @@ describe("Logout /logout", () => {
     // let gRToken;
     // let gAToken;
     beforeAll(async () => {
-        const hashedPassword = crypto
-            .scryptSync(userObj.password, "salt", 12)
-            .toString("base64");
-        const [_, error] = await UserService.register(
+        const [_, error] = await UserService.create(
             userObj.email,
-            "salt",
-            hashedPassword
+            userObj.password
         );
         if (error) {
             console.log(`error: at logout register: ${error}`);
@@ -224,6 +220,7 @@ describe("Logout /logout", () => {
     );
     it("should pass when response has a cleared out cookie field.", async () => {
         const reqCookies = cookies;
+        assert(reqCookies, "cookies are undefined");
         const agent = request.agent(app);
         const response = await agent
             .post("/api/v1/users/logout")
@@ -308,7 +305,7 @@ describe("Unprotected routes", () => {
         );
     });
 
-    describe("GET /users/:id/profile", () => {
+    describe("GET /users/:id/profile/:profile_id", () => {
         it.todo("should fail when called without an id parameter in req");
         it.todo(
             "should pass when return response has a JSON object of schema User"

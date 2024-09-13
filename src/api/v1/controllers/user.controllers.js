@@ -1,11 +1,11 @@
-import UserService from "../services/user.services.js";
+import { UserService, ProfileService } from "../services/user.services.js";
 import process from "node:process";
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
 
 const JWTSecret = "randtoken";
-export async function getUserProfileAll(req, res, err) {
-    const [profiles, error] = await UserService.getAll({
+export async function getUsers(req, res, err) {
+    const [profiles, error] = await UserService.get({
         include: {
             UserProfiles: true
         }
@@ -17,18 +17,16 @@ export async function getUserProfileAll(req, res, err) {
     }
     return res.status(200).json(profiles);
 }
+//TODO: create one user or nulk-users alongwith their roles
+export async function createUsers(req, res, err) {}
 
-export async function getUserProfileOne(req, res, err) {
+export async function getUserProfile(req, res, err) {
     const { id, profile_id } = req.params.id;
-    const [profile, error] = await UserService.getOne({
-        select: {
-            UserProfiles: {
-                where: {
-                    id: profile_id
-                }
-            }
-        },
-        where: { id: id }
+    const [profile, error] = await ProfileService.findOne({
+        where: {
+            id: profile_id,
+            userId: id
+        }
     });
     if (req.user) {
         console.log(`User ${req.user.userName} is logged in`);
@@ -43,20 +41,17 @@ export async function getUserProfileOne(req, res, err) {
 
     return res.status(200).json(profile);
 }
-
 export async function editUserProfile(req, res, err) {
     const id = req.user.id;
     const profile_id = req.params.profile_id;
-    let user = req.body.newProfile;
-    user = { ...user, profile_id: profile_id };
+    let newProfile = req.body.newProfile;
 
-    delete user.email;
-    delete user.password;
-    delete user.refreshToken;
-    delete user.updatedAt;
-    delete user.createdAt;
+    delete newProfile.email;
+    delete newProfile.role;
+    delete newProfile.updatedAt;
+    delete newProfile.createdAt;
 
-    const [status, error] = await UserService.updateOneById(id, user);
+    const [status, error] = await ProfileService.update(profile_id, newProfile);
     if (error) {
         console.log(`UpdateProfile error: ${error}`);
 
@@ -85,16 +80,8 @@ export async function registerHandler(req, res, err) {
      */
 
     const { email, password } = req.body;
-    const salt = "salt";
-    // encrypt password
-    const hashedPassword = crypto
-        .scryptSync(password, salt, 12)
-        .toString("base64");
-    const [response, error] = await UserService.register(
-        email,
-        salt,
-        hashedPassword
-    );
+
+    const [response, error] = await UserService.create(email, password);
 
     if (error) {
         console.log(`error: ${error}`);
@@ -104,7 +91,6 @@ export async function registerHandler(req, res, err) {
 
     return res.status(200).json(response);
 }
-
 export async function loginHandler(req, res, err) {
     /**
      * TODO: distinguish between login via token and login via email+password
@@ -122,14 +108,15 @@ export async function loginHandler(req, res, err) {
      * Return a success response.
      */
     const { email, password, role } = req.body;
-    const [user, error] = await UserService.findOne({
+    const [user, error] = await UserService.get({
         where: { email: email },
         include: {
             UserProfiles: true
         },
         omit: {
             password: false,
-            refreshToken: false
+            refreshToken: false,
+            oneTimeToken: false
         }
     });
 
@@ -162,7 +149,7 @@ export async function loginHandler(req, res, err) {
         await generateAccessAndRefreshTokens(user);
 
     //save refreshToken with the user.
-    await UserService.updateTokenById(user.id, { refreshToken: refreshToken });
+    await UserService.updateTokenById(user.id, "refreshToken", refreshToken);
 
     const cookieOptions = {
         httpOnly: true,
@@ -180,6 +167,39 @@ export async function loginHandler(req, res, err) {
             message: "Login successful",
             user: user
         });
+}
+export async function logoutHandler(req, res, err) {
+    /**
+     * put accessToken in blacklist table
+     *
+     * delete refreshToken from user in the db
+     *
+     * clear out cookie from response
+     *
+     * return response
+     */
+    const user = req.user;
+
+    const [_, error] = await UserService.updateTokenById(
+        user.id,
+        "refreshToken",
+        null
+    );
+
+    if (error) {
+        console.log(`Failed to Logout error: ${error}`);
+        return res.status(400).json(error);
+    }
+
+    const options = {
+        httpOnly: true,
+        secure: false
+    };
+    return res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json("Logout Successful");
 }
 
 export async function generateAccessToken(user) {
@@ -208,124 +228,6 @@ export async function generateAccessAndRefreshTokens(user) {
     const refreshToken = await generateRefreshToken(user);
     return { accessToken, refreshToken };
 }
-export async function verifyTokenAndAttachUser(req, res, next) {
-    /**
-     * extract accessToken from req body.
-     *  might be under Authorization header as Bearer Token
-     *  might be under cookies.
-     *  might be in query param
-     *
-     * If no token present,
-     *  deny entry. return Error.
-     *
-     * decode the token using jwt.verify()
-     * extract the id from the decoded token
-     * use id to find user in db.
-     *  if no user, return error.
-     *
-     * attach user obj to req.
-     * call next().
-     */
-    const token =
-        req.cookies?.accessToken ||
-        req.query?.accessToken ||
-        req.get("Authorization")?.replace("Bearer ", "");
-    if (!token) {
-        console.log(`token not found`);
-
-        return res.status(400).json("Not Authorized.");
-    }
-
-    //check if accessToken is in blacklist table
-    let decoded;
-    try {
-        decoded = jwt.verify(token, JWTSecret);
-    } catch (err) {
-        console.log(`error: ${err}`);
-    }
-
-    const [user, error] = await UserService.getOne({
-        where: { id: decoded.id },
-        include: {
-            UserProfiles: true
-        }
-    });
-
-    if (error) {
-        //check the error code and send appropriate response
-        console.log(`No user found :Token Invalid error: ${error}`);
-
-        return res.status(400).json(error);
-    }
-
-    req.user = user;
-    next();
-}
-
-export async function AttachUserOrSilentFail(req, res, err) {
-    /**
-     * extract accessToken from req body.
-     *  might be under Authorization header as Bearer Token
-     *  might be under cookies.
-     *  might be in query param
-     *
-     * If token present,
-     * decode the token using jwt.verify()
-     * extract the id from the decoded token
-     *
-     * attach user obj to req.
-     * call next().
-     */
-    const token =
-        req.cookies?.accessToken ||
-        req.query?.accessToken ||
-        req.get("Authorization")?.replace("Bearer ", "");
-
-    const decoded = jwt.verify(token, "randtoken");
-    const [user, error] = await UserService.getOne({
-        where: { id: decoded.id },
-        include: {
-            UserProfiles: true
-        }
-    });
-
-    if (user) req.user = user;
-
-    next();
-}
-
-export async function logoutHandler(req, res, err) {
-    /**
-     * put accessToken in blacklist table
-     *
-     * delete refreshToken from user in the db
-     *
-     * clear out cookie from response
-     *
-     * return response
-     */
-    const user = req.user;
-
-    const [_, error] = await UserService.updateTokenById(user.id, {
-        refreshToken: null
-    });
-
-    if (error) {
-        console.log(`Failed to Logout error: ${error}`);
-        return res.status(400).json(error);
-    }
-
-    const options = {
-        httpOnly: true,
-        secure: false
-    };
-    return res
-        .status(200)
-        .clearCookie("accessToken", options)
-        .clearCookie("refreshToken", options)
-        .json("Logout Successful");
-}
-
 export async function refreshAccessToken(req, res, err) {
     /**
      * extract refreshToken from req
@@ -348,7 +250,7 @@ export async function refreshAccessToken(req, res, err) {
     }
 
     const decoded = jwt.verify(token, "randtoken");
-    const [user, error] = await UserService.getOne({
+    const [user, error] = await UserService.get({
         where: { id: decoded.id },
         omit: { refreshToken: false }
     });

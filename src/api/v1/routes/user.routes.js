@@ -1,20 +1,25 @@
 import express from "express";
 import {
-    AttachUserOrSilentFail,
-    editUserProfile,
-    getUserProfileAll,
-    getUserProfileOne,
+    verifyTokenAndAttachUser,
+    attachUserOrSilentFail
+} from "../middlewares/auth.middlewares.js";
+import {
+    getUsers,
+    createUsers,
     loginHandler,
     logoutHandler,
-    refreshAccessToken,
     registerHandler,
-    verifyTokenAndAttachUser
+    refreshAccessToken,
+    editUserProfile,
+    getUserProfile
 } from "../controllers/user.controllers.js";
-import { body, param, check } from "express-validator";
+
+import { body, param } from "express-validator";
 import { validate } from "../validators/general.validators.js";
+
 const router = express.Router();
 
-router.route("/").get(getUserProfileAll);
+router.route("/all").get(verifyTokenAndAttachUser, getUsers);
 
 router
     .route("/login")
@@ -34,16 +39,18 @@ router
     );
 router.route("/refresh-token").post(refreshAccessToken);
 
+router.route("/create-user").post(verifyTokenAndAttachUser, createUsers);
+// router.route("/bulk-create").post(verifyTokenAndAttachUser, bulkCreateUsers);
 router.route("/logout").post(verifyTokenAndAttachUser, logoutHandler);
 
 router
     .route("/:id/profile/:profile_id")
     .get(
-        AttachUserOrSilentFail,
+        attachUserOrSilentFail,
         param("id").notEmpty().toInt(),
         param("profile_id").notEmpty().toInt(),
         validate,
-        getUserProfileOne
+        getUserProfile
     );
 
 router
