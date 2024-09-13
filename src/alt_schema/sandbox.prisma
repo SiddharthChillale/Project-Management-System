@@ -47,8 +47,8 @@ model Project {
     courseId Int?
     course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
 
-    ProjectAssociations ProjectAssociation[]
-    Ratings             Ratings[]
+    projectAssociations ProjectAssociation[]
+    ratings             Ratings[]
 }
 
 model User {
@@ -57,12 +57,12 @@ model User {
     email        String   @unique
     password     String   @db.VarChar(255)
     salt         String?
-    refreshToken String?
-    oneTimeToken String?
+    refreshToken String?  @unique
+    oneTimeToken String?  @unique
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
 
-    UserProfiles UserProfile[]
+    profiles UserProfile[]
 }
 
 model UserProfile {
@@ -76,10 +76,10 @@ model UserProfile {
     userId      Int // foreign key
     user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    ProjectAssociations ProjectAssociation[]
-    Ratings             Ratings[]
-    Events              Event[]
-    Courses             Course[]
+    projectAssociations ProjectAssociation[]
+    ratings             Ratings[]
+    events              Event[]
+    courses             Course[]
 }
 
 model Event {
@@ -88,8 +88,8 @@ model Event {
     startDate DateTime
     endDate   DateTime
 
-    Projects     Project[]
-    UserProfiles UserProfile[]
+    projects Project[]
+    profiles UserProfile[]
 }
 
 model Course {
@@ -102,15 +102,15 @@ model Course {
     departmentId Int
     department   Department @relation(fields: [departmentId], references: [id], onDelete: SetDefault)
 
-    Projects     Project[]
-    UserProfiles UserProfile[]
+    projects     Project[]
+    userProfiles UserProfile[]
 }
 
 model Department {
     id   Int    @id @default(autoincrement())
     name String @default("deleted")
 
-    Courses Course[]
+    courses Course[]
 }
 
 model ProjectAssociation {
@@ -131,7 +131,7 @@ model ScoreCategory {
     id   Int    @id @default(autoincrement())
     name String @default("unkown") // business logic, can be "default" or "unknown" or anything else.
 
-    Ratings Ratings[]
+    ratings Ratings[]
 }
 
 model Ratings {
