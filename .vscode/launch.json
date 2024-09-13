@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Sandbox prisma",
+            "program": "${workspaceFolder}/src/alt_schema/scripts/prisma.sandbox.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        
+        {
             "name": "Launch test via NPM",
             "request": "launch",
             "runtimeArgs": [
