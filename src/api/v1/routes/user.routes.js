@@ -16,19 +16,14 @@ const router = express.Router();
 
 router.route("/").get(getUserProfileAll);
 
-router.route("/login").post(
-    body("email").optional().isEmail().trim(),
-    body("userName").optional().trim(),
-    body().custom((value, { req }) => {
-        if (!req.body.email && !req.body.userName) {
-            throw new Error("Either email or username must be provided");
-        }
-        return true;
-    }),
-    body("password").notEmpty(),
-    validate,
-    loginHandler
-);
+router
+    .route("/login")
+    .post(
+        body("email").isEmail().trim(),
+        body("password").notEmpty(),
+        validate,
+        loginHandler
+    );
 router
     .route("/register")
     .post(
@@ -42,18 +37,20 @@ router.route("/refresh-token").post(refreshAccessToken);
 router.route("/logout").post(verifyTokenAndAttachUser, logoutHandler);
 
 router
-    .route("/:id/profile")
+    .route("/:id/profile/:profile_id")
     .get(
         AttachUserOrSilentFail,
-        param("id").notEmpty().isAlphanumeric(),
+        param("id").notEmpty().toInt(),
+        param("profile_id").notEmpty().toInt(),
         validate,
         getUserProfileOne
     );
 
 router
-    .route("/profile")
+    .route("/profile/:profile_id")
     .patch(
         verifyTokenAndAttachUser,
+        param("profile_id").notEmpty().toInt(),
         body("newProfile").exists(),
         validate,
         editUserProfile

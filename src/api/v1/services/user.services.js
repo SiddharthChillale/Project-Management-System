@@ -11,20 +11,6 @@ export const prisma = new PrismaClient({
     }
 });
 
-// const xprisma = prisma.$extends({
-//     name: "tokenizer",
-//     model:{
-//         user:{
-//             async generateAccessToken() {
-
-//             },
-//             async generaterefreshToken(){
-
-//             }
-//         }
-//     }
-// })
-
 async function dbGetAllUsers(filterClause) {
     const goGetAll = goStyleExceptionWrapper(prisma.user.findMany);
     const [result, error] = await goGetAll(filterClause);
@@ -43,25 +29,23 @@ async function dbGetFirstUser(filterClause) {
     const [result, error] = await goFindOne(filterClause);
     return [result, error];
 }
-async function dbAddUser(email, encryptedPassword) {
-    const userName = email.split("@")[0];
+async function dbAddUser(email, salt, encryptedPassword) {
     const goCreate = goStyleExceptionWrapper(prisma.user.create);
 
     const [response, error] = await goCreate({
         select: {
-            id: true,
-            userName: true
+            id: true
         },
         data: {
             email: email,
-            userName: userName,
+            salt: salt,
             password: encryptedPassword
         }
     });
     return [response, error];
 }
 
-async function dbUpdateUserById(id, data) {
+async function dbUpdateTokenByUserId(id, data) {
     const goUpdate = goStyleExceptionWrapper(prisma.user.update);
 
     const [response, error] = await goUpdate({
@@ -69,6 +53,22 @@ async function dbUpdateUserById(id, data) {
             id: id
         },
         data: data
+    });
+    return [response, error];
+}
+
+async function dbUpdateUserProfileById(id, data) {
+    const goUpdate = goStyleExceptionWrapper(prisma.userProfile.update);
+
+    const [response, error] = await goUpdate({
+        where: {
+            userId: id,
+            id: data.profile_id
+        },
+        data: {
+            socialLinks: data.socialLinks,
+            userName: data.userName
+        }
     });
     return [response, error];
 }
@@ -88,7 +88,8 @@ const UserService = {
     getOne: dbGetOneUser,
     getAll: dbGetAllUsers,
     findOne: dbGetFirstUser,
-    updateOneById: dbUpdateUserById,
+    updateOneById: dbUpdateUserProfileById,
+    updateTokenById: dbUpdateTokenByUserId,
     deleteOneById: dbDeleteUserById,
     register: dbAddUser
 };

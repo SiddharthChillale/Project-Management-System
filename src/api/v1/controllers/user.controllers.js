@@ -5,7 +5,11 @@ import jwt from "jsonwebtoken";
 
 const JWTSecret = "randtoken";
 export async function getUserProfileAll(req, res, err) {
-    const [profiles, error] = await UserService.getAll();
+    const [profiles, error] = await UserService.getAll({
+        include: {
+            UserProfiles: true
+        }
+    });
     if (error) {
         console.log(error);
 
@@ -15,8 +19,15 @@ export async function getUserProfileAll(req, res, err) {
 }
 
 export async function getUserProfileOne(req, res, err) {
-    const { id } = req.param.id;
+    const { id, profile_id } = req.params.id;
     const [profile, error] = await UserService.getOne({
+        select: {
+            UserProfiles: {
+                where: {
+                    id: profile_id
+                }
+            }
+        },
         where: { id: id }
     });
     if (req.user) {
@@ -35,7 +46,9 @@ export async function getUserProfileOne(req, res, err) {
 
 export async function editUserProfile(req, res, err) {
     const id = req.user.id;
-    const user = req.body.newProfile;
+    const profile_id = req.params.profile_id;
+    let user = req.body.newProfile;
+    user = { ...user, profile_id: profile_id };
 
     delete user.email;
     delete user.password;
@@ -72,12 +85,16 @@ export async function registerHandler(req, res, err) {
      */
 
     const { email, password } = req.body;
-
+    const salt = "salt";
     // encrypt password
     const hashedPassword = crypto
-        .scryptSync(password, "salt", 12)
+        .scryptSync(password, salt, 12)
         .toString("base64");
-    const [response, error] = await UserService.register(email, hashedPassword);
+    const [response, error] = await UserService.register(
+        email,
+        salt,
+        hashedPassword
+    );
 
     if (error) {
         console.log(`error: ${error}`);
@@ -90,6 +107,8 @@ export async function registerHandler(req, res, err) {
 
 export async function loginHandler(req, res, err) {
     /**
+     * TODO: distinguish between login via token and login via email+password
+     *
      * extract email, username or password from the request body
      *
      * check if user is present in the db.
@@ -102,21 +121,11 @@ export async function loginHandler(req, res, err) {
      *
      * Return a success response.
      */
-    const { email, userName, password } = req.body;
+    const { email, password, role } = req.body;
     const [user, error] = await UserService.findOne({
-        where: {
-            OR: [
-                {
-                    email: {
-                        contains: email
-                    }
-                },
-                {
-                    userName: {
-                        contains: userName
-                    }
-                }
-            ]
+        where: { email: email },
+        include: {
+            UserProfiles: true
         },
         omit: {
             password: false,
@@ -137,8 +146,9 @@ export async function loginHandler(req, res, err) {
         return res.status(409).json("User already logged in");
     }
 
+    const salt = user.salt;
     const reqPassHash = crypto
-        .scryptSync(password, "salt", 12)
+        .scryptSync(password, salt, 12)
         .toString("base64");
     const isValidPassword = reqPassHash === user.password;
 
@@ -152,7 +162,7 @@ export async function loginHandler(req, res, err) {
         await generateAccessAndRefreshTokens(user);
 
     //save refreshToken with the user.
-    await UserService.updateOneById(user.id, { refreshToken: refreshToken });
+    await UserService.updateTokenById(user.id, { refreshToken: refreshToken });
 
     const cookieOptions = {
         httpOnly: true,
@@ -175,18 +185,16 @@ export async function loginHandler(req, res, err) {
 export async function generateAccessToken(user) {
     // const JWTSecret = process.env.JWT_TOKEN;
     // const JWTSecret = "randtoken";
-    return jwt.sign(
-        { id: user.id, email: user.email, userName: user.userName },
-        JWTSecret,
-        { expiresIn: "20m" }
-    );
+    return jwt.sign({ id: user.id, email: user.email }, JWTSecret, {
+        expiresIn: "20m"
+    });
 }
 export async function generateRefreshToken(user) {
     // const JWTSecret = process.env.JWT_TOKEN;
     // const JWTSecret = "randtoken";
 
     return jwt.sign({ id: user.id }, JWTSecret, {
-        expiresIn: "20m"
+        expiresIn: "1hr"
     });
 }
 export async function generateAccessAndRefreshTokens(user) {
@@ -237,7 +245,10 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     }
 
     const [user, error] = await UserService.getOne({
-        where: { id: decoded.id }
+        where: { id: decoded.id },
+        include: {
+            UserProfiles: true
+        }
     });
 
     if (error) {
@@ -272,7 +283,10 @@ export async function AttachUserOrSilentFail(req, res, err) {
 
     const decoded = jwt.verify(token, "randtoken");
     const [user, error] = await UserService.getOne({
-        where: { id: decoded.id }
+        where: { id: decoded.id },
+        include: {
+            UserProfiles: true
+        }
     });
 
     if (user) req.user = user;
@@ -292,7 +306,7 @@ export async function logoutHandler(req, res, err) {
      */
     const user = req.user;
 
-    const [_, error] = await UserService.updateOneById(user.id, {
+    const [_, error] = await UserService.updateTokenById(user.id, {
         refreshToken: null
     });
 

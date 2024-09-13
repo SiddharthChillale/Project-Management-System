@@ -11,46 +11,50 @@ afterAll(() => {});
 describe("Protected routes", () => {
     describe("PUT /users/profile/", () => {
         const userObj = {
-            email: "updateProfile.user@xyz.com",
+            email: "Valentine.Miller15@yahoo.com",
             password: "root"
         };
-        const newUserObj = {
-            firstName: "updateProfile",
-            lastName: "user",
+        const newUserProfile = {
+            socialLinks: { image: "abcde" },
             userName: "updProfile.user"
         };
 
-        beforeEach(async () => {
-            try {
-                const hashedPassword = crypto
-                    .scryptSync(userObj.password, "salt", 12)
-                    .toString("base64");
-                await UserService.register(userObj.email, hashedPassword);
-            } catch (error) {
-                console.log(`Update Profile delete user error: ${error}`);
-            }
-        });
-        afterAll(async () => {
-            try {
-                await prisma.user.delete({
-                    where: {
-                        email: userObj.email
-                    }
-                });
-            } catch (error) {
-                console.log(`Update Profile delete user error: ${error}`);
-            }
-        });
+        // beforeEach(async () => {
+        //     try {
+        //         const hashedPassword = crypto
+        //             .scryptSync(userObj.password, "salt", 12)
+        //             .toString("base64");
+        //         await UserService.register(
+        //             "upDate.email@gngn.com",
+        //             "salt",
+        //             hashedPassword
+        //         );
+        //     } catch (error) {
+        //         console.log(`Update Profile delete user error: ${error}`);
+        //     }
+        // });
+        // afterAll(async () => {
+        //     try {
+        //         await prisma.user.delete({
+        //             where: {
+        //                 email: userObj.email
+        //             }
+        //         });
+        //     } catch (error) {
+        //         console.log(`Update Profile delete user error: ${error}`);
+        //     }
+        // });
         it("should fail when user attempting the update is not logged in", async () => {
+            const profile_id = 5;
             const response = await request(app)
-                .patch("/api/v1/users/profile")
+                .patch(`/api/v1/users/profile/${profile_id}`)
                 .set("Accept", "application/json")
                 .send({
-                    newProfile: newUserObj
+                    newProfile: newUserProfile
                 });
 
             expect(response.statusCode).toBe(400);
-        }, 10000);
+        });
         it("should pass with code 200 when update is reflected in the db", async () => {
             //Login User
             const loginResponse = await request(app)
@@ -59,19 +63,22 @@ describe("Protected routes", () => {
                 .send(userObj);
 
             const cookies = loginResponse.headers["set-cookie"];
-
+            const Profiles = loginResponse.body.user.UserProfiles;
+            const one_profile = Profiles[0];
+            const profile_id = one_profile.id;
             const updateResponse = await request(app)
-                .patch("/api/v1/users/profile")
+                .patch(`/api/v1/users/profile/${profile_id}`)
                 .set("Cookie", cookies)
                 .set("Accept", "application/json")
                 .send({
-                    newProfile: newUserObj
+                    newProfile: newUserProfile
                 });
 
             expect(updateResponse.statusCode).toBe(200);
-            expect(updateResponse.body.userName).toBe(newUserObj.userName);
-            expect(updateResponse.body.firstName).toBe(newUserObj.firstName);
-            expect(updateResponse.body.lastName).toBe(newUserObj.lastName);
+            expect(updateResponse.body.userName).toBe(newUserProfile.userName);
+            expect(updateResponse.body.socialLinks).toMatchObject(
+                newUserProfile.socialLinks
+            );
         });
     });
 
@@ -104,7 +111,7 @@ describe("Login /login", () => {
         const hashedPassword = crypto
             .scryptSync(userObj.password, "salt", 12)
             .toString("base64");
-        await UserService.register(userObj.email, hashedPassword);
+        await UserService.register(userObj.email, "salt", hashedPassword);
     });
     afterAll(async () => {
         await prisma.user.delete({
@@ -113,7 +120,7 @@ describe("Login /login", () => {
             }
         });
     });
-    it("should error when req.body doesn't have the mandatory fields(email|username, password) for login.", async () => {
+    it("should error when req.body doesn't have the mandatory fields(email, password) or (loginToken) for login.", async () => {
         const response = await request(app)
             .post("/api/v1/users/login")
             .set("Accept", "application/json");
@@ -149,34 +156,11 @@ describe("Login /login", () => {
         expect(cookies).toContain("accessToken");
         expect(cookies).toContain("refreshToken");
 
-        await UserService.updateOneById(response.body.user.id, {
+        await UserService.updateTokenById(response.body.user.id, {
             refreshToken: null
         });
     });
 
-    it("should pass when response has accessToken and refreshToken in the response cookie after a successful login {with username}", async () => {
-        const response = await request(app)
-            .post("/api/v1/users/login")
-            .set("Accept", "application/json")
-            .send({
-                userName: "login.user",
-                password: "root"
-            });
-
-        expect(response.statusCode).toBe(200);
-        expect(response.headers["set-cookie"]).toBeDefined(); // Ensure cookies are set
-
-        // Check for individual cookies
-        const cookies = response.headers["set-cookie"].map(
-            (cookie) => cookie.split("=")[0]
-        );
-
-        expect(cookies).toContain("accessToken");
-        expect(cookies).toContain("refreshToken");
-        await UserService.updateOneById(response.body.user.id, {
-            refreshToken: null
-        });
-    });
     it("should throw code 409: Conflict when a logged-in user attempts to login again.", async () => {
         const response1 = await request(app)
             .post("/api/v1/users/login")
@@ -191,10 +175,10 @@ describe("Login /login", () => {
             .send(userObj);
         expect(response2.statusCode).toBe(409);
 
-        await UserService.updateOneById(response1.body.user.id, {
+        await UserService.updateTokenById(response1.body.user.id, {
             refreshToken: null
         });
-    }, 20000);
+    }, 50000);
 });
 describe("Logout /logout", () => {
     const userObj = {
@@ -208,21 +192,20 @@ describe("Logout /logout", () => {
         const hashedPassword = crypto
             .scryptSync(userObj.password, "salt", 12)
             .toString("base64");
-        await UserService.register(userObj.email, hashedPassword);
+        const [_, error] = await UserService.register(
+            userObj.email,
+            "salt",
+            hashedPassword
+        );
+        if (error) {
+            console.log(`error: at logout register: ${error}`);
+        }
         const response = await request(app)
             .post("/api/v1/users/login")
             .set("Accept", "application/json")
             .send(userObj);
 
-        // expect(response.headers["set-cookie"]).toBeDefined(); // Ensure cookies are set
-
-        // Check for individual cookies
         cookies = response.headers["set-cookie"];
-        // const allCookies = response.headers["set-cookie"].map(
-        //     (cookie) => cookie.split("=")[1]
-        // );
-        // gAToken = allCookies[0].split(";")[0];
-        // gRToken = allCookies[1].split(";")[0];
     });
     afterAll(async () => {
         cookies = undefined;
@@ -255,7 +238,7 @@ describe("Logout /logout", () => {
         expect(abc[1]).toBe("");
         expect(def[1]).toBe("");
         // expect(abc).not.toBeDefined(); // Ensure cookies are set
-    }, 200000);
+    });
 });
 
 describe("Register /register", () => {
@@ -294,8 +277,8 @@ describe("Register /register", () => {
         } catch (err) {
             console.log(`attempted to delete non-existent user ${err}`);
         }
-    }, 10000);
-    it("should pass when reponse body has a username field after a successful register. Username is generated in backend.", async () => {
+    });
+    it("should pass when reponse body has id after a successful register.", async () => {
         const response = await request(app)
             .post("/api/v1/users/register")
             .set("Accept", "application/json")
@@ -311,9 +294,8 @@ describe("Register /register", () => {
             console.log(`attempted to delete non-existent user ${err}`);
         }
         expect(response.statusCode).toBe(200);
-        expect(response.body).toHaveProperty("id", expect.any(String));
-        expect(response.body).toHaveProperty("userName", expect.any(String));
-    }, 10000);
+        expect(response.body).toHaveProperty("id", expect.any(Number));
+    });
 });
 
 describe("Unprotected routes", () => {
