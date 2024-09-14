@@ -1,3 +1,10 @@
+/**
+ * Ideally, I do not write modules/functions like this. but I have chosen to cut corners on the side tables like
+ * courses, departments, score-categories. these require basic CRUDING so I chose to save time for
+ * main routes and tables.
+ *
+ */
+
 import { prisma } from "./main.services.js";
 
 async function CRUD_course(method, options) {
@@ -6,12 +13,7 @@ async function CRUD_course(method, options) {
         switch (method) {
             case "C":
                 result = await prisma.course.create({
-                    data: {
-                        name: options.data.name,
-                        semester: options.data.semester,
-                        year: options.data.year,
-                        code: options.data.code
-                    }
+                    data: options.data
                 });
                 break;
             case "R":
