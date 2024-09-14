@@ -1,4 +1,4 @@
 export async function rootHandler(req, res, err) {
     // res.sendFile(path.join(__rootdir, "public", "index.html"));
-    res.send({}).status(200);
+    res.status(200).json({ message: "Hello World" });
 }
