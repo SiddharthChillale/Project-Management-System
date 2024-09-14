@@ -4,6 +4,8 @@ import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
 
 const JWTSecret = "randtoken";
+
+// Users
 export async function getUsers(req, res, err) {
     const [profiles, error] = await UserService.get({
         include: {
@@ -17,7 +19,6 @@ export async function getUsers(req, res, err) {
     }
     return res.status(200).json(profiles);
 }
-
 export async function createUsers(req, res, err) {
     const dataArray = req.body.dataArray;
     const role = req.body.role || undefined;
@@ -67,6 +68,7 @@ export async function createUsers(req, res, err) {
     // return [response, error];
 }
 
+// Profile
 export async function createUserProfile(req, res, err) {
     const { email, id, role } = req.body;
 
@@ -92,7 +94,6 @@ export async function createUserProfile(req, res, err) {
 
     return res.status(200).json(response);
 }
-
 export async function getUserProfile(req, res, err) {
     const { id, profile_id } = req.params.id;
     const [profile, error] = await ProfileService.findOne({
@@ -133,6 +134,7 @@ export async function editUserProfile(req, res, err) {
     return res.status(200).json(status);
 }
 
+// Login, Register, Logout
 export async function registerHandler(req, res, err) {
     /**
      * extract email and password from req body
@@ -275,6 +277,7 @@ export async function logoutHandler(req, res, err) {
         .json("Logout Successful");
 }
 
+//Tokenizer
 export async function generateAccessToken(user) {
     // const JWTSecret = process.env.JWT_TOKEN;
     // const JWTSecret = "randtoken";

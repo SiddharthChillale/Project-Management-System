@@ -1,4 +1,5 @@
 import ProjectService from "../services/project.services.js";
+import { cleanDeep } from "../utils/helper.utils.js";
 
 export async function getProjects(req, res, err) {
     let body = {};
@@ -26,8 +27,22 @@ export async function getProjects(req, res, err) {
 export async function addProject(req, res, err) {
     // should be able to add multiple projects since the URI doesn't specify operation on one particular project
     // TODO: allow insertion of multiple projects.
-    const project = req.body.project;
-    const [pid, error] = await ProjectService.addOne(project);
+    let projectDetails = req.body.project;
+    const { id } = req.user.id;
+    const { eventId } = req.body;
+    projectDetails = {
+        ...projectDetails,
+        creator: { connect: { id: id } },
+        event: { connect: { id: eventId } }
+    };
+    details = cleanDeep(projectDetails);
+    // if (eventId) {
+    //     projectDetails = {
+    //         ...projectDetails,
+    //         event: { connect: { id: eventId } }
+    //     };
+    // }
+    const [pid, error] = await ProjectService.addOne(details);
     if (error) {
         res.status(400).json(error);
         return;
@@ -37,10 +52,21 @@ export async function addProject(req, res, err) {
 }
 
 export async function editProject(req, res, err) {
-    const data = {
-        id: req.params.id,
-        project: req.body.project
+    let projectDetails = req.body.project;
+    let data = {
+        id: req.params.id
     };
+
+    const { eventId } = req.body;
+
+    if (eventId) {
+        projectDetails = {
+            ...projectDetails,
+            event: { connect: { id: eventId } }
+        };
+    }
+
+    data = { ...data, project: projectDetails };
     const [status, error] = await ProjectService.updateOne(data);
     if (error) {
         res.status(400).json(error);

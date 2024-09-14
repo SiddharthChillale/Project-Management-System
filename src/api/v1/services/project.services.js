@@ -1,9 +1,9 @@
 import { goStyleExceptionWrapper } from "../utils/wrapper.utils.js";
 import { prisma } from "./main.services.js";
 
-async function dbGetAllProjects() {
+async function dbGetAllProjects(clause) {
     const goFindAll = goStyleExceptionWrapper(prisma.project.findMany);
-    const [response, error] = await goFindAll();
+    const [response, error] = await goFindAll(clause);
     return [response, error];
 }
 
