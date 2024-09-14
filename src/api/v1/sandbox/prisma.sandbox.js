@@ -1,11 +1,8 @@
-import { createUsers } from "../../api/v1/controllers/user.controllers.js";
-import DepartmentService from "../../api/v1/services/department.services.js";
-import ScoreCatService from "../../api/v1/services/scoreCategory.services.js";
-import {
-    ProfileService,
-    PrismaEnums
-} from "../../api/v1/services/user.services.js";
-import { UserService } from "../../api/v1/services/user.services.js";
+import { createUsers } from "../controllers/user.controllers.js";
+import DepartmentService from "../services/department.services.js";
+import ScoreCatService from "../services/scoreCategory.services.js";
+import { ProfileService, PrismaEnums } from "../services/user.services.js";
+import { UserService } from "../services/user.services.js";
 import { faker } from "@faker-js/faker";
 
 function createUser(_email = undefined, _password = undefined) {

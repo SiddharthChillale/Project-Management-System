@@ -5,8 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/src/api/v1/sandbox/sandbox.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
             "name": "Launch Sandbox prisma",
-            "program": "${workspaceFolder}/src/alt_schema/scripts/prisma.sandbox.js",
+            "program": "${workspaceFolder}/src/api/v1/sandbox/prisma.sandbox.js",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
