@@ -196,6 +196,17 @@ async function dbFindFirstProfile(filterClause) {
     return [result, error];
 }
 
+async function dbFindAllProfiles(filterClause) {
+    if (!filterClause) {
+        return [null, Error("filterClause cannot be empty")];
+    }
+
+    const goFindMany = goStyleExceptionWrapper(prisma.userProfile.findMany);
+
+    const [result, error] = await goFindMany(filterClause);
+    return [result, error];
+}
+
 async function dbUpdateProfileById(profile_id, data) {
     const goUpdate = goStyleExceptionWrapper(prisma.userProfile.update);
 
@@ -234,6 +245,7 @@ export const UserService = {
 export const ProfileService = {
     create: dbCreateProfile,
     findOne: dbFindFirstProfile,
+    findAll: dbFindAllProfiles,
     update: dbUpdateProfileById,
     delete: dbDeleteProfileById
 };
