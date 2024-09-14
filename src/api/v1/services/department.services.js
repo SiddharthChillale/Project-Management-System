@@ -31,7 +31,7 @@ async function CRUD_department(method, options) {
             case "U":
                 result = await prisma.department.update({
                     where: options.where,
-                    data: options.data
+                    data: options.newData
                 });
                 break;
             case "D":
