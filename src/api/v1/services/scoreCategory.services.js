@@ -13,8 +13,7 @@ async function CRUD_scoreCategory(method, options) {
                 break;
             case "R":
                 result = await prisma.scoreCategory.findMany({
-                    where: options.where,
-                    include: options.include
+                    where: options.where
                 });
                 break;
             case "U":
