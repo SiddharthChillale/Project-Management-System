@@ -1,18 +1,9 @@
-import { PrismaClient, Role, Status } from "@prisma/client";
+import { Role, Status } from "@prisma/client";
 import { goStyleExceptionWrapper } from "../utils/wrapper.utils.js";
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
 import assert from "node:assert";
-export const prisma = new PrismaClient({
-    omit: {
-        user: {
-            password: true,
-            refreshToken: true,
-            oneTimeToken: true,
-            updatedAt: true
-        }
-    }
-});
+import { prisma } from "./main.services.js";
 
 async function dbGetUsers(filterClause) {
     const goGetAll = goStyleExceptionWrapper(prisma.user.findMany);
@@ -45,8 +36,6 @@ async function dbCreateUser(email, password) {
     return [response, error];
 }
 
-//meant for bulk creating users, or creating individual user with oneTimeToken. can create
-//TODO
 export async function generateOneTimeToken(email) {
     // const JWTSecret = process.env.JWT_TOKEN;
     const JWTSecret = "randtoken";

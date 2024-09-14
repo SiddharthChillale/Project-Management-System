@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { goStyleExceptionWrapper } from "../utils/wrapper.utils.js";
-const prisma = new PrismaClient();
+import { prisma } from "./main.services.js";
 
 async function dbGetAllProjects() {
     const goFindAll = goStyleExceptionWrapper(prisma.project.findMany);
@@ -9,6 +8,7 @@ async function dbGetAllProjects() {
 }
 
 async function dbGetOneProject(data) {
+    //TODO: replace this with finUniqueOrThrow
     const goFindUnique = goStyleExceptionWrapper(prisma.project.findUnique);
     let [response, error] = await goFindUnique({
         where: {
@@ -17,7 +17,6 @@ async function dbGetOneProject(data) {
     });
 
     if (response == null && !error) {
-        //if broken here, it's an error thrown by developer.
         error = Error(`Project of id: ${data.id} does not exist`, {
             cause: { code: "ProjectDoesNotExist" }
         });
