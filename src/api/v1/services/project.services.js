@@ -7,23 +7,23 @@ async function dbGetAllProjects(clause) {
     return [response, error];
 }
 
-async function dbGetOneProject(data) {
-    //TODO: replace this with finUniqueOrThrow
-    const goFindUnique = goStyleExceptionWrapper(prisma.project.findUnique);
-    let [response, error] = await goFindUnique({
-        where: {
-            id: data.id
-        }
-    });
+// async function dbGetOneProject(data) {
+//     //TODO: replace this with finUniqueOrThrow
+//     const goFindUnique = goStyleExceptionWrapper(prisma.project.findUnique);
+//     let [response, error] = await goFindUnique({
+//         where: {
+//             id: data.id
+//         }
+//     });
 
-    if (response == null && !error) {
-        error = Error(`Project of id: ${data.id} does not exist`, {
-            cause: { code: "ProjectDoesNotExist" }
-        });
-    }
+//     if (response == null && !error) {
+//         error = Error(`Project of id: ${data.id} does not exist`, {
+//             cause: { code: "ProjectDoesNotExist" }
+//         });
+//     }
 
-    return [response, error];
-}
+//     return [response, error];
+// }
 
 async function dbAddProject(data) {
     // data is a projectObject. validation middleware handles format validation of data object.
@@ -62,12 +62,10 @@ async function dbDeleteProject(data) {
 }
 
 const ProjectService = {
-    getOne: dbGetOneProject,
     getAll: dbGetAllProjects,
     addOne: dbAddProject,
     updateOne: dbUpdateProject,
     deleteOne: dbDeleteProject
 };
 
-export const getOneProject = dbGetOneProject;
 export default ProjectService;

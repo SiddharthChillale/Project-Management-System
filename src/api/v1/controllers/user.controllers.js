@@ -2,6 +2,8 @@ import { UserService, ProfileService } from "../services/user.services.js";
 import process from "node:process";
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
+import { Role, Status } from "@prisma/client";
+import wlogger from "../../../logger/winston.logger.js";
 
 const JWTSecret = "randtoken";
 
@@ -9,23 +11,46 @@ const JWTSecret = "randtoken";
 export async function getUsers(req, res, err) {
     const [profiles, error] = await UserService.get({
         include: {
-            UserProfiles: true
+            profiles: true
         }
     });
     if (error) {
-        console.log(error);
+        wlogger.error(error);
 
         return res.status(500).json(error);
     }
     return res.status(200).json(profiles);
 }
+
+export async function getUserProfile(req, res, err) {
+    const { id, profile_id } = req.params.id;
+    const [profile, error] = await ProfileService.findOne({
+        where: {
+            id: profile_id,
+            userId: id
+        }
+    });
+    if (req.user) {
+        wlogger.info(`User ${req.user.userName} is logged in`);
+    }
+    if (error) {
+        if (error.code == "NotFoundError") {
+            return res.status(404).json(error);
+        }
+
+        return res.status(500).json(error);
+    }
+
+    return res.status(200).json(profile);
+}
+
 export async function createUsers(req, res, err) {
     const dataArray = req.body.dataArray;
     const role = req.body.role || undefined;
 
     let [response, error] = await UserService.createForToken(dataArray);
     if (error) {
-        console.log(`bulk-creation error: ${error}`);
+        wlogger.error(`bulk-creation error: ${error}`);
         // return [response, error];
         return res.status(500).json(error);
     }
@@ -82,38 +107,17 @@ export async function createUserProfile(req, res, err) {
         const error = Error(
             `Profile with role: ${role} for user-email: ${email} already exists`
         );
-        console.log(`${error}`);
+        wlogger.error(`${error}`);
         return res.status(409).json(error);
     }
 
     const [response, error] = await ProfileService.create(email, id, role);
     if (error) {
-        console.log(`error creating Profile for user ${email}: ${error}`);
+        wlogger.error(`error creating Profile for user ${email}: ${error}`);
         return res.status(409).json(error);
     }
 
     return res.status(200).json(response);
-}
-export async function getUserProfile(req, res, err) {
-    const { id, profile_id } = req.params.id;
-    const [profile, error] = await ProfileService.findOne({
-        where: {
-            id: profile_id,
-            userId: id
-        }
-    });
-    if (req.user) {
-        console.log(`User ${req.user.userName} is logged in`);
-    }
-    if (error) {
-        if (error.code == "NotFoundError") {
-            return res.status(404).json(error);
-        }
-
-        return res.status(500).json(error);
-    }
-
-    return res.status(200).json(profile);
 }
 export async function editUserProfile(req, res, err) {
     const id = req.user.id;
@@ -127,7 +131,7 @@ export async function editUserProfile(req, res, err) {
 
     const [status, error] = await ProfileService.update(profile_id, newProfile);
     if (error) {
-        console.log(`UpdateProfile error: ${error}`);
+        wlogger.error(`UpdateProfile error: ${error}`);
 
         return res.status(400).json(error);
     }
@@ -159,10 +163,10 @@ export async function registerHandler(req, res, err) {
     const [response, error] = await UserService.create(email, password);
 
     if (error) {
-        console.log(`error: ${error}`);
+        wlogger.error(`error: ${error}`);
         return res.status(400).json(error);
     }
-    console.log(`success: registered: ${email}`);
+    wlogger.info(`success: registered: ${email}`);
 
     return res.status(200).json(response);
 }
@@ -186,7 +190,7 @@ export async function loginHandler(req, res, err) {
     const [user, error] = await UserService.get({
         where: { email: email },
         include: {
-            UserProfiles: true
+            profiles: true
         },
         omit: {
             password: false,
@@ -197,13 +201,13 @@ export async function loginHandler(req, res, err) {
 
     if (error) {
         //check for if no such user
-        console.log(`No such user exists error: ${error}`);
+        wlogger.error(`No such user exists error: ${error}`);
 
         return res.status(404).json(error);
     }
 
     if (user.refreshToken) {
-        console.log(`user ${user.userName} is logged in`);
+        wlogger.warn(`user ${user.userName} is logged in`);
 
         return res.status(409).json("User already logged in");
     }
@@ -215,7 +219,7 @@ export async function loginHandler(req, res, err) {
     const isValidPassword = reqPassHash === user.password;
 
     if (!isValidPassword) {
-        console.log(`Wrong Password: ${error}`);
+        wlogger.error(`Wrong Password: ${error}`);
 
         return res.status(400).json("Wrong Password");
     }
@@ -262,7 +266,7 @@ export async function logoutHandler(req, res, err) {
     );
 
     if (error) {
-        console.log(`Failed to Logout error: ${error}`);
+        wlogger.error(`Failed to Logout error: ${error}`);
         return res.status(400).json(error);
     }
 
@@ -331,7 +335,7 @@ export async function refreshAccessToken(req, res, err) {
         omit: { refreshToken: false }
     });
     if (error) {
-        console.log(`no user with provided token`);
+        wlogger.error(`no user with provided token`);
         return res.status(400).json(error);
     }
 
@@ -349,4 +353,116 @@ export async function refreshAccessToken(req, res, err) {
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
         .json("refreshed");
+}
+
+export async function assignmentHandler(req, res, err) {
+    /**
+     * get project-id
+     * check role of logged-in user
+     * if req.body is array of strings => consider them as emails
+     *  (assume that the emails are vested for existence and profile-role validity )
+     *  find profile ids of the given emails
+     *  append req.user.profile-id to array if profile of logged-in user is DEV
+     *  create entry for each {role, status="Queued"}, connect the project-id and profile-id
+     *
+     * if req.body is array of ints => consider them as profile-ids
+     *  (assume that profile-ids are valid)
+     *  create entry for each {role, status="Queued"}, connect the project-id and profile-id
+     *
+     */
+
+    const { projectId } = req.params.id;
+    const user = req.user;
+    const role = await ProfileService.findOne({
+        where: {
+            OR: [
+                {
+                    email: other_users
+                },
+                {
+                    id: other_users
+                }
+            ]
+        }
+    });
+    const { other_users } = req.body.additionals;
+    let profileIdArry = [];
+    let response, error;
+    if (typeof other_users[0] == "String") {
+        other_users.push(user.email);
+        // get profile-ids of the emails
+        [response, error] = await ProfileService.update({
+            where: {
+                email: {
+                    in: other_users
+                },
+                role: Role.DEVELOPER
+            },
+            data: {
+                projectAssociations: {
+                    create: {
+                        data: {
+                            userRole: Role.DEVELOPER,
+                            status: Status.IS_ENROLL,
+                            projectId: projectId
+                        }
+                    }
+                }
+            }
+        });
+
+        // append current profile-id
+    } else {
+        [response, error] = await ProfileService.update({
+            where: {
+                id: {
+                    in: other_users
+                },
+                role: role
+            },
+            data: {
+                projectAssociations: {
+                    create: {
+                        data: {
+                            userRole: role,
+                            status: Status.IS_ENROLL,
+                            projectId: projectId
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    if (error) {
+        wlogger.error(`error: ${error}`);
+        return res.status(500).json(error);
+    }
+
+    return res.status(200).json(response);
+}
+
+export async function detachHandler(req, res, err) {
+    const { profileId } = req.params.profile_id;
+    const { projectId } = req.body.project_id;
+    const [response, error] = ProfileService.update({
+        where: {
+            id: profileId
+        },
+        data: {
+            projectAssociations: {
+                delete: {
+                    projectId: projectId,
+                    profileId: profileId
+                }
+            }
+        }
+    });
+
+    if (error) {
+        wlogger.error(`error: ${error}`);
+        return res.status(500).json(error);
+    }
+
+    return res.status(200).json(response);
 }

@@ -11,7 +11,9 @@ import {
     registerHandler,
     refreshAccessToken,
     editUserProfile,
-    getUserProfile
+    getUserProfile,
+    assignmentHandler,
+    detachHandler
 } from "../controllers/user.controllers.js";
 
 import { body, param } from "express-validator";
@@ -63,6 +65,21 @@ router
         editUserProfile
     );
 
+router.route(
+    "/profile/:profile_id/detach-project",
+    param("profile_id").toInt(),
+    body("project_id").notEmpty(),
+    validate,
+    detachHandler // delete an entry from either ratings table or associations table. | can be used by devs to unenroll | can be used by ADMIN or PM to detach a user from a project
+);
+
+router.route(
+    "/profile/:profile_id/assign",
+    param("profile_id").toInt(),
+    body("project").notEmpty(),
+    validate,
+    assignmentHandler // must be same in project.routes | can be used by devs to enroll | can be used by ADMIN or PM to assign users to project
+);
 // router.delete("/:id", deleteUser);
 
 export default router;

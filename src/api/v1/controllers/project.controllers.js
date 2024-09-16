@@ -1,14 +1,38 @@
+import wlogger from "../../../logger/winston.logger.js";
 import ProjectService from "../services/project.services.js";
+import {
+    dbCreateRating,
+    dbFindRating,
+    dbUpdateRating
+} from "../services/rating.services.js";
 import { cleanDeep } from "../utils/helper.utils.js";
 
 export async function getProjects(req, res, err) {
-    let body = {};
-    let error;
-    if (req.params?.id) {
-        [body, error] = await ProjectService.getOne({ id: req.params.id });
-    } else {
-        [body, error] = await ProjectService.getAll();
-    }
+    const { id } = req.params;
+
+    let options = {
+        where: {
+            id: id
+        },
+        include: {
+            ratings: true,
+            event: true,
+            course: true,
+            creator: {
+                select: {
+                    email: true
+                }
+            },
+            _count: {
+                select: {
+                    projectAssociations: true
+                }
+            }
+        }
+    };
+
+    const clause = cleanDeep(options);
+    const [body, error] = await ProjectService.getAll(clause);
 
     if (error) {
         if (error.cause?.code == "ProjectDoesNotExist") {
@@ -85,4 +109,49 @@ export async function deleteProject(req, res, err) {
     }
     res.status(200).json(status);
     return;
+}
+
+export async function getRating(req, res, err) {
+    //doesn't make sense to get individual rating.
+    // Get a rating for a project through getting the project
+}
+
+export async function addRating(req, res, err) {
+    const { user } = req.user;
+    const { profile_id } = user.profiles.find(
+        (profile) => profile.role == Role.REVIEWER
+    ).id;
+    const { project_id } = req.params.id;
+    const { score, scoreCategoryId } = req.body;
+    const [response, error] = await dbCreateRating(
+        profile_id,
+        project_id,
+        score,
+        scoreCategoryId
+    );
+
+    if (error) {
+        wlogger.error(`error creating Rating: ${error}`);
+        return res.status(409).json(error);
+    }
+
+    return res.status(200).json(response);
+}
+export async function updateRating(req, res, err) {
+    const { score, rating_id } = req.body;
+    const [response, error] = await dbUpdateRating(rating_id, score);
+    if (error) {
+        wlogger.error(`error updating Rating: ${error}`);
+        return res.status(409).json(error);
+    }
+    return res.status(200).json(response);
+}
+export async function deleteRating(req, res, err) {
+    const { rating_id } = req.body;
+    const [response, error] = await dbUpdateRating(rating_id);
+    if (error) {
+        wlogger.error(`error deleting Rating: ${error}`);
+        return res.status(409).json(error);
+    }
+    return res.status(200).json(response);
 }
