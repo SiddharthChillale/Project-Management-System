@@ -25,3 +25,7 @@ export function cleanDeep(obj) {
     }
     return obj;
 }
+
+export function findProfileByRole(user, role) {
+    user.profiles.find((profile) => profile.role == role).id;
+}

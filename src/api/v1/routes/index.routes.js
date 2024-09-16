@@ -17,6 +17,7 @@ router.use("/api/v1/users", userRouter);
 router.use("/api/v1/events", eventRouter);
 router.use("/api/v1/score-category", scoreCatRouter);
 router.use("/api/v1/departments", departmentRouter);
+
 // routes for ratings
 // routes for project-associations
 

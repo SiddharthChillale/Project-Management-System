@@ -1,5 +1,8 @@
-import { UserService } from "../services/user.services.js";
-import { jwt } from "jsonwebtoken";
+import { Role } from "@prisma/client";
+import { prisma } from "../services/main.services.js";
+import { ProfileService, UserService } from "../services/user.services.js";
+import jwt from "jsonwebtoken";
+import wlogger from "../../../logger/winston.logger.js";
 
 export async function verifyTokenAndAttachUser(req, res, next) {
     /**
@@ -24,7 +27,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
         req.query?.accessToken ||
         req.get("Authorization")?.replace("Bearer ", "");
     if (!token) {
-        console.log(`token not found`);
+        wlogger.error(`token not found`);
 
         return res.status(400).json("Not Authorized.");
     }
@@ -34,19 +37,19 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     try {
         decoded = jwt.verify(token, JWTSecret);
     } catch (err) {
-        console.log(`error: ${err}`);
+        wlogger.error(`error: ${err}`);
     }
 
     const [user, error] = await UserService.get({
         where: { id: decoded.id },
         include: {
-            UserProfiles: true
+            profiles: true
         }
     });
 
     if (error) {
         //check the error code and send appropriate response
-        console.log(`No user found :Token Invalid error: ${error}`);
+        wlogger.error(`No user found :Token Invalid error: ${error}`);
 
         return res.status(400).json(error);
     }
@@ -78,7 +81,7 @@ export async function attachUserOrSilentFail(req, res, next) {
     const [user, error] = await UserService.get({
         where: { id: decoded.id },
         include: {
-            UserProfiles: true
+            profiles: true
         }
     });
 

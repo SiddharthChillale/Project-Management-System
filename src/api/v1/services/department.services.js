@@ -1,3 +1,4 @@
+import wlogger from "../../../logger/winston.logger.js";
 import { prisma } from "./main.services.js";
 
 async function CRUD_department(method, options) {
@@ -40,12 +41,12 @@ async function CRUD_department(method, options) {
                 });
                 break;
             default:
-                console.log(`error, no method matching : ${method}`);
+                wlogger.error(`error, no method matching : ${method}`);
 
                 break;
         }
     } catch (error) {
-        console.log(`error in case statement: ${error}`);
+        wlogger.error(`error in case statement: ${error}`);
     }
     return result;
 }

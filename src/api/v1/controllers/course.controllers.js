@@ -1,3 +1,4 @@
+import wlogger from "../../../logger/winston.logger.js";
 import CourseService from "../services/courses.services.js";
 
 export async function createCourse(req, res, err) {
@@ -19,7 +20,7 @@ export async function createCourse(req, res, err) {
     const [response, error] = await CourseService.CRUD("C", options);
 
     if (error) {
-        console.log(`error creating course: ${error}`);
+        wlogger.error(`error creating course: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -44,7 +45,7 @@ export async function getCourses(req, res, err) {
     const [result, error] = await CourseService.CRUD("R", options);
 
     if (error) {
-        console.log(`error: ${error}`);
+        wlogger.error(`error: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -73,7 +74,7 @@ export async function editCourse(req, res, err) {
     const [response, error] = await CourseService.CRUD("U", options);
 
     if (error) {
-        console.log(`error updating course: ${error}`);
+        wlogger.error(`error updating course: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -92,7 +93,7 @@ export async function deleteCourse(req, res, err) {
     });
 
     if (error) {
-        console.log(`error deleting events: ${error}`);
+        wlogger.error(`error deleting events: ${error}`);
         return res.status(500).json(error);
     }
 

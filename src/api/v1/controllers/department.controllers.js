@@ -1,3 +1,4 @@
+import wlogger from "../../../logger/winston.logger.js";
 import DepartmentService from "../services/department.services.js";
 
 export async function createDepartment(req, res, err) {
@@ -13,7 +14,7 @@ export async function createDepartment(req, res, err) {
     const [response, error] = await DepartmentService.CRUD("C", options);
 
     if (error) {
-        console.log(`createDepartment error: ${error}`);
+        wlogger.error(`createDepartment error: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -37,7 +38,7 @@ export async function getDepartments(req, res, err) {
     const [response, error] = await DepartmentService.CRUD("R", options);
 
     if (error) {
-        console.log(`getDepartments error: ${error}`);
+        wlogger.error(`getDepartments error: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -64,7 +65,7 @@ export async function updateDepartment(req, res, err) {
     const [response, error] = await DepartmentService.CRUD("U", options);
 
     if (error) {
-        console.log(`updateDepartment error: ${error}`);
+        wlogger.error(`updateDepartment error: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -81,7 +82,7 @@ export async function deleteDepartment(req, res, err) {
     const [response, error] = await DepartmentService.CRUD("D", options);
 
     if (error) {
-        console.log(`deleteDepartment error: ${error}`);
+        wlogger.error(`deleteDepartment error: ${error}`);
         return res.status(500).json(error);
     }
 

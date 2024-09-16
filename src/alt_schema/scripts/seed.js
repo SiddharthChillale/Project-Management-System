@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { generatefakeData, clearDB } from "./fake.generator.js";
+import wlogger from "../../logger/winston.logger.js";
 const prisma = new PrismaClient();
 
 const xprisma = prisma.$extends({
@@ -10,15 +11,15 @@ const xprisma = prisma.$extends({
                 const email = args.data.email;
                 const cargs = args.data;
                 const username = email.split("@")[0];
-                console.log(`username: ${username}`);
-                console.log(`args.data: ${{ cargs }}`);
+                wlogger.debug(`username: ${username}`);
+                wlogger.debug(`args.data: ${{ cargs }}`);
 
                 args.data = { ...args.data, userName: username };
                 return query(args);
             },
             async createMany({ model, operation, args, query }) {
                 const cargs = args.data;
-                console.log(`args.data: ${{ cargs }}`);
+                wlogger.debug(`args.data: ${{ cargs }}`);
                 args.data.map((dataObj) => {
                     const email = dataObj.email;
                     const username = email.split("@")[0];
@@ -32,14 +33,14 @@ const xprisma = prisma.$extends({
 });
 async function main() {
     await clearDB(xprisma);
-    console.log("seeding db");
+    wlogger.info("seeding db");
 
     await generatefakeData(xprisma);
 }
 
 main()
     .then(() => {
-        console.log("\nSeeding complete");
+        wlogger.info("\nSeeding complete");
     })
     .finally(async () => {
         await xprisma.$disconnect();

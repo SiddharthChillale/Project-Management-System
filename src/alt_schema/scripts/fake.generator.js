@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import wlogger from "../../logger/winston.logger.js";
 
 faker.seed(42);
 
@@ -31,7 +32,7 @@ const dataConfig = {
 
 export async function generatefakeData(xprisma) {
     const userEmail = faker.internet.email();
-    console.log(`creating users: start`);
+    wlogger.info(`creating users: start`);
 
     await xprisma.user.create({
         data: {
@@ -64,8 +65,8 @@ export async function generatefakeData(xprisma) {
             }
         }
     });
-    console.log(`creating users: done `);
-    console.log(`creating projects: start`);
+    wlogger.info(`creating users: done `);
+    wlogger.info(`creating projects: start`);
 
     await xprisma.project.create({
         data: {
@@ -101,7 +102,7 @@ export async function generatefakeData(xprisma) {
         }
     });
 
-    console.log(`creating projects: done`);
+    wlogger.debug(`creating projects: done`);
     return;
 }
 

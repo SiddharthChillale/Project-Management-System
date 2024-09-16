@@ -4,6 +4,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import routes from "./api/v1/routes/index.routes.js";
 import cookieParser from "cookie-parser";
+
 const app = express();
 // const __rootdir = path.join(import.meta.dirname, "../");
 

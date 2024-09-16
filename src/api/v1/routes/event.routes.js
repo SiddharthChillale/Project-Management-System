@@ -5,7 +5,7 @@ import {
     editEvent,
     getEvents
 } from "../controllers/event.controllers.js";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { validate } from "../validators/general.validators.js";
 
 const router = Router();

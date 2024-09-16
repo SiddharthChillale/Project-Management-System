@@ -1,3 +1,4 @@
+import wlogger from "../../../logger/winston.logger.js";
 import ScoreCatService from "../services/scoreCategory.services.js";
 import { cleanDeep } from "../utils/helper.utils.js";
 
@@ -14,7 +15,7 @@ export async function createScoreCat(req, res, err) {
     const [response, error] = await ScoreCatService.CRUD("C", options);
 
     if (error) {
-        console.log(`createScoreCat error: ${error}`);
+        wlogger.error(`createScoreCat error: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -39,7 +40,7 @@ export async function getScoreCats(req, res, err) {
     const [response, error] = await ScoreCatService.CRUD("R", options);
 
     if (error) {
-        console.log(`getScoreCats error: ${error}`);
+        wlogger.error(`getScoreCats error: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -61,7 +62,7 @@ export async function updateScoreCat(req, res, err) {
     const [response, error] = await ScoreCatService.CRUD("U", options);
 
     if (error) {
-        console.log(`updateScoreCat error: ${error}`);
+        wlogger.error(`updateScoreCat error: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -78,7 +79,7 @@ export async function deleteScoreCat(req, res, err) {
     const [response, error] = await ScoreCatService.CRUD("D", options);
 
     if (error) {
-        console.log(`deleteScoreCat error: ${error}`);
+        wlogger.error(`deleteScoreCat error: ${error}`);
         return res.status(500).json(error);
     }
 

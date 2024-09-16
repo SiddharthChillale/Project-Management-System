@@ -6,6 +6,7 @@ import {
     prisma
 } from "../../../src/api/v1/services/user.services.js";
 import assert from "node:assert";
+import wlogger from "../../../src/logger/winston.logger.js";
 
 beforeAll(() => {});
 
@@ -28,7 +29,7 @@ describe("Protected routes", () => {
         //             hashedPassword
         //         );
         //     } catch (error) {
-        //         console.log(`Update Profile delete user error: ${error}`);
+        //         wlogger.error(`Update Profile delete user error: ${error}`);
         //     }
         // });
         // afterAll(async () => {
@@ -39,7 +40,7 @@ describe("Protected routes", () => {
         //             }
         //         });
         //     } catch (error) {
-        //         console.log(`Update Profile delete user error: ${error}`);
+        //         wlogger.error(`Update Profile delete user error: ${error}`);
         //     }
         // });
         it("should fail when user attempting the update is not logged in", async () => {
@@ -61,7 +62,7 @@ describe("Protected routes", () => {
                 .send(userObj);
 
             const cookies = loginResponse.headers["set-cookie"];
-            const Profiles = loginResponse.body.user.UserProfiles;
+            const Profiles = loginResponse.body.user.profiles;
             const one_profile = Profiles[0];
             const profile_id = one_profile.id;
             const updateResponse = await request(app)
@@ -194,7 +195,7 @@ describe("Logout /logout", () => {
             userObj.password
         );
         if (error) {
-            console.log(`error: at logout register: ${error}`);
+            wlogger.error(`error: at logout register: ${error}`);
         }
         const response = await request(app)
             .post("/api/v1/users/login")
@@ -212,7 +213,9 @@ describe("Logout /logout", () => {
                 }
             });
         } catch (err) {
-            console.log(`LOGOUT: attempted to delete non-existent user ${err}`);
+            wlogger.error(
+                `LOGOUT: attempted to delete non-existent user ${err}`
+            );
         }
     });
     it.todo(
@@ -272,7 +275,7 @@ describe("Register /register", () => {
                 where: { email: "register.user@example.com" }
             });
         } catch (err) {
-            console.log(`attempted to delete non-existent user ${err}`);
+            wlogger.error(`attempted to delete non-existent user ${err}`);
         }
     });
     it("should pass when reponse body has id after a successful register.", async () => {
@@ -288,7 +291,7 @@ describe("Register /register", () => {
                 where: { email: "register.user@example.com" }
             });
         } catch (err) {
-            console.log(`attempted to delete non-existent user ${err}`);
+            wlogger.error(`attempted to delete non-existent user ${err}`);
         }
         expect(response.statusCode).toBe(200);
         expect(response.body).toHaveProperty("id", expect.any(Number));

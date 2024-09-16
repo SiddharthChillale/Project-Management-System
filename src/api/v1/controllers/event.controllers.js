@@ -3,6 +3,7 @@ import EventService from "../services/event.services.js";
 import { ProfileService } from "../services/user.services.js";
 import ProjectService from "../services/project.services.js";
 import { cleanDeep } from "../utils/helper.utils.js";
+import wlogger from "../../../logger/winston.logger.js";
 
 export async function createEvent(req, res, err) {
     const { name, startDate, endDate } = req.body;
@@ -30,14 +31,15 @@ export async function createEvent(req, res, err) {
             }
         });
         if (error) {
-            console.log(`error: ${error}`);
+            wlogger.error(`error: ${error}`);
 
             return res.status(500).json(error);
         }
 
         if (result.length != participantIdArray.length) {
-            const error_message = `participants provided do not have role: ${Role.REVIEWER}`;
-            console.log(error_message);
+            wlogger.error(
+                `participants provided do not have role: ${Role.REVIEWER}`
+            );
             return res.status(409).json({
                 message: error_message,
                 present: result,
@@ -56,7 +58,7 @@ export async function createEvent(req, res, err) {
     const [response, error] = await EventService.create(createData);
 
     if (error) {
-        console.log(`error creating events: ${error}`);
+        wlogger.error(`error creating events: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -98,7 +100,7 @@ export async function getEvents(req, res, err) {
     const [result, error] = await EventService.findMany({ where: options });
 
     if (error) {
-        console.log(`error: ${error}`);
+        wlogger.error(`error: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -138,14 +140,14 @@ export async function editEvent(req, res, err) {
             }
         });
         if (error) {
-            console.log(`error: ${error}`);
+            wlogger.error(`error: ${error}`);
 
             return res.status(500).json(error);
         }
 
         if (result.length != participantIdArray.length) {
             const error_message = `participants provided do not have role: ${Role.REVIEWER}`;
-            console.log(error_message);
+            wlogger.error(error_message);
             return res.status(409).json({
                 message: error_message,
                 present: result,
@@ -172,7 +174,7 @@ export async function editEvent(req, res, err) {
             }
         });
         if (error || response.length != projectIdArray) {
-            console.log(`Event Update error: ${error}`);
+            wlogger.error(`Event Update error: ${error}`);
             return res.status(450).json({
                 message:
                     "Projects selected are already associated to a different event or some other error",
@@ -185,7 +187,7 @@ export async function editEvent(req, res, err) {
     const [response, error] = await EventService.updateById(id, updateData);
 
     if (error) {
-        console.log(`error updating events: ${error}`);
+        wlogger.error(`error updating events: ${error}`);
         return res.status(500).json(error);
     }
 
@@ -204,7 +206,7 @@ export async function deleteEvent(req, res, err) {
     });
 
     if (error) {
-        console.log(`error deleting events: ${error}`);
+        wlogger.error(`error deleting events: ${error}`);
         return res.status(500).json(error);
     }
 

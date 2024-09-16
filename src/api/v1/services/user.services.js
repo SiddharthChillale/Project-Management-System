@@ -4,6 +4,7 @@ import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
 import assert from "node:assert";
 import { prisma } from "./main.services.js";
+import wlogger from "../../../logger/winston.logger.js";
 
 async function dbGetUsers(filterClause) {
     const goGetAll = goStyleExceptionWrapper(prisma.user.findMany);
@@ -45,7 +46,7 @@ export async function generateOneTimeToken(email) {
             expiresIn: "7 days"
         });
     } catch (error) {
-        console.log(`${error}`);
+        wlogger.error(`${error}`);
     }
     return ott;
 }
@@ -75,7 +76,7 @@ async function dbCreateUsersForOTToken(dataArray) {
     });
 
     if (error) {
-        console.log(`error in bulk creation: ${error}`);
+        wlogger.error(`error in bulk creation: ${error}`);
 
         return [response, error];
     }

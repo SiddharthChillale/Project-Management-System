@@ -1,8 +1,11 @@
-import { createUsers } from "../controllers/user.controllers.js";
-import DepartmentService from "../services/department.services.js";
-import ScoreCatService from "../services/scoreCategory.services.js";
-import { ProfileService, PrismaEnums } from "../services/user.services.js";
-import { UserService } from "../services/user.services.js";
+import { createUsers } from "../../src/api/v1/controllers/user.controllers.js";
+import DepartmentService from "../../src/api/v1/services/department.services.js";
+import ScoreCatService from "../../src/api/v1/services/scoreCategory.services.js";
+import {
+    ProfileService,
+    PrismaEnums
+} from "../../src/api/v1/services/user.services.js";
+import { UserService } from "../../src/api/v1/services/user.services.js";
 import { faker } from "@faker-js/faker";
 
 function createUser(_email = undefined, _password = undefined) {
@@ -55,22 +58,22 @@ async function testCreateProfile() {
     const id = 2;
     const email = "abc.xyz@gmail.com";
     const [response, error] = await ProfileService.create(email, id, "ADMIN");
-    console.log(`error: ${error}`);
-    console.log(`response: ${response}`);
+    wlogger.error(`error: ${error}`);
+    wlogger.info(`response: ${response}`);
 }
 async function testBulkCreation() {
     const manyUserEmails = Array.from({ length: 10 }, () => Creators.user());
     const [response, error] = await UserService.createForToken(manyUserEmails);
-    console.log(`error: ${error}`);
-    console.log(`response: ${response}`);
+    wlogger.error(`error: ${error}`);
+    wlogger.info(`response: ${response}`);
 }
 
 async function testBulkCreationreq(role = undefined) {
     const manyUserEmails = Array.from({ length: 5 }, () => Creators.user());
     const req = { body: { dataArray: manyUserEmails, role: role } };
     const [response, error] = await createUsers(req, null, null);
-    console.log(`error: ${error}`);
-    console.log(`response: ${response}`);
+    wlogger.error(`error: ${error}`);
+    wlogger.info(`response: ${response}`);
 }
 
 async function testAuxCreation() {
@@ -106,19 +109,19 @@ async function testAuxCreation() {
 }
 
 async function main() {
-    console.log("started");
+    wlogger.info("started");
     const roles = { ...PrismaEnums, undef: undefined };
     const role = faker.helpers.objectValue(roles);
     let timenow = performance.now();
     await testAuxCreation();
     timenow = performance.now() - timenow;
-    console.log(`Time taken: ${timenow.toFixed(2)} milliseconds`);
-    console.log("ended");
+    wlogger.info(`Time taken: ${timenow.toFixed(2)} milliseconds`);
+    wlogger.info("ended");
 }
 
 main()
     .then(() => {
-        console.log("\nUpdate complete");
+        wlogger.info("\nUpdate complete");
     })
     .finally(async () => {
         // await prisma.$disconnect();
