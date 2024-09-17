@@ -15,7 +15,7 @@
         },
         {
             "name": "Launch Sandbox prisma",
-            "program": "${workspaceFolder}/src/api/v1/sandbox/prisma.sandbox.js",
+            "program": "${workspaceFolder}/test/sandbox/db-builder.sandbox.js",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
