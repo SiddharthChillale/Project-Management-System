@@ -4,6 +4,7 @@ import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
 import { Role, Status } from "@prisma/client";
 import wlogger from "../../../logger/winston.logger.js";
+import { profile } from "node:console";
 
 const JWTSecret = "randtoken";
 
@@ -186,11 +187,17 @@ export async function loginHandler(req, res, err) {
      *
      * Return a success response.
      */
-    const { email, password, role } = req.body;
-    const [user, error] = await UserService.get({
+    const { email, password } = req.body;
+    const [result, error] = await UserService.get({
         where: { email: email },
         include: {
-            profiles: true
+            profiles: {
+                select: {
+                    id: true,
+                    role: true,
+                    userName: true
+                }
+            }
         },
         omit: {
             password: false,
@@ -206,6 +213,11 @@ export async function loginHandler(req, res, err) {
         return res.status(404).json(error);
     }
 
+    if (result.length > 1) {
+        wlogger.error(`multiple users found for email: ${email}`);
+        return res.status(409).json("Multiple users found");
+    }
+    const user = result[0];
     if (user.refreshToken) {
         wlogger.warn(`user ${user.userName} is logged in`);
 
@@ -242,10 +254,7 @@ export async function loginHandler(req, res, err) {
         .status(200)
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
-        .json({
-            message: "Login successful",
-            user: user
-        });
+        .redirect("/api/v1/users/profile/choose");
 }
 export async function logoutHandler(req, res, err) {
     /**
@@ -282,30 +291,50 @@ export async function logoutHandler(req, res, err) {
 }
 
 //Tokenizer
-export async function generateAccessToken(user) {
+export async function generateAccessToken(user, profile_id = undefined) {
     // const JWTSecret = process.env.JWT_TOKEN;
     // const JWTSecret = "randtoken";
-    return jwt.sign({ id: user.id, email: user.email }, JWTSecret, {
-        expiresIn: "20m"
-    });
+    if (!profile_id) {
+        return jwt.sign({ id: user.id, email: user.email }, JWTSecret, {
+            expiresIn: "20m"
+        });
+    }
+    return jwt.sign(
+        { id: user.id, email: user.email, profile_id: profile_id },
+        JWTSecret,
+        {
+            expiresIn: "20m"
+        }
+    );
 }
-export async function generateRefreshToken(user) {
+export async function generateRefreshToken(user, profile_id = undefined) {
     // const JWTSecret = process.env.JWT_TOKEN;
     // const JWTSecret = "randtoken";
 
-    return jwt.sign({ id: user.id }, JWTSecret, {
+    if (!profile_id) {
+        return jwt.sign({ id: user.id }, JWTSecret, {
+            expiresIn: "1hr"
+        });
+    }
+
+    return jwt.sign({ id: user.id, profile_id: profile_id }, JWTSecret, {
         expiresIn: "1hr"
     });
 }
-export async function generateAccessAndRefreshTokens(user) {
+export async function generateAccessAndRefreshTokens(
+    user,
+    profile_id = undefined
+) {
     /**
+     *
      * generate accessToken
      * generate refreshToken
      *
      * return {accessToken, refreshToken}
      */
-    const accessToken = await generateAccessToken(user);
-    const refreshToken = await generateRefreshToken(user);
+
+    const accessToken = await generateAccessToken(user, profile_id);
+    const refreshToken = await generateRefreshToken(user, profile_id);
     return { accessToken, refreshToken };
 }
 export async function refreshAccessToken(req, res, err) {
@@ -330,6 +359,7 @@ export async function refreshAccessToken(req, res, err) {
     }
 
     const decoded = jwt.verify(token, "randtoken");
+    const profile_id = decoded.profile_id;
     const [user, error] = await UserService.get({
         where: { id: decoded.id },
         omit: { refreshToken: false }
@@ -342,8 +372,10 @@ export async function refreshAccessToken(req, res, err) {
     if (user.refreshToken !== token) {
         return res.status(400).json("refreshToken expired. Login again");
     }
-    const { accessToken, refreshToken } =
-        await generateAccessAndRefreshTokens(user);
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+        user,
+        profile_id
+    );
     const cookieOptions = {
         httpOnly: true,
         secure: false
@@ -465,4 +497,62 @@ export async function detachHandler(req, res, err) {
     }
 
     return res.status(200).json(response);
+}
+
+export async function getAvailableProfiles(req, res, err) {
+    const { user } = req;
+    const [response, error] = await ProfileService.findAll({
+        where: {
+            userId: user.id
+        },
+        select: {
+            id: true,
+            role: true,
+            userName: true
+        }
+    });
+
+    if (error) {
+        wlogger.error(`error: ${error}`);
+        return res.status(500).json(error);
+    }
+
+    if (!response || response.length == 0) {
+        return res.status(203).json("No profiles available");
+    }
+
+    return res.status(200).json(response);
+}
+
+export async function chooseProfile(req, res, err) {
+    const { user } = req;
+    const { profile_id } = req.body;
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+        user,
+        profile_id
+    );
+
+    await UserService.updateTokenById(user.id, "refreshToken", refreshToken);
+
+    const cookieOptions = {
+        httpOnly: true,
+        secure: false // make this dependant on NODE_ENV. should be false in dev, true in prod.
+    };
+    let allProfiles = user.profiles;
+    const loggedinProfile = allProfiles.filter(
+        (profile) => profile.id == profile_id
+    );
+    let responseUser = { ...user };
+    delete responseUser.profiles;
+    responseUser.profiles = loggedinProfile;
+    return res
+        .status(200)
+        .cookie("accessToken", accessToken, cookieOptions)
+        .cookie("refreshToken", refreshToken, cookieOptions)
+        .json({
+            message: "Login successful",
+            user: responseUser.profiles[0]
+        });
+    // .redirect("/profile/home");
 }

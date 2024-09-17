@@ -13,7 +13,9 @@ import {
     editUserProfile,
     getUserProfile,
     assignmentHandler,
-    detachHandler
+    detachHandler,
+    getAvailableProfiles,
+    chooseProfile
 } from "../controllers/user.controllers.js";
 
 import { body, param } from "express-validator";
@@ -21,7 +23,8 @@ import { validate } from "../validators/general.validators.js";
 
 const router = express.Router();
 
-router.route("/all").get(verifyTokenAndAttachUser, getUsers);
+//only accessible to all profiles with role=ADMIN or PM, hence require the verifyTokenAndAttachUser
+router.route("/").get(verifyTokenAndAttachUser, getUsers);
 
 router
     .route("/login")
@@ -46,17 +49,18 @@ router.route("/create-user").post(verifyTokenAndAttachUser, createUsers);
 router.route("/logout").post(verifyTokenAndAttachUser, logoutHandler);
 
 router
-    .route("/:id/profile/:profile_id")
-    .get(
-        attachUserOrSilentFail,
-        param("id").notEmpty().toInt(),
-        param("profile_id").notEmpty().toInt(),
-        validate,
-        getUserProfile
-    );
+    .route("/profile/choose")
+    .get(verifyTokenAndAttachUser, getAvailableProfiles)
+    .post(verifyTokenAndAttachUser, body("profile_id").isInt(), chooseProfile);
 
 router
     .route("/profile/:profile_id")
+    .get(
+        attachUserOrSilentFail,
+        param("profile_id").optional().toInt(),
+        validate,
+        getUserProfile
+    )
     .patch(
         verifyTokenAndAttachUser,
         param("profile_id").notEmpty().toInt(),

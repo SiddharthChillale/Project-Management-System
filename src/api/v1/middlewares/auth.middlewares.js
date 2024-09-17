@@ -3,6 +3,7 @@ import { prisma } from "../services/main.services.js";
 import { ProfileService, UserService } from "../services/user.services.js";
 import jwt from "jsonwebtoken";
 import wlogger from "../../../logger/winston.logger.js";
+const JWTSecret = "randtoken";
 
 export async function verifyTokenAndAttachUser(req, res, next) {
     /**
@@ -35,7 +36,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     //check if accessToken is in blacklist table
     let decoded;
     try {
-        decoded = jwt.verify(token, JWTSecret);
+        decoded = jwt.verify(token, "randtoken");
     } catch (err) {
         wlogger.error(`error: ${err}`);
     }
@@ -53,8 +54,18 @@ export async function verifyTokenAndAttachUser(req, res, next) {
 
         return res.status(400).json(error);
     }
+    if (user.length > 1) {
+        wlogger.error(`multiple users found`);
+        return res.status(409).json("Multiple users found");
+    }
 
-    req.user = user;
+    let userWithProfile = user[0];
+    if (decoded.profile_id)
+        userWithProfile = {
+            ...userWithProfile,
+            profile_id: decoded.profile_id
+        };
+    req.user = userWithProfile;
     next();
 }
 
@@ -78,6 +89,7 @@ export async function attachUserOrSilentFail(req, res, next) {
         req.get("Authorization")?.replace("Bearer ", "");
 
     const decoded = jwt.verify(token, "randtoken");
+
     const [user, error] = await UserService.get({
         where: { id: decoded.id },
         include: {
@@ -85,7 +97,15 @@ export async function attachUserOrSilentFail(req, res, next) {
         }
     });
 
-    if (user) req.user = user;
+    if (user && user.length > 1) {
+        let userWithProfile = firstUser;
+        if (decoded.profile_id)
+            userWithProfile = {
+                ...userWithProfile,
+                profile_id: decoded.profile_id
+            };
+        req.user = userWithProfile;
+    }
 
     next();
 }

@@ -117,7 +117,7 @@ export async function getRating(req, res, err) {
 }
 
 export async function addRating(req, res, err) {
-    const { user } = req.user;
+    const { user } = req;
     const { profile_id } = user.profiles.find(
         (profile) => profile.role == Role.REVIEWER
     ).id;

@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import { generateOneTimeToken } from "../../src/api/v1/services/user.services.js";
 import wlogger from "../../src/logger/winston.logger.js";
 import { Role, Status } from "@prisma/client";
+import crypto from "node:crypto";
 /**
  * Primary Tables:
  * Users
@@ -29,10 +30,18 @@ import { Role, Status } from "@prisma/client";
 
 async function dumUser() {
     const email = faker.internet.email();
-    const password = faker.word.noun();
     const oneTimeToken = await generateOneTimeToken(email);
-
-    return { email: email, password: password, oneTimeToken: oneTimeToken };
+    const password = "root";
+    const salt = "salt";
+    const hashedPassword = crypto
+        .scryptSync(password, salt, 12)
+        .toString("base64");
+    return {
+        email: email,
+        password: hashedPassword,
+        salt: salt,
+        oneTimeToken: oneTimeToken
+    };
 }
 async function dumUserTable(numUsers) {
     wlogger.info(`creating users: start`);
