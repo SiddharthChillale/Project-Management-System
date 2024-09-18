@@ -38,6 +38,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     try {
         decoded = jwt.verify(token, "randtoken");
     } catch (err) {
+        //Token expired
         wlogger.error(`error: ${err}`);
     }
 
@@ -49,9 +50,8 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     });
 
     if (error) {
-        //check the error code and send appropriate response
+        //Token valid but no such user found. Issue a redirect to the register page?
         wlogger.error(`No user found :Token Invalid error: ${error}`);
-
         return res.status(400).json(error);
     }
     if (user.length > 1) {

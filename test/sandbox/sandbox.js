@@ -5,21 +5,19 @@ import wlogger from "../../src/logger/winston.logger.js";
 const id = undefined;
 const date = undefined;
 let body;
-try {
-    body = {
-        where: {
-            id: id,
-            startDate: {
-                lte: date
-            },
-            endDate: {
-                gte: date
-            }
+
+body = {
+    where: {
+        id: id,
+        startDate: {
+            lte: date
+        },
+        endDate: {
+            gte: date
         }
-    };
-} catch (error) {
-    wlogger.error(`${error}`);
-}
+    }
+};
+
 const a = cleanDeep(body);
 const b = await prisma.userProfile.findMany({ where: a });
 wlogger.info(`a: ${a}`);

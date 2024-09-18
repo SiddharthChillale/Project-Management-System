@@ -44,7 +44,7 @@ router
     );
 router.route("/refresh-token").post(refreshAccessToken);
 
-router.route("/create-user").post(verifyTokenAndAttachUser, createUsers);
+router.route("/create-users").post(verifyTokenAndAttachUser, createUsers);
 // router.route("/bulk-create").post(verifyTokenAndAttachUser, bulkCreateUsers);
 router.route("/logout").post(verifyTokenAndAttachUser, logoutHandler);
 
@@ -69,20 +69,20 @@ router
         editUserProfile
     );
 
-router.route(
-    "/profile/:profile_id/detach-project",
+router.route("/profile/:profile_id/detach-project").post(
+    verifyTokenAndAttachUser,
     param("profile_id").toInt(),
     body("project_id").notEmpty(),
     validate,
     detachHandler // delete an entry from either ratings table or associations table. | can be used by devs to unenroll | can be used by ADMIN or PM to detach a user from a project
 );
 
-router.route(
-    "/profile/:profile_id/assign",
+router.route("/profile/:profile_id/assign").post(
+    verifyTokenAndAttachUser,
     param("profile_id").toInt(),
     body("project").notEmpty(),
     validate,
-    assignmentHandler // must be same in project.routes | can be used by devs to enroll | can be used by ADMIN or PM to assign users to project
+    assignmentHandler // must be same in project.routes | can be used by ADMIN or PM to assign users to project
 );
 // router.delete("/:id", deleteUser);
 

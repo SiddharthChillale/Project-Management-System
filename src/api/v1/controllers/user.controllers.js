@@ -355,22 +355,27 @@ export async function refreshAccessToken(req, res, err) {
      */
     const token = req.cookies?.refreshToken || req.body.refreshToken;
     if (!token) {
+        // no refreshToken found in cookies or authorization header. redirect to login
         return res.status(400).json("Login again");
     }
 
     const decoded = jwt.verify(token, "randtoken");
+    // possible that token given has expired. possible redirect to login page?
+
     const profile_id = decoded.profile_id;
     const [user, error] = await UserService.get({
         where: { id: decoded.id },
         omit: { refreshToken: false }
     });
     if (error) {
+        // token is valid but no such user found. Redirect to login page?
         wlogger.error(`no user with provided token`);
         return res.status(400).json(error);
     }
 
     if (user.refreshToken !== token) {
-        return res.status(400).json("refreshToken expired. Login again");
+        // User has logged out. Redirect to Login again?
+        return res.status(400).json("User has logged out. Login again");
     }
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
         user,

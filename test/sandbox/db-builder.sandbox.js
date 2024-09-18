@@ -171,14 +171,14 @@ async function dumCourseTable(departmentIds, numCourses) {
     let courses = [];
     //     dumCourse(faker.helpers.arrayElement(departments.ids))
     // );
-    try {
-        for (let i = 0; i < numCourses; i++) {
-            const one = dumCourse(faker.helpers.arrayElement(departmentIds));
-            courses.push(one);
-        }
-    } catch (error) {
-        wlogger.error(`error in dumCourseTable: ${error}`);
+
+    for (let i = 0; i < numCourses; i++) {
+        const one = dumCourse(faker.helpers.arrayElement(departmentIds));
+        courses.push(one);
     }
+
+    wlogger.error(`error in dumCourseTable: ${error}`);
+
     try {
         const response = await prisma.course.createManyAndReturn({
             data: courses,
