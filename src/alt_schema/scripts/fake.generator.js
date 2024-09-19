@@ -102,7 +102,6 @@ export async function generatefakeData(xprisma) {
         }
     });
 
-    wlogger.debug(`creating projects: done`);
     return;
 }
 

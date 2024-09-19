@@ -45,20 +45,20 @@ router
         createCourse
     );
 router
-    .route("/courses/:course_id")
+    .route("/courses/:courseId")
     .get(param("course_id").notEmpty().toInt(), validate, getCourses);
 
 router
-    .route("/:id/courses/:course_id")
+    .route("/:id/courses/:courseId")
     .get(
         param("id").notEmpty().toInt(),
-        param("course_id").notEmpty().toInt(),
+        param("courseId").notEmpty().toInt(),
         validate,
         getCourses
     )
     .patch(
         param("id").notEmpty().toInt(),
-        param("course_id").notEmpty().toInt(),
+        param("courseId").notEmpty().toInt(),
         body(["name", "semester", "code"]).optional().trim(),
         body("year").optional().toInt(),
         validate,
@@ -66,7 +66,7 @@ router
     )
     .delete(
         param("id").notEmpty().toInt(),
-        param("course_id").notEmpty().toInt(),
+        param("courseId").notEmpty().toInt(),
         validate,
         deleteCourse
     );

@@ -60,8 +60,8 @@ export async function getUserProfile(req, res, err) {
         wlogger.error(`error at getting profile: ${error}`);
         return res.status(500).json(error);
     }
-    wlogger.debug(`profile: ${JSON.stringify(profile)}`);
-    return res.status(200).render("pages/profile.ejs", { profile: profile });
+
+    return res.status(200).render("pages/one-user.ejs", { profile: profile });
 }
 
 export async function createUsers(req, res, err) {

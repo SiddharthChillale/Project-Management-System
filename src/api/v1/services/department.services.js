@@ -45,10 +45,11 @@ async function CRUD_department(method, options) {
 
                 break;
         }
+        return [result, null];
     } catch (error) {
         wlogger.error(`error in case statement: ${error}`);
+        return [null, error];
     }
-    return result;
 }
 
 const DepartmentService = {

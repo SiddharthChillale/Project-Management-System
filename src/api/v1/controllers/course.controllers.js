@@ -1,5 +1,7 @@
+import { name } from "ejs";
 import wlogger from "../../../logger/winston.logger.js";
 import CourseService from "../services/courses.services.js";
+import { cleanDeep } from "../utils/helper.utils.js";
 
 export async function createCourse(req, res, err) {
     const { name, code, semester, year } = req.body;
@@ -35,21 +37,41 @@ export async function getCourses(req, res, err) {
     let options = {
         where: {
             id: courseId,
-            departmanetId: id
+            departmentId: id
         },
         include: {
-            projects
+            projects: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            },
+            userProfiles: {
+                select: {
+                    id: true,
+                    userName: true,
+                    email: true,
+                    role: true
+                }
+            }
         }
     };
-
+    options = cleanDeep(options);
     const [result, error] = await CourseService.CRUD("R", options);
 
     if (error) {
         wlogger.error(`error: ${error}`);
         return res.status(500).json(error);
     }
+    if (courseId) {
+        return res
+            .status(200)
+            .render("pages/one-course.ejs", { course: result[0] });
+    }
 
-    return res.status(200).json(result);
+    return res
+        .status(200)
+        .render("pages/courses.ejs", { courses: result, departmentId: id });
 }
 
 export async function editCourse(req, res, err) {
@@ -78,17 +100,15 @@ export async function editCourse(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res
-        .status(200)
-        .json({ message: "succesful course update", response });
+    return res.status(200).render("pages/courses.ejs", { courses: response });
 }
 
 export async function deleteCourse(req, res, err) {
-    const { id } = req.params;
+    const { courseId } = req.params;
 
     const [response, error] = await CourseService.CRUD("D", {
         where: {
-            id: id
+            id: courseId
         }
     });
 

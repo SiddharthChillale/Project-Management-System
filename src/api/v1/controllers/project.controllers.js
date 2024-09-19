@@ -40,7 +40,7 @@ export async function getProjects(req, res, err) {
         delete options.skip;
     }
     const clause = cleanDeep(options);
-    wlogger.debug(`clause: ${{ clause }}`);
+
     const [result, error] = await ProjectService.getAll(clause);
     let body = result;
     if (error) {
@@ -52,10 +52,10 @@ export async function getProjects(req, res, err) {
         return res.status(500).json(error);
     }
     const a = JSON.stringify(body[0]);
-    wlogger.debug(`project 1: ${a}`);
+
     // body[0] = cleanDeep(body[0]);
     // const b = JSON.stringify(body[0]);
-    // wlogger.debug(`project 2: ${b}`);
+    //
     for (let project of body) {
         if (
             project.event &&

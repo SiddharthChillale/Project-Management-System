@@ -1,0 +1,34 @@
+<div class="container content m-0 p-2 has-background-white">
+    <div class="content">
+    <p class="title is-4 has-text-weight-bold"><%= course.name %></p>
+    <p>Code: <%= course.code %></p>
+    <p>Semester: <%= course.semester %></p>
+    <p>Year: <%= course.year %></p>
+    <table>
+        <th>Projects: </th>
+        <% for( let pi = 0; pi < course.projects.length; pi ++ ) { %>
+            <tr>
+                <td><a href="<%= `/api/v1/projects/${course.projects[pi].id}`%>"><%= course.projects[pi].name %></a>
+                </td>
+                </tr>
+        <% } %>
+    </table>
+
+    <table>
+        <th>Users Associated:</th>
+        <% for( let pi = 0; pi < course.userProfiles.length; pi ++ ) { %>
+            <tr>
+                <td>
+                    <a href="<%= `/api/v1/projects/${course.userProfiles[pi].id}`%>"><%= course.userProfiles[pi].userName %></a>
+                </td>
+                <td>
+                    <a href="<%= `/api/v1/projects/${course.userProfiles[pi].id}`%>"><%= course.userProfiles[pi].email %></a>
+                </td>
+                <td>
+                    <a href="<%= `/api/v1/projects/${course.userProfiles[pi].id}`%>"><%= course.userProfiles[pi].role %></a>
+                </td>
+                </tr>
+        <% } %>
+    </table>
+    </div>
+</div>

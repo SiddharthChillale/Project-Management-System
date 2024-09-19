@@ -28,7 +28,7 @@ export async function getDepartments(req, res, err) {
 
     let options = {
         include: {
-            courses: includeCourses
+            courses: true
         }
     };
     if (id) {
@@ -38,11 +38,17 @@ export async function getDepartments(req, res, err) {
     const [response, error] = await DepartmentService.CRUD("R", options);
 
     if (error) {
-        wlogger.error(`getDepartments error: ${error}`);
+        wlogger.error(`getDepartments error: ${JSON.stringify(error)}`);
         return res.status(500).json(error);
     }
-
-    return res.status(200).json(response);
+    if (id) {
+        return res
+            .status(200)
+            .render("pages/one-department.ejs", { department: response[0] });
+    }
+    return res
+        .status(200)
+        .render("pages/departments.ejs", { departments: response });
 }
 
 export async function updateDepartment(req, res, err) {

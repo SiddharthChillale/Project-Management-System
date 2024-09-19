@@ -5,7 +5,7 @@ import {
     editEvent,
     getEvents
 } from "../controllers/event.controllers.js";
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 import { validate } from "../validators/general.validators.js";
 
 const router = Router();
@@ -13,7 +13,7 @@ const router = Router();
 
 router
     .route("/")
-    .get(getEvents)
+    .get(query("includeAdditional").optional().toBoolean(), validate, getEvents)
     .post(
         body("name").notEmpty().trim(),
         body(["startDate", "endDate"]).notEmpty().isDate(),

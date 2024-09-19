@@ -39,10 +39,11 @@ async function CRUD_course(method, options) {
 
                 break;
         }
+        return [result, null];
     } catch (error) {
         wlogger.error(`error in case statement: ${error}`);
+        return [null, error];
     }
-    return result;
 }
 const CourseService = {
     CRUD: CRUD_course

@@ -70,7 +70,7 @@ export async function createEvent(req, res, err) {
 export async function getEvents(req, res, err) {
     const { id } = req.params;
     const { date } = req.query;
-
+    const { includeAdditional = false } = req.query;
     let options = {
         where: {
             id: id,
@@ -82,6 +82,32 @@ export async function getEvents(req, res, err) {
             }
         }
     };
+    if (includeAdditional) {
+        options = {
+            ...options,
+            include: {
+                projects: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
+                participants: {
+                    select: {
+                        id: true,
+                        email: true,
+                        userName: true
+                    }
+                },
+                creator: {
+                    select: {
+                        id: true,
+                        email: true
+                    }
+                }
+            }
+        };
+    }
     // if (id) {
     //     options = { ...options, id: id };
     // }
@@ -104,7 +130,13 @@ export async function getEvents(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res.status(200).render("pages/default.ejs", { events: result });
+    if (id) {
+        return res
+            .status(200)
+            .render("pages/one-event.ejs", { event: result[0] });
+    }
+
+    return res.status(200).render("pages/events.ejs", { events: result });
 }
 
 export async function editEvent(req, res, err) {

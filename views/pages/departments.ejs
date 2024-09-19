@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+>
+        <title >Departments</title>
+    </head>
+    <body class="has-background-light">
+        
+        <div class="columns ">
+                <%- include ('../partials/menu.ejs'); %>
+            <section class="is-medium column p-0 ">
+                <div class="container content my-3">
+                    <%- include ('../partials/navbar.ejs'); %>
+                    
+                    <div class="mr-2">
+                        <table class="table is-narrow is-striped  container">
+
+                            <thead class="thead ">
+                                <th>Name</th>
+                                <th>Courses</th>
+                                
+                            </thead>
+                            <% for( let di = 0; di < departments.length; di++ ) { %>
+                                <tr>
+                                    
+                                    <td><a href="<%= `/api/v1/departments/${departments[di].id}`  %>" ><%= departments[di].name %></a></td>
+                                    <td><button class="button is-small is-danger is-outlined">
+                                        <a href="<%= `/api/v1/departments/${departments[di].id}/courses/`%>">View Courses</a>
+                                    </button></td>
+                                </tr>
+                            <% } %>
+                        </table>
+                        
+                    </div>
+
+
+                    
+                </div>
+
+            </div>
+            
+        </section>
+    </div>
+    <%- include('../partials/footer.ejs'); %>
+</body>
+</html>

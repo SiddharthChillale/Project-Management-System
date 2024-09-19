@@ -11,15 +11,13 @@ const xprisma = prisma.$extends({
                 const email = args.data.email;
                 const cargs = args.data;
                 const username = email.split("@")[0];
-                wlogger.debug(`username: ${username}`);
-                wlogger.debug(`args.data: ${{ cargs }}`);
 
                 args.data = { ...args.data, userName: username };
                 return query(args);
             },
             async createMany({ model, operation, args, query }) {
                 const cargs = args.data;
-                wlogger.debug(`args.data: ${{ cargs }}`);
+
                 args.data.map((dataObj) => {
                     const email = dataObj.email;
                     const username = email.split("@")[0];

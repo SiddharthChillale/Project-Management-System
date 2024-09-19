@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+>
+        <title >Departments</title>
+    </head>
+    <body class="has-background-light">
+        
+        <div class="columns ">
+                <%- include ('../partials/menu.ejs'); %>
+            <section class="is-medium column p-0 ">
+                <div class="container content my-3">
+                    <%- include ('../partials/navbar.ejs'); %>
+                    
+                    <div class="mr-2">
+                        <table class="table is-narrow is-striped  container">
+
+                            <thead class="thead ">
+                                <th>Course Name</th>
+                                <th>Code</th>
+                                <th>Semester</th>
+                                <th>Year</th>
+                                
+                            </thead>
+                            <% for( let ci = 0; ci < courses.length; ci++ ) { %>
+                                <tr>
+                                    <td><a href="<%= `/api/v1/departments/${departmentId}/courses/${courses[ci].id}`  %>" ><%= courses[ci].name %></a></td>
+                                    <td><%= courses[ci].code %></td>
+                                    <td><%= courses[ci].semester %></td>
+                                    <td><%= courses[ci].year %></td>
+                                    
+                                </tr>
+                            <% } %>
+                        </table>
+                        
+                    </div>
+
+
+                    
+                </div>
+
+            </div>
+            
+        </section>
+    </div>
+    <%- include('../partials/footer.ejs'); %>
+</body>
+</html>
