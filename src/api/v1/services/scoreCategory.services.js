@@ -33,10 +33,11 @@ async function CRUD_scoreCategory(method, options) {
 
                 break;
         }
+        return [result, null];
     } catch (error) {
         wlogger.error(`error in case statement: ${error}`);
+        return [null, result];
     }
-    return result;
 }
 
 const ScoreCatService = {

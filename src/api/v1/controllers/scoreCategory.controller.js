@@ -44,7 +44,14 @@ export async function getScoreCats(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res.status(200).json(response);
+    if (id) {
+        return res
+            .status(200)
+            .render("pages/one-scoreCat.ejs", { scoreCat: response[0] });
+    }
+    return res
+        .status(200)
+        .render("pages/scoreCats.ejs", { scoreCats: response });
 }
 
 export async function updateScoreCat(req, res, err) {
