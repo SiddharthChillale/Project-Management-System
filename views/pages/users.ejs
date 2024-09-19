@@ -9,7 +9,7 @@
 >
         <title >Projects-All</title>
     </head>
-    <body class="has-background-light">
+    <body class="has-bakground-white">
         
         <div class="columns ">
                 <%- include ('../partials/menu.ejs'); %>
@@ -19,11 +19,17 @@
                     <div class="mr-2">
 
                         <div class="p-4 has-background-white">
+                            <div class="field is-grouped"></div>
+                            <button class="control button is-success is-light is-small">Add Users +</button>
+                            <button class="control button is-success is-light is-small">Create Profile +</button>
+                            
+                        </div>
                         <table class="table is-narrow is-striped  container">
                             <thead class="thead ">
                                 <tr>
                                     <th>ID</th>
                                     <th>Email</th>
+                                    <th>One-Time Token</th>
                                     <th>View</th>
                                 </tr>
                             </thead>
@@ -31,13 +37,14 @@
                                 <tr>
                                     <td><%= users[ui].id %></td>
                                     <td><%= users[ui].email %></td>
+                                    <td><button class="button is-small is-primary is-outlined">Regenerate</button></td>
                                     <% if (users[ui].profiles.length == 0) { %>
                                         <td class="dropdown">
                                             <div class="dropdown-trigger">
-                                                <button class="button is-small is-danger" disabled>
-                                                    <span> No profiles</span>
+                                                <button class="button is-small is-shadowless " aria-haspopup="true" aria-controls="dropdown-menu" disabled> 
+                                                    <span title="No Profiles for this user">View Profile</span>
                                                     <span class="icon is-small">
-                                                        <i class="fas fa-cross" aria-hidden="true"></i>
+                                                        <i class="fas fa-angle-down" aria-hidden="false"></i>
                                                     </span>
                                                 </button>
                                             </div>
@@ -49,12 +56,13 @@
                                     <!-- <td class="dropdown is-active"> -->
                                         <td class="dropdown ">
                                         <div class="dropdown-trigger">
-                                            <button class="button is-secondary is-small is-shadowless" aria-haspopup="true" aria-controls="dropdown-menu">
+                                            <button class="button is-info is-light is-small is-shadowless " aria-haspopup="true" aria-controls="dropdown-menu">
                                                 <span>View Profile</span>
                                                 <span class="icon is-small">
                                                     <i class="fas fa-angle-down" aria-hidden="false"></i>
                                                 </span>
                                             </button>
+                                            
                                         </div>
                                         <div class="dropdown-menu " id="dropdown-menu" role="menu">
                                             <div class="dropdown-content is-shadowless " style="outline: 1px solid #d0d7de;">
