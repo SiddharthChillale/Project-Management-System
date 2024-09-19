@@ -44,6 +44,9 @@ router
         validate,
         createCourse
     );
+router
+    .route("/courses/:course_id")
+    .get(param("course_id").notEmpty().toInt(), validate, getCourses);
 
 router
     .route("/:id/courses/:course_id")
