@@ -78,7 +78,7 @@ export async function getEvents(req, res, err) {
                 lte: date
             },
             endDate: {
-                gte: data
+                gte: date
             }
         }
     };
@@ -97,14 +97,14 @@ export async function getEvents(req, res, err) {
     //     };
     // }
     options = cleanDeep(options);
-    const [result, error] = await EventService.findMany({ where: options });
+    const [result, error] = await EventService.findMany(options);
 
     if (error) {
         wlogger.error(`error: ${error}`);
         return res.status(500).json(error);
     }
 
-    return res.status(200).json(result);
+    return res.status(200).render("pages/default.ejs", { events: result });
 }
 
 export async function editEvent(req, res, err) {

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+>
+        <title >Projects-All</title>
+    </head>
+    <body class="has-background-light">
+        
+        <div class="columns ">
+                <%- include ('../partials/menu.ejs'); %>
+            <section class="is-medium column p-0 ">
+                <div class="container content my-3">
+                    <%- include ('../partials/navbar.ejs'); %>
+                    <div class="mr-2">
+
+                        <div class="p-4 has-background-white">
+                        <table class="table is-narrow is-striped  container">
+                            <thead class="thead ">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Email</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <% for( let ui = 0; ui < users.length; ui ++ ) { %>
+                                <tr>
+                                    <td><%= users[ui].id %></td>
+                                    <td><%= users[ui].email %></td>
+                                    <% if (users[ui].profiles.length == 0) { %>
+                                        <td class="dropdown">
+                                            <div class="dropdown-trigger">
+                                                <button class="button is-small is-danger" disabled>
+                                                    <span> No profiles</span>
+                                                    <span class="icon is-small">
+                                                        <i class="fas fa-cross" aria-hidden="true"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        
+                                    
+                                    <% } else { %>
+                                    
+                                    <!-- <td class="dropdown is-active"> -->
+                                        <td class="dropdown ">
+                                        <div class="dropdown-trigger">
+                                            <button class="button is-secondary is-small is-shadowless" aria-haspopup="true" aria-controls="dropdown-menu">
+                                                <span>View Profile</span>
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-angle-down" aria-hidden="false"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div class="dropdown-menu " id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content is-shadowless " style="outline: 1px solid #d0d7de;">
+                                                <% for( let pid = 0; pid < users[ui].profiles.length; pid++ ) { %>
+                                                    <a class="dropdown-item py-3 is-radiusless is-size-7 is-centered"  href="<%= `/api/v1/users/profile/${users[ui].profiles[pid].id}`%>"><%= users[ui].profiles[pid].role %></a> 
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <% } %>
+                                </tr>
+                            <% } %>
+                        </table>
+                    </div>
+
+                </div>
+
+                </div>
+                
+            </section>
+        </div>
+        <%- include('../partials/footer.ejs'); %>
+    </body>
+</html>

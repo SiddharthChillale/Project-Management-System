@@ -20,15 +20,34 @@ export async function getUsers(req, res, err) {
 
         return res.status(500).json(error);
     }
-    return res.status(200).json(profiles);
+
+    return res.status(200).render("pages/users.ejs", { users: profiles });
 }
 
 export async function getUserProfile(req, res, err) {
-    const { id, profile_id } = req.params.id;
+    const { profile_id } = req.params;
     const [profile, error] = await ProfileService.findOne({
         where: {
-            id: profile_id,
-            userId: id
+            id: profile_id
+        },
+        include: {
+            projectAssociations: {
+                select: {
+                    id: true,
+                    projectId: true,
+                    userRole: true,
+                    status: true,
+                    project: {
+                        select: {
+                            name: true
+                        }
+                    }
+                }
+            },
+            ratings: true,
+            participantEvents: true,
+            createdEvents: true,
+            courses: true
         }
     });
     if (req.user) {
@@ -38,11 +57,11 @@ export async function getUserProfile(req, res, err) {
         if (error.code == "NotFoundError") {
             return res.status(404).json(error);
         }
-
+        wlogger.error(`error at getting profile: ${error}`);
         return res.status(500).json(error);
     }
-
-    return res.status(200).json(profile);
+    wlogger.debug(`profile: ${JSON.stringify(profile)}`);
+    return res.status(200).render("pages/profile.ejs", { profile: profile });
 }
 
 export async function createUsers(req, res, err) {

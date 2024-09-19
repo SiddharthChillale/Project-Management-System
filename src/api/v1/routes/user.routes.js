@@ -24,7 +24,7 @@ import { validate } from "../validators/general.validators.js";
 const router = express.Router();
 
 //only accessible to all profiles with role=ADMIN or PM, hence require the verifyTokenAndAttachUser
-router.route("/").get(verifyTokenAndAttachUser, getUsers);
+router.route("/").get(getUsers);
 
 router
     .route("/login")

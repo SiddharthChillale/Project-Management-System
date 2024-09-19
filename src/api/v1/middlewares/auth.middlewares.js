@@ -87,24 +87,25 @@ export async function attachUserOrSilentFail(req, res, next) {
         req.cookies?.accessToken ||
         req.query?.accessToken ||
         req.get("Authorization")?.replace("Bearer ", "");
+    if (token) {
+        const decoded = jwt.verify(token, "randtoken");
 
-    const decoded = jwt.verify(token, "randtoken");
+        const [user, error] = await UserService.get({
+            where: { id: decoded.id },
+            include: {
+                profiles: true
+            }
+        });
 
-    const [user, error] = await UserService.get({
-        where: { id: decoded.id },
-        include: {
-            profiles: true
+        if (user && user.length > 1) {
+            let userWithProfile = firstUser;
+            if (decoded.profile_id)
+                userWithProfile = {
+                    ...userWithProfile,
+                    profile_id: decoded.profile_id
+                };
+            req.user = userWithProfile;
         }
-    });
-
-    if (user && user.length > 1) {
-        let userWithProfile = firstUser;
-        if (decoded.profile_id)
-            userWithProfile = {
-                ...userWithProfile,
-                profile_id: decoded.profile_id
-            };
-        req.user = userWithProfile;
     }
 
     next();

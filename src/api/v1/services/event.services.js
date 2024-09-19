@@ -3,7 +3,7 @@ import { prisma } from "./main.services.js";
 
 export async function dbCreateEvent(data) {
     const goCreateEvent = goStyleExceptionWrapper(prisma.event.create);
-    const [response, error] = goCreateEvent({
+    const [response, error] = await goCreateEvent({
         data: data
     });
     return [response, error];
@@ -11,7 +11,7 @@ export async function dbCreateEvent(data) {
 
 export async function dbUpdateEventById(eventId, data) {
     const goUpdateEvent = goStyleExceptionWrapper(prisma.event.update);
-    const [response, error] = goUpdateEvent({
+    const [response, error] = await goUpdateEvent({
         where: {
             id: eventId
         },
@@ -22,13 +22,13 @@ export async function dbUpdateEventById(eventId, data) {
 
 export async function dbFindEvents(clause) {
     const goFindMany = goStyleExceptionWrapper(prisma.event.findMany);
-    const [response, error] = goFindMany(clause);
+    const [response, error] = await goFindMany(clause);
     return [response, error];
 }
 
 export async function dbDeleteEvent(clause) {
     const goFindMany = goStyleExceptionWrapper(prisma.event.findMany);
-    const [response, error] = goFindMany(clause);
+    const [response, error] = await goFindMany(clause);
     return [response, error];
 }
 

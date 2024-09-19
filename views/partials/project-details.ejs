@@ -1,112 +1,93 @@
-<!doctype html>
-<html lang="en" data-theme="light">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
-        />
-        <title><%= project.name %></title>
-    </head>
-    <body class="has-background-light">
-        <div><%- include ('../partials/navbar.ejs'); %></div>
-        <div class="columns section">
-            <section class="column is-one-quarter">
-                <%- include ('../partials/menu.ejs'); %>
-            </section>
-            <section class="is-medium column">
-                <div class="container content">
-                    <div class="level box is-shadowless">
-                        <div class="level-left title is-5">
-                            <%= project.name %>
-                        </div>
+<div class="container content">
+        <div class="m-0 p-5 has-background-white">
+            <div class="level">
+                <div class="level-left is-size-3 has-text-weight-medium">
+                        <%= project.name %>
                     </div>
-
-                    <div class="card box is-shadowless con">
-                        <div class="block">
-                            <div class="has-text-weight-bold">
-                                <span>Seats available:</span>
-                                <span>
-                                    <%= project.teamSize
-                                    -project._count.projectAssociations %>
-                                </span>
-                                /
-                                <span><%=project.teamSize%></span>
-                            </div>
-                            <div class="level"><%= project.description %></div>
-
-                            <br />
-                            <div class="level-left">
-                                <div>
-                                    <p class="subtitle is-7">
-                                        Last Updated: <%= project.updatedAt %>
-                                    </p>
-                                    <p class="subtitle is-7">
-                                        Started: <%= project.createdAt %>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- <span>
-                                <%# project.publicAttachments?.keys.forEach(link => { %> 
-                                        <a href="<%# project.publicAttachments[link] %>"><%# project.publicAttachments[link] %></a>
-                                <%# }) %>
-                                
-                            </span>
-                            <span>
-                                <%# project.privateAttachments?.keys.forEach(link => { %> 
-                                        <a href="<%# project.privateAttachments[link] %>"><%# project.privateAttachments[link] %></a>
-                                <%# }) %>
-                        
-                            </span> -->
-                        </div>
-                        <div class="columns">
-                            <div class="column">
-                                <div class="subtitle is-6">Event:</div>
-
-                                <% if (project.event) { %>
-                                <a
-                                        class="title is-5"
-                                        href="<%= `/api/v1/events/${project.event.id}`%>"
-                                        ><%= project.event.name %></a
-                                    >
-
-                                    <div>
-                                        From: <%= project.event.startDate %>
-                                    </div>
-                                    <div>To: <%= project.event.endDate %></div>
-                                
-                                    <% } else { %>
-                                        <span>N/A</span>
-                                        <% } %>
-                            </div>
-                            <div class="column">
-                                <div class="subtitle is-6">Course:</div>
-                                <% if (project.course) { %>
-                                        
-                                    <a
-                                        class="title is-5"
-                                        href="<%= `/api/v1/departments/courses/${project.course.id}`%>"
-                                        ><%= project.course.name %></a
-                                    >
-                                
-                                <span class="subtitle"
-                                    ><%= project.course.semester %> <%=
-                                    project.course.year %></span
-                                >
-                                <% } else { %>
-                                        <span>N/A</span>
-                                        <% } %>
-                                 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                    <span class="level-right">
+                        <button class="button is-primary is-small"><a href="<%= `/api/v1/projects/${project.id}/assign`%>">Edit</a></button>
+                        <button class="button is-primary is-small"><a href="<%= `/api/v1/projects/${project.id}/assign`%>">Enroll</a></button>
+        
+                    </span>
+            </div>
         </div>
 
-        <footer class="footer">
-            <%- include('../partials/footer.ejs'); %>
-        </footer>
-    </body>
-</html>
+        <div class="p-5 has-background-white">
+            <div class="block">
+                <div class="has-text-weight-bold">
+                    <span>Seats available:</span>
+                    <span>
+                        <%= project.teamSize
+                        -project._count.projectAssociations %>
+                    </span>
+                    /
+                    <span><%=project.teamSize%></span>
+                </div>
+                <br />
+
+                <div class="level"><%= project.description %></div>
+
+                <br />
+                <div class="level-left">
+                    <div>
+                        <p class="subtitle is-7">
+                            Last Updated: <%= project.updatedAt %>
+                        </p>
+                        <p class="subtitle is-7">
+                            Started: <%= project.createdAt %>
+                        </p>
+                    </div>
+                </div>
+                <!-- <span>
+                    <%# project.publicAttachments?.keys.forEach(link => { %> 
+                            <a href="<%# project.publicAttachments[link] %>"><%# project.publicAttachments[link] %></a>
+                    <%# }) %>
+                    
+                </span>
+                <span>
+                    <%# project.privateAttachments?.keys.forEach(link => { %> 
+                            <a href="<%# project.privateAttachments[link] %>"><%# project.privateAttachments[link] %></a>
+                    <%# }) %>
+            
+                </span> -->
+            </div>
+            <div class="grid">
+                <div class="cell">
+                    
+                    <% if (project.event) { %>
+                    <a
+                            class="is-size-4 has-text-weight-bold"
+                            href="<%= `/api/v1/events/${project.event.id}`%>"
+                            ><%= project.event.name %></a
+                        >
+
+                        <div>
+                            From: <%= project.event.startDate %>
+                        </div>
+                        <div>To: <%= project.event.endDate %></div>
+                    
+                        <% } else { %>
+                            <span class="is-size-7 is-italic is-capitalized">Not in any Event</span>
+                            <% } %>
+                </div>
+                <div class="cell">
+                    <% if (project.course) { %>
+                            
+                        <a
+                            class="is-size-4 has-text-weight-bold"
+                            href="<%= `/api/v1/departments/courses/${project.course.id}`%>"
+                            ><%= project.course.name %></a
+                        >
+                    
+                    <span class="is-size-7 is-italic is-capitalized" 
+                        ><%= project.course.semester %> <%=
+                        project.course.year %></span
+                    >
+                    <% } else { %>
+                            <span class="is-size-7 is-italic is-capitalized" >Not in any Course</span>
+                            <% } %>
+                     
+                </div>
+            </div>
+        </div>
+    </div>

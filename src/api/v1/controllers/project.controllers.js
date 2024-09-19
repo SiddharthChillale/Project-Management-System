@@ -74,11 +74,11 @@ export async function getProjects(req, res, err) {
     }
 
     if (id) {
-        return res.status(200).render("partials/project-details.ejs", {
+        return res.status(200).render("pages/one-project.ejs", {
             project: body[0]
         });
     }
-    return res.status(200).render("pages/project.ejs", { projects: body });
+    return res.status(200).render("pages/projects.ejs", { projects: body });
 }
 
 function convertToReadableDate(ISOdate) {
