@@ -177,8 +177,6 @@ async function dumCourseTable(departmentIds, numCourses) {
         courses.push(one);
     }
 
-    wlogger.error(`error in dumCourseTable: ${error}`);
-
     try {
         const response = await prisma.course.createManyAndReturn({
             data: courses,
@@ -203,7 +201,8 @@ async function dumUserProfile(user) {
         email: user.email,
         userName: user.email.split("@")[0],
         role: faker.helpers.objectValue(Role),
-        userId: user.id
+        userId: user.id,
+        profilePic: { url: faker.image.avatarGitHub() }
     };
 }
 
@@ -297,8 +296,15 @@ async function dumEventTable(profiles, numOfEvents) {
 function dumProject(profileId) {
     return {
         name: faker.commerce.productName(),
-        description: faker.commerce.productDescription(),
-        teamSize: faker.number.int(10),
+        description:
+            faker.commerce.productDescription() +
+            " <p> " +
+            faker.lorem.sentences() +
+            " <p> " +
+            faker.lorem.sentences() +
+            " <p> " +
+            faker.lorem.sentences(),
+        teamSize: faker.number.int({ min: 2, max: 10 }),
         publicAttachments: {
             website: faker.internet.url(),
             photos: faker.internet.url()
@@ -391,7 +397,8 @@ async function dumProjectAssociationTable(
     let participantProfiles = [];
 
     for (const profile of profiles) {
-        if (profile.role != Role.ADMIN) participantProfiles.push(profile);
+        if (profile.role != Role.ADMIN && profile.eole != Role.PUBLIC)
+            participantProfiles.push(profile);
     }
 
     for (let i = 0; i < numOfAssociations; i++) {
@@ -427,8 +434,72 @@ async function dumProjectAssociationTable(
     return [assocIds, response];
 }
 
-async function course_profiles(numCP, courseIds, profiles) {}
-async function course_events(numCP, eventIds, profiles) {}
+async function course_projects(numCP, courseIds, projectIds) {
+    wlogger.info(`creating course-project: start`);
+    let courseProjectPromises = [];
+
+    for (let i = 0; i < numCP; i++) {
+        const projectId = faker.helpers.arrayElement(projectIds);
+        const courseId = faker.helpers.arrayElement(courseIds);
+        const result = prisma.project.update({
+            where: {
+                id: projectId
+            },
+            data: {
+                course: {
+                    connect: {
+                        id: courseId
+                    }
+                }
+            }
+        });
+
+        courseProjectPromises.push(result);
+    }
+
+    try {
+        await Promise.all(courseProjectPromises).then((result) => {
+            wlogger.info(`creating course-projects: done `);
+            return [result, null];
+        });
+    } catch (error) {
+        wlogger.error(`error in course_projects: ${error}`);
+        return [undefined, error];
+    }
+}
+async function event_projects(numCP, eventIds, projectIds) {
+    wlogger.info(`creating event-project: start`);
+    let eventProjectPromises = [];
+
+    for (let i = 0; i < numCP; i++) {
+        const projectId = faker.helpers.arrayElement(projectIds);
+        const eventId = faker.helpers.arrayElement(eventIds);
+        const result = prisma.project.update({
+            where: {
+                id: projectId
+            },
+            data: {
+                event: {
+                    connect: {
+                        id: eventId
+                    }
+                }
+            }
+        });
+
+        eventProjectPromises.push(result);
+    }
+
+    try {
+        await Promise.all(eventProjectPromises).then((result) => {
+            wlogger.info(`creating event-projects: done `);
+            return [result, null];
+        });
+    } catch (error) {
+        wlogger.error(`error in event_projects: ${error}`);
+        return [undefined, error];
+    }
+}
 
 async function tertiaryTables(parent, params) {
     wlogger.info("filling tertiary tables");
@@ -439,6 +510,27 @@ async function tertiaryTables(parent, params) {
             parent.projects.ids,
             params.numProjectAssociations
         );
+
+    // try {
+    await course_projects(
+        params.numCourseProjects,
+        parent.courses.ids,
+        parent.projects.ids
+    );
+    // } catch (error) {
+    //     wlogger.error(`error in courseprofiles: ${error}`);
+    //     return error;
+    // }
+    try {
+        await event_projects(
+            params.numEventProjects,
+            parent.events.ids,
+            parent.projects.ids
+        );
+    } catch (error) {
+        wlogger.error(`error in eventprojects: ${error}`);
+        return error;
+    }
 
     parent = {
         ...parent,
@@ -532,7 +624,10 @@ async function setup() {
         numProjects: 20,
         numProjectAssociations: 7,
         numEvents: 3,
-        numRatings: 2
+        numRatings: 2,
+        numCourseProfiles: 6,
+        numCourseProjects: 10,
+        numEventProjects: 10
     };
     try {
         parents = await primaryTables(params);

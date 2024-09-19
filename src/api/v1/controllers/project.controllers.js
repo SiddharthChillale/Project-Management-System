@@ -9,6 +9,10 @@ import { cleanDeep } from "../utils/helper.utils.js";
 
 export async function getProjects(req, res, err) {
     const { id } = req.params;
+    let { page } = req.query;
+    page = page ? page - 1 : 0;
+    const take = 10;
+    const skip = take * page;
 
     let options = {
         where: {
@@ -28,24 +32,69 @@ export async function getProjects(req, res, err) {
                     projectAssociations: true
                 }
             }
-        }
+        },
+        skip: skip,
+        take: take
     };
-
+    if (id) {
+        delete options.skip;
+    }
     const clause = cleanDeep(options);
-    const [body, error] = await ProjectService.getAll(clause);
-
+    wlogger.debug(`clause: ${{ clause }}`);
+    const [result, error] = await ProjectService.getAll(clause);
+    let body = result;
     if (error) {
         if (error.cause?.code == "ProjectDoesNotExist") {
             res.status(404).json(error);
             return;
         }
-
-        res.status(500).json(error);
-        return;
+        wlogger.error(`error: ${error}`);
+        return res.status(500).json(error);
+    }
+    const a = JSON.stringify(body[0]);
+    wlogger.debug(`project 1: ${a}`);
+    // body[0] = cleanDeep(body[0]);
+    // const b = JSON.stringify(body[0]);
+    // wlogger.debug(`project 2: ${b}`);
+    for (let project of body) {
+        if (
+            project.event &&
+            project.event != null &&
+            project.event != undefined
+        ) {
+            project.event.startDate = convertToReadableDate(
+                project.event.startDate
+            );
+            project.event.endDate = convertToReadableDate(
+                project.event.endDate
+            );
+        }
+        project.createdAt = convertToReadableDate(project.createdAt);
+        project.updatedAt = convertToReadableDate(project.updatedAt);
     }
 
-    res.status(200).json(body);
-    return;
+    if (id) {
+        return res.status(200).render("partials/project-details.ejs", {
+            project: body[0]
+        });
+    }
+    return res.status(200).render("pages/project.ejs", { projects: body });
+}
+
+function convertToReadableDate(ISOdate) {
+    const date = ISOdate;
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // JavaScript months are 0-indexed
+    const day = date.getDate();
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const readableDate = `${year}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+    const readableTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+    return [readableDate, readableTime];
 }
 
 export async function addProject(req, res, err) {

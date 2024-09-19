@@ -9,7 +9,7 @@ import scoreCatRouter from "./scoreCategory.routes.js";
 
 const router = express.Router();
 
-router.get("/", rootHandler);
+router.get("/api/v1/", rootHandler);
 
 // all other routes
 router.use("/api/v1/projects", projectRouter);

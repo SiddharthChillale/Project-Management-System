@@ -4,6 +4,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import routes from "./api/v1/routes/index.routes.js";
 import cookieParser from "cookie-parser";
+import ejs from "ejs";
 
 const app = express();
 // const __rootdir = path.join(import.meta.dirname, "../");
@@ -16,6 +17,7 @@ if (process.env.NODE_ENV !== "test") {
     app.use(morgan("dev"));
 }
 
+app.set("view engine", "ejs");
 // middleware: set content-type to be json
 app.use(express.json());
 

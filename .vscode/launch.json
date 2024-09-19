@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Program",
+            "name": "Launch sandbox.js ", 
             "program": "${workspaceFolder}/src/api/v1/sandbox/sandbox.js",
             "request": "launch",
             "skipFiles": [
@@ -14,7 +14,7 @@
             "type": "node"
         },
         {
-            "name": "Launch Sandbox prisma",
+            "name": "Launch db-builder sandbox",
             "program": "${workspaceFolder}/test/sandbox/db-builder.sandbox.js",
             "request": "launch",
             "skipFiles": [

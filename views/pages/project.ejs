@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+>
+        <title >Projects-All</title>
+    </head>
+    <body class="has-background-light">
+        <div>
+            <%- include ('../partials/navbar.ejs'); %>
+        </div>
+        <div class="columns section ">
+            <section class="column is-one-quarter">
+                <%- include ('../partials/menu.ejs'); %>
+            </section>
+            <section class="is-medium column">
+                <div class="container content">
+                        <div class="level-left title is-5 box is-shadowless">
+                            Projects
+                        </div>
+                    
+
+                    <div >
+                        <% for( let pi = 0; pi < projects.length; pi ++ ) { %>
+                            <div class = " card box is-shadowless">
+                                <span >
+
+                                    <a class="content" href="<%= `/api/v1/projects/${projects[pi].id}`%>"><%= projects[pi].name %></a>
+                                    <div class="level is-overflow">
+                                        <%= projects[pi].description %> 
+                                        
+                                    </div>
+                                    <div class="card-footer">
+                                        <br/>
+                                        <span>Seats available: <%= projects[pi].teamSize - projects[pi]._count.projectAssociations %>/<%= projects[pi].teamSize%></span>
+                                
+                                    </div>
+                                </span>
+                                
+                                    <span><a href="<%= `/api/v1/projects/${projects[pi].id}`%>">Read More</a></span>
+                                
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <div class="pagination" role="navigation" aria-label="pagination">
+                        <a class="pagination-previous is-disabled" title="This is the first page"
+                        <a href="#" class="pagination-next">Next page</a>
+                        <ul class="pagination-list">
+                          <li>
+                            <a
+                              class="pagination-link is-current"
+                              aria-label="Page 1"
+                              aria-current="page"
+                              >1</a
+                            >
+                          </li>
+                          <li>
+                            <a href="#" class="pagination-link" aria-label="Goto page 2">2</a>
+                          </li>
+                          <li>
+                            <a href="#" class="pagination-link" aria-label="Goto page 3">3</a>
+                          </li>
+                        </ul>
+                      </div> 
+                </div>
+                
+            </section>
+        </div>
+        
+        
+        <footer class="footer"><%- include('../partials/footer.ejs'); %></footer>
+    </body>
+</html>

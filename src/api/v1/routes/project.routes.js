@@ -12,7 +12,7 @@ import {
 import { checkProjectExistenceById } from "../middlewares/projectValidation.middlewares.js";
 import checkForSchema from "../middlewares/schemaValidation.middlewares.js";
 import project_schema from "../ajv_schemas/project.schema.js";
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 import { validate } from "../validators/general.validators.js";
 import {
     attachUserOrSilentFail,
@@ -24,6 +24,8 @@ router
     .get(
         [
             //validateHeaders, authentication, checkAuthorization
+            query("page").optional().toInt(),
+            query("take").optional().toInt()
         ],
         getProjects
     )
