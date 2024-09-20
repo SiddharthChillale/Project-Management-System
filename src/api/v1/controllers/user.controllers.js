@@ -159,6 +159,21 @@ export async function editUserProfile(req, res, err) {
 }
 
 // Login, Register, Logout
+export async function loginViewHandler(req, res, err) {
+    return res.status(200).render("pages/login.ejs");
+}
+export async function registerViewHandler(req, res, err) {
+    return res.status(200).render("pages/register.ejs");
+}
+
+export async function dashboardViewHandler(req, res, err) {
+    const { user } = req;
+    if (!user) {
+        return res.status(401).render("pages/login.ejs");
+    }
+    return res.status(200).render("pages/dashboard.ejs");
+}
+
 export async function registerHandler(req, res, err) {
     /**
      * extract email and password from req body

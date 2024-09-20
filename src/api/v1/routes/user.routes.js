@@ -15,7 +15,10 @@ import {
     assignmentHandler,
     detachHandler,
     getAvailableProfiles,
-    chooseProfile
+    chooseProfile,
+    loginViewHandler,
+    registerViewHandler,
+    dashboardViewHandler
 } from "../controllers/user.controllers.js";
 
 import { body, param } from "express-validator";
@@ -28,6 +31,7 @@ router.route("/").get(getUsers);
 
 router
     .route("/login")
+    .get(loginViewHandler)
     .post(
         body("email").isEmail().trim(),
         body("password").notEmpty(),
@@ -36,12 +40,15 @@ router
     );
 router
     .route("/register")
+    .get(registerViewHandler)
     .post(
         body("email").isEmail().trim(),
         body("password").notEmpty(),
         validate,
         registerHandler
     );
+
+router.route("/dashboard").get(verifyTokenAndAttachUser, dashboardViewHandler);
 router.route("/refresh-token").post(refreshAccessToken);
 
 router.route("/create-users").post(verifyTokenAndAttachUser, createUsers);

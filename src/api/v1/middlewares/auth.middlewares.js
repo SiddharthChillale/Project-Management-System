@@ -30,7 +30,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     if (!token) {
         wlogger.error(`token not found`);
 
-        return res.status(400).json("Not Authorized.");
+        return res.status(400).render("pages/login.ejs");
     }
 
     //check if accessToken is in blacklist table
@@ -40,6 +40,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     } catch (err) {
         //Token expired
         wlogger.error(`error: ${err}`);
+        return res.status(400).render("pages/login.ejs");
     }
 
     const [user, error] = await UserService.get({

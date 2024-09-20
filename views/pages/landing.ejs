@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('../partials/layouts/header.ejs'); %>
+        <title>Welcome</title>
+</head>
+
+<body>
+    <div class="hero is-fullheight-with-navbar">
+        <div class="hero-head">
+            <nav class="navbar has-background-primary-light">
+                <div class="container">
+
+                    <div class="navbar-menu">
+                        <div class="navbar-start">
+                            <span class="navbar-item has-text-weight-bold is-size-5">Project Management System</span>
+                        </div>
+                        <div class="navbar-end">
+                            <a href="/api/v1/users/dashboard" class="navbar-item">Dashboard</a>
+                            <a href="/api/v1/users/login" class="navbar-item">Login</a>
+                            <a href="/api/v1/users/register" class="navbar-item">Register</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="hero-body">
+            <section class="section container has-text-centered">
+                Welcome to Project Management System
+            </section>
+            <section class="section container">
+                <figure>
+                    <img src="https://source.unsplash.com/random/1280x720" alt="">
+                </figure>
+            </section>
+        </div>
+    </div>
+
+</body>
+
+</html>
