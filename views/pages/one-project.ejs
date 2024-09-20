@@ -1,26 +1,29 @@
 <!doctype html>
 <html lang="en" data-theme="light">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <%- include('../partials/header.ejs'); %>
-        
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%- include('../partials/layouts/header.ejs'); %>
+
         <title>Projects-All</title>
-    </head>
-    <body class="has-bakground-white">
-        <div class="columns">
-            <%- include ('../partials/menu.ejs'); %>
+</head>
+
+<body class="has-bakground-white">
+    <div class="columns">
+        <%- include ('../partials/layouts/menu.ejs'); %>
             <section class="is-medium column p-0">
                 <div class="container content my-3"></div>
-                    <%- include ('../partials/navbar.ejs'); %>
-                    <%- include ('../partials/project-details.ejs'); %>
-                </div>
+                <%- include ('../partials/layouts/navbar.ejs'); %>
+                    <%- include ('../partials/details/project.ejs'); %>
+    </div>
 
-            </section>
-        </div>
+    </section>
+    </div>
 
-        
-            <%- include('../partials/footer.ejs'); %>
-        
-    </body>
+
+    <%- include('../partials/layouts/footer.ejs'); %>
+
+</body>
+
 </html>

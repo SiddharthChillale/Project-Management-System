@@ -1,54 +1,60 @@
 <!doctype html>
 <html lang="en" data-theme="light">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
->
-        <title >Projects-All</title>
-    </head>
-    <body class="has-bakground-white">
-        
-        <div class="columns ">
-                <%- include ('../partials/menu.ejs'); %>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <title>Projects-All</title>
+</head>
+
+<body class="has-bakground-white">
+
+    <div class="columns ">
+        <%- include ('../partials/layouts/menu.ejs'); %>
             <section class="is-medium column p-0 ">
                 <div class="container content my-3">
-                    <%- include ('../partials/navbar.ejs'); %>
-                    
-                    <div class="mr-2">
-                        <div class="field is-grouped">
-                            <button class="control button is-success is-light is-small">Create Event +</button>
-                            
+                    <%- include ('../partials/layouts/navbar.ejs'); %>
+
+                        <div class="mr-2">
+                            <div class="field is-grouped">
+                                <button class="control button is-success is-light is-small">Create Event +</button>
+
+                            </div>
+                            <table class="table is-narrow is-striped  container">
+
+                                <thead class="thead ">
+                                    <th>Name</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                </thead>
+                                <% for( let evi=0; evi < events.length; evi++ ) { %>
+                                    <tr>
+
+                                        <td><a href="<%= `/api/v1/events/${events[evi].id}?includeAdditional=true`  %>">
+                                                <%= events[evi].name %>
+                                            </a></td>
+                                        <td>
+                                            <%= events[evi].startDate %>
+                                        </td>
+                                        <td>
+                                            <%= events[evi].endDate %>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </table>
+
                         </div>
-                        <table class="table is-narrow is-striped  container">
-
-                            <thead class="thead ">
-                                <th>Name</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                            </thead>
-                            <% for( let evi = 0; evi < events.length; evi++ ) { %>
-                                <tr>
-                                    
-                                    <td><a href="<%= `/api/v1/events/${events[evi].id}?includeAdditional=true`  %>" ><%= events[evi].name %></a></td>
-                                    <td><%= events[evi].startDate %></td>    
-                                    <td><%= events[evi].endDate %></td>
-                                </tr>
-                            <% } %>
-                        </table>
-                        
-                    </div>
 
 
-                    
+
                 </div>
 
-            </div>
-            
-        </section>
     </div>
-    <%- include('../partials/footer.ejs'); %>
+
+    </section>
+    </div>
+    <%- include('../partials/layouts/footer.ejs'); %>
 </body>
+
 </html>
