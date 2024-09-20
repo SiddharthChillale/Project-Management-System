@@ -141,7 +141,7 @@ export async function createUserProfile(req, res, err) {
 }
 export async function editUserProfile(req, res, err) {
     const id = req.user.id;
-    const profile_id = req.params.profile_id;
+    const profileId = req.params.profileId;
     let newProfile = req.body.newProfile;
 
     delete newProfile.email;
@@ -149,7 +149,7 @@ export async function editUserProfile(req, res, err) {
     delete newProfile.updatedAt;
     delete newProfile.createdAt;
 
-    const [status, error] = await ProfileService.update(profile_id, newProfile);
+    const [status, error] = await ProfileService.update(profileId, newProfile);
     if (error) {
         wlogger.error(`UpdateProfile error: ${error}`);
 

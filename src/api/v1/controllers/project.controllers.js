@@ -167,14 +167,14 @@ export async function getRating(req, res, err) {
 
 export async function addRating(req, res, err) {
     const { user } = req;
-    const { profile_id } = user.profiles.find(
+    const { profileId } = user.profiles.find(
         (profile) => profile.role == Role.REVIEWER
     ).id;
-    const { project_id } = req.params.id;
+    const { projectId } = req.params.id;
     const { score, scoreCategoryId } = req.body;
     const [response, error] = await dbCreateRating(
-        profile_id,
-        project_id,
+        profileId,
+        projectId,
         score,
         scoreCategoryId
     );
@@ -187,8 +187,8 @@ export async function addRating(req, res, err) {
     return res.status(200).json(response);
 }
 export async function updateRating(req, res, err) {
-    const { score, rating_id } = req.body;
-    const [response, error] = await dbUpdateRating(rating_id, score);
+    const { score, ratingId } = req.body;
+    const [response, error] = await dbUpdateRating(ratingId, score);
     if (error) {
         wlogger.error(`error updating Rating: ${error}`);
         return res.status(409).json(error);
@@ -196,8 +196,8 @@ export async function updateRating(req, res, err) {
     return res.status(200).json(response);
 }
 export async function deleteRating(req, res, err) {
-    const { rating_id } = req.body;
-    const [response, error] = await dbUpdateRating(rating_id);
+    const { ratingId } = req.body;
+    const [response, error] = await dbUpdateRating(ratingId);
     if (error) {
         wlogger.error(`error deleting Rating: ${error}`);
         return res.status(409).json(error);

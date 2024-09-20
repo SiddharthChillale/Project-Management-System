@@ -46,7 +46,7 @@ router
     );
 router
     .route("/courses/:courseId")
-    .get(param("course_id").notEmpty().toInt(), validate, getCourses);
+    .get(param("courseId").notEmpty().toInt(), validate, getCourses);
 
 router
     .route("/:id/courses/:courseId")
