@@ -221,8 +221,9 @@ export async function loginHandler(req, res, err) {
      *
      * Return a success response.
      */
+
     const { email, password } = req.body;
-    const [result, error] = await UserService.get({
+    const [result, error] = await UserService.getUnique({
         where: { email: email },
         include: {
             profiles: {
@@ -239,19 +240,16 @@ export async function loginHandler(req, res, err) {
             oneTimeToken: false
         }
     });
-
+    wlogger.debug(`result: ${email}, ${password}`);
     if (error) {
         //check for if no such user
         wlogger.error(`No such user exists error: ${error}`);
 
-        return res.status(404).json(error);
+        return res.status(404).render("pages/notfound_404.ejs");
     }
+    const user = result;
+    wlogger.debug(`user is ${JSON.stringify(user)}`);
 
-    if (result.length > 1) {
-        wlogger.error(`multiple users found for email: ${email}`);
-        return res.status(409).json("Multiple users found");
-    }
-    const user = result[0];
     if (user.refreshToken) {
         wlogger.warn(`user ${user.userName} is logged in`);
 
@@ -337,7 +335,7 @@ export async function generateAccessToken(user, profile_id = undefined) {
         { id: user.id, email: user.email, profile_id: profile_id },
         JWTSecret,
         {
-            expiresIn: "20m"
+            expiresIn: "5m"
         }
     );
 }
@@ -547,7 +545,8 @@ export async function getAvailableProfiles(req, res, err) {
         select: {
             id: true,
             role: true,
-            userName: true
+            userName: true,
+            profilePic: true
         }
     });
 
@@ -557,19 +556,28 @@ export async function getAvailableProfiles(req, res, err) {
     }
 
     if (!response || response.length == 0) {
-        return res.status(203).json("No profiles available");
+        return res
+            .status(203)
+            .render("partials/modals/assign/profile-chooser.ejs", {
+                profiles: []
+            });
     }
 
-    return res.status(200).json(response);
+    return res
+        .status(200)
+        .render("partials/modals/assign/profile-chooser.ejs", {
+            profiles: response
+        });
 }
 
 export async function chooseProfile(req, res, err) {
     const { user } = req;
+    const { profileId } = req.params;
     const { profile_id } = req.body;
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
         user,
-        profile_id
+        profileId
     );
 
     await UserService.updateTokenById(user.id, "refreshToken", refreshToken);
@@ -580,7 +588,7 @@ export async function chooseProfile(req, res, err) {
     };
     let allProfiles = user.profiles;
     const loggedinProfile = allProfiles.filter(
-        (profile) => profile.id == profile_id
+        (profile) => profile.id == profileId
     );
     let responseUser = { ...user };
     delete responseUser.profiles;
@@ -589,9 +597,7 @@ export async function chooseProfile(req, res, err) {
         .status(200)
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
-        .json({
-            message: "Login successful",
-            user: responseUser.profiles[0]
+        .render("pages/dashboard.ejs", {
+            profile: responseUser.profiles[0]
         });
-    // .redirect("/profile/home");
 }

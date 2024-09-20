@@ -12,6 +12,12 @@ async function dbGetUsers(filterClause) {
     return [result, error];
 }
 
+async function dbGetUniqueUser(filterClause) {
+    const goGetUnique = goStyleExceptionWrapper(prisma.user.findUniqueOrThrow);
+    const [result, error] = await goGetUnique(filterClause);
+    return [result, error];
+}
+
 //meant for self-registering users, returns id created
 async function dbCreateUser(email, password) {
     const salt = "salt";
@@ -237,6 +243,7 @@ async function dbDeleteProfileById(profile_id) {
  */
 export const UserService = {
     get: dbGetUsers,
+    getUnique: dbGetUniqueUser,
     create: dbCreateUser,
     createForToken: dbCreateUsersForOTToken,
     updateTokenById: dbUpdateTokenById,

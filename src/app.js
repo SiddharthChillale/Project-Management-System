@@ -19,8 +19,11 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 app.set("view engine", "ejs");
+
 // middleware: set content-type to be json
 app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
 var corsOptions = {
     origin: "https://avatars.githubusercontent.com",
     optionsSuccessStatus: 200
@@ -42,7 +45,7 @@ app.use(routes);
 app.use((req, res, next) => {
     const error = new Error("Error: Not found");
     error.status = 404;
-    next(error);
+    return res.status(404).json(error);
 });
 
 // 500 error middleware ...

@@ -1,5 +1,8 @@
 import express from "express";
-import { rootHandler } from "../controllers/index.controllers.js";
+import {
+    rootHandler,
+    sandboxHandler
+} from "../controllers/index.controllers.js";
 
 import projectRouter from "./project.routes.js";
 import userRouter from "./user.routes.js";
@@ -9,8 +12,9 @@ import scoreCatRouter from "./scoreCategory.routes.js";
 
 const router = express.Router();
 
+router.get("/", rootHandler);
 router.get("/api/v1/", rootHandler);
-
+router.get("/api/v1/sandbox", sandboxHandler);
 // all other routes
 router.use("/api/v1/projects", projectRouter);
 router.use("/api/v1/users", userRouter);

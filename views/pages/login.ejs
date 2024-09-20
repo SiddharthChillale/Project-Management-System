@@ -9,20 +9,21 @@
 </head>
 
 <body>
-    <main class="section hero pb-0 px-0 is-fullheight">
+    <main class="section hero is-fullheight">
         <section class="container">
             <div class=" container " style="max-width: max-content; border: 1px solid #d7d7d7;">
                 <div class=" has-text-weight-bold is-size-3 pb-3 pt-2 px-5 has-background-primary-light">Welcome to
                     Project Manager</div>
 
-                <div class="fixed-grid has-1-cols px-5">
+                <div class="is-flex is-flex-direction-column px-5">
 
-                    <div class="cell py-3">
+                    <!-- Email Login -->
+                    <div class=" py-3">
                         <div class="has-text-weight-semibold is-italic">Have an account?</div>
                         <form action="/api/v1/users/login" method="POST">
                             <div class="field">
                                 <p class="control has-icons-left has-icons-right">
-                                    <input class="input" type="email" placeholder="Email">
+                                    <input class="input" type="email" name="email" placeholder="Email">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-envelope"></i>
                                     </span>
@@ -33,7 +34,7 @@
                             </div>
                             <div class="field">
                                 <p class="control has-icons-left">
-                                    <input class="input" type="password" placeholder="Password">
+                                    <input class="input" type="password" name="password" placeholder="Password">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
                                     </span>
@@ -41,7 +42,7 @@
                             </div>
                             <div class="field">
                                 <p class="control">
-                                    <button class="button is-success">
+                                    <button class="button is-success" type="submit">
                                         Login
                                     </button>
                                 </p>
@@ -49,15 +50,16 @@
                         </form>
                     </div>
 
-                    <div class="cell has-text-centered ">OR</div>
+                    <div class=" has-text-centered ">OR</div>
 
-                    <div class="cell py-1 py-3">
+                    <!-- One Time Token Login -->
+                    <div class=" py-1 py-3">
                         <div class="has-text-weight-semibold is-italic">Received a One-Time Token?</div>
                         <form action="/api/v1/users/login" method="POST">
 
                             <div class="field">
                                 <p class="control has-icons-left">
-                                    <input class="input" type="text" placeholder="One-Time Token">
+                                    <input class="input" type="text" name="token" placeholder="One-Time Token">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
                                     </span>
@@ -80,7 +82,7 @@
                 </div>
             </div>
         </section>
-        <%- include('../partials/layouts/footer.ejs'); %>
+
     </main>
 </body>
 
