@@ -49,9 +49,7 @@ export async function getScoreCats(req, res, err) {
             .status(200)
             .render("pages/one-scoreCat.ejs", { scoreCat: response[0] });
     }
-    return res
-        .status(200)
-        .render("pages/scoreCats.ejs", { scoreCats: response });
+    return res.status(200).render("score-categories", { scoreCats: response });
 }
 
 export async function updateScoreCat(req, res, err) {

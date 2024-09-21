@@ -8,16 +8,16 @@ import {
 import { cleanDeep } from "../utils/helper.utils.js";
 
 export async function getProjects(req, res, err) {
-    const { id } = req.params;
+    const { user } = req;
+    // let ids = ;
+    let id = parseInt(req.params.id);
+
     let { page } = req.query;
     page = page ? page - 1 : 0;
     const take = 10;
     const skip = take * page;
 
     let options = {
-        where: {
-            id: id
-        },
         include: {
             ratings: true,
             event: true,
@@ -37,25 +37,23 @@ export async function getProjects(req, res, err) {
         take: take
     };
     if (id) {
+        options = { ...options, where: { id: id } };
         delete options.skip;
     }
+
     const clause = cleanDeep(options);
 
     const [result, error] = await ProjectService.getAll(clause);
     let body = result;
     if (error) {
-        if (error.cause?.code == "ProjectDoesNotExist") {
-            res.status(404).json(error);
-            return;
-        }
         wlogger.error(`error: ${error}`);
+        if (error.cause?.code == "ProjectDoesNotExist") {
+            return res.status(404).json(error);
+        }
+
         return res.status(500).json(error);
     }
-    const a = JSON.stringify(body[0]);
 
-    // body[0] = cleanDeep(body[0]);
-    // const b = JSON.stringify(body[0]);
-    //
     for (let project of body) {
         if (
             project.event &&
@@ -73,12 +71,37 @@ export async function getProjects(req, res, err) {
         project.updatedAt = convertToReadableDate(project.updatedAt);
     }
 
+    let templateName = "details/public.ejs";
+    let path = "projects/item.ejs";
+    let obj = { templateName: templateName };
+
     if (id) {
-        return res.status(200).render("pages/one-project.ejs", {
-            project: body[0]
-        });
+        if (user) {
+            switch (user.profiles[0].role) {
+                case "DEVELOPER":
+                    obj.templateName = "details/developer.ejs";
+                    break;
+                case "PROJECT_MANAGER":
+                    obj.templateName = "details/project_manager.ejs";
+                    break;
+                case "REVIEWER":
+                    obj.templateName = "details/reviewer.ejs";
+                    break;
+                case "ADMIN":
+                    obj.templateName = "details/admin.ejs";
+                    break;
+                default:
+                    obj.templateName = "details/public.ejs";
+                    break;
+            }
+        }
+        obj = { ...obj, project: body[0] };
+    } else {
+        path = "projects";
+        obj = { ...obj, projects: body };
     }
-    return res.status(200).render("pages/projects.ejs", { projects: body });
+
+    return res.status(200).render(path, obj);
 }
 
 function convertToReadableDate(ISOdate) {

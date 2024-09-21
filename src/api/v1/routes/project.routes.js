@@ -42,11 +42,9 @@ router
 router
     .route("/:id")
     .get(
-        [
-            //validateHeaders, authentication,  checkAuthorization
-            param("id").notEmpty().toInt(),
-            validate
-        ],
+        attachUserOrSilentFail,
+        param("id").optional().toInt(),
+        validate,
         getProjects
     )
     .put(

@@ -21,7 +21,7 @@ export async function getUsers(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res.status(200).render("pages/users.ejs", { users: profiles });
+    return res.status(200).render("users", { users: profiles });
 }
 
 export async function getUserProfile(req, res, err) {
@@ -160,18 +160,21 @@ export async function editUserProfile(req, res, err) {
 
 // Login, Register, Logout
 export async function loginViewHandler(req, res, err) {
-    return res.status(200).render("pages/login.ejs");
+    return res.status(200).render("common/login.ejs");
 }
 export async function registerViewHandler(req, res, err) {
-    return res.status(200).render("pages/register.ejs");
+    return res.status(200).render("common/register.ejs");
 }
 
 export async function dashboardViewHandler(req, res, err) {
     const { user } = req;
-    if (!user) {
-        return res.status(401).render("pages/login.ejs");
-    }
-    return res.status(200).render("pages/dashboard.ejs");
+    // if (!user) {
+    //     return res.status(401).render("common/login.ejs");
+    // }
+    // choose dashboard accoring to user profile role.
+    // This might require unpacking the JWT to determine the profile to fetch.
+    // For now, This will go to simple unprotected dashboard.
+    return res.status(200).render("dashboards/public.ejs");
 }
 
 export async function registerHandler(req, res, err) {
@@ -240,21 +243,20 @@ export async function loginHandler(req, res, err) {
             oneTimeToken: false
         }
     });
-    wlogger.debug(`result: ${email}, ${password}`);
+
     if (error) {
         //check for if no such user
         wlogger.error(`No such user exists error: ${error}`);
 
-        return res.status(404).render("pages/notfound_404.ejs");
+        return res.status(401).render("common/404.ejs");
     }
     const user = result;
-    wlogger.debug(`user is ${JSON.stringify(user)}`);
 
-    if (user.refreshToken) {
-        wlogger.warn(`user ${user.userName} is logged in`);
+    // if (user.refreshToken) {
+    //     wlogger.warn(`user ${user.userName} is logged in`);
 
-        return res.status(409).json("User already logged in");
-    }
+    //     return res.status(409).json("User already logged in");
+    // }
 
     const salt = user.salt;
     const reqPassHash = crypto
@@ -335,7 +337,7 @@ export async function generateAccessToken(user, profile_id = undefined) {
         { id: user.id, email: user.email, profile_id: profile_id },
         JWTSecret,
         {
-            expiresIn: "5m"
+            expiresIn: "15m"
         }
     );
 }

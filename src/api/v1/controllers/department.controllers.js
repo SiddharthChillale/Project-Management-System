@@ -46,9 +46,7 @@ export async function getDepartments(req, res, err) {
             .status(200)
             .render("pages/one-department.ejs", { department: response[0] });
     }
-    return res
-        .status(200)
-        .render("pages/departments.ejs", { departments: response });
+    return res.status(200).render("departments", { departments: response });
 }
 
 export async function updateDepartment(req, res, err) {

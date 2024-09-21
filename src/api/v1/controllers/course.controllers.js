@@ -71,7 +71,7 @@ export async function getCourses(req, res, err) {
 
     return res
         .status(200)
-        .render("pages/courses.ejs", { courses: result, departmentId: id });
+        .render("departments/courses", { courses: result, departmentId: id });
 }
 
 export async function editCourse(req, res, err) {

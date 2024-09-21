@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('../layouts/header.ejs'); %>
+
+        <title>Create Project</title>
+</head>
+
+<body>
+    <section class="section">
+        <div class="container">
+            <div class="modal is-active" id="create-project">
+                <form action="/api/v1/projects" method="POST">
+                    <div class="modal-background"></div>
+                    <div class="modal-content ">
+                        <div class="modal-card">
+                            <header class="modal-card-head is-shadowless">
+                                <p class="modal-card-title">Create Project</p>
+                                <button class="delete" aria-label="close"></button>
+                            </header>
+                            <section class="modal-card-body">
+                                <div class="field">
+                                    <label class="label">Project Name</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Project Name" required>
+                                    </div>
+                                    <label class="label">Team size</label>
+                                    <div class="control">
+                                        <input class="input" type="number" placeholder="Team Size">
+                                    </div>
+                                    <label class="label">Projects links(optional)</label>
+                                    <div class="control">
+                                        <input class="input" type="url" placeholder="Links">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Description</label>
+                                    <div class="control">
+                                        <textarea class="textarea" placeholder="Description"></textarea>
+                                    </div>
+                                </div>
+                            </section>
+                            <footer class="modal-card-foot level">
+                                <span>Project Details > Add to Event > Add to Course > Add Reviewers > Confirm</span>
+                                <button class="level-item button is-shadowless is-small">
+                                    &lt; Previous</button>
+                                <button class="level-item button is-info is-small">Next &gt; </button>
+                                <button class="level-item button is-danger is-light is-small">Cancel</button>
+                            </footer>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

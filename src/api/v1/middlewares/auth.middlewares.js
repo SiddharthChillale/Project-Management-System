@@ -88,24 +88,36 @@ export async function attachUserOrSilentFail(req, res, next) {
         req.cookies?.accessToken ||
         req.query?.accessToken ||
         req.get("Authorization")?.replace("Bearer ", "");
+
     if (token) {
-        const decoded = jwt.verify(token, "randtoken");
+        let decoded;
+        try {
+            decoded = jwt.verify(token, "randtoken");
+        } catch (error) {
+            wlogger.error("Error in verifying token", error);
+        }
 
-        const [user, error] = await UserService.get({
-            where: { id: decoded.id },
-            include: {
-                profiles: true
+        if (decoded) {
+            const [user, error] = await UserService.getUnique({
+                where: { id: decoded.id },
+                include: {
+                    profiles: {
+                        where: {
+                            id: decoded.profile_id
+                        }
+                    }
+                }
+            });
+
+            if (user) {
+                let userWithProfile = user;
+                if (decoded.profile_id)
+                    userWithProfile = {
+                        ...userWithProfile,
+                        profile_id: decoded.profile_id
+                    };
+                req.user = userWithProfile;
             }
-        });
-
-        if (user && user.length > 1) {
-            let userWithProfile = firstUser;
-            if (decoded.profile_id)
-                userWithProfile = {
-                    ...userWithProfile,
-                    profile_id: decoded.profile_id
-                };
-            req.user = userWithProfile;
         }
     }
 

@@ -4,21 +4,22 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%- include('../partials/layouts/header.ejs'); %>
-        <title>Projects-All</title>
+    <%- include('../layouts/header.ejs'); %>
+        <title>Projects</title>
 </head>
 
 <body class="has-background-white">
 
     <div class="columns ">
-        <%- include ('../partials/layouts/menu.ejs'); %>
+        <%- include ('../layouts/menu.ejs'); %>
             <section class="is-medium column p-0 ">
                 <div class="container content my-3">
-                    <%- include ('../partials/layouts/navbar.ejs'); %>
+                    <%- include ('../layouts/navbar.ejs'); %>
 
                         <div class="mr-2">
 
                             <div class="p-2">
+
                                 <button class="control button is-success is-light is-small">Create Project +</button>
                                 <div class="grid is-col-min-14 is-gap-1">
 
@@ -79,7 +80,7 @@
             </section>
     </div>
 
-    <%- include('../partials/layouts/footer.ejs'); %>
+    <%- include('../layouts/footer.ejs'); %>
 </body>
 
 </html>

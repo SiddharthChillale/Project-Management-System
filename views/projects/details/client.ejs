@@ -4,28 +4,13 @@
             <div class="level-left is-size-3 has-text-weight-medium">
                 <%= project.name %>
             </div>
-            <span class="level-right ">
-                <button class="button is-warning">Enroll</button>
-                <button class="button is-danger is-light ">Unenroll</button>
 
-            </span>
         </div>
     </div>
 
     <div class="p-5 has-background-white">
         <div class="block">
-            <div class="has-text-weight-bold ">
-                <span>Seats available:</span>
-                <span class="is-size-5">
-                    <span class=>
-                        <%= project.teamSize -project._count.projectAssociations %>
-                    </span>
-                    /
-                    <span>
-                        <%=project.teamSize%>
-                    </span>
-                </span>
-            </div>
+
             <br />
 
             <div class="level">
@@ -77,35 +62,13 @@
 
                             <div class="is-size-7 is-italic has-text-weight-light">Event</div>
             </div>
-            <div class="cell">
-                <% if (project.course) { %>
-                    <div>
 
-                        <a class="is-size-4 has-text-weight-bold"
-                            href="<%= `/api/v1/departments/courses/${project.course.id}`%>">
-                            <%= project.course.name %>
-                        </a>
-                    </div>
-
-                    <span class="is-size-7 is-italic is-capitalized">
-                        <%= project.course.semester %>
-                            <%= project.course.year %>
-                    </span>
-                    <% } else { %>
-                        <span class="is-size-7 is-italic is-capitalized">Not in any Course</span>
-                        <% } %>
-
-                            <div class="is-size-7 is-italic has-text-weight-light">Course</div>
-            </div>
         </div>
 
 
     </div>
     <div class="p-4" style="border-top: 1px solid #151515;">
 
-        <div class="field is-grouped ">
-            <button class="control button is-info is-light is-small">Edit</button>
-            <button class="control button is-danger is-light is-small">Delete </button>
-        </div>
+
     </div>
 </div>
