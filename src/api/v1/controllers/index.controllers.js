@@ -4,7 +4,7 @@ export async function rootHandler(req, res, err) {
     // if(req.user){
     //     res.status(200).render("pages/dashboard.ejs", req.user);
     // }
-    res.status(200).render("pages/landing.ejs");
+    res.status(200).render("common/landing.ejs");
 }
 
 export async function sandboxHandler(req, res, err) {

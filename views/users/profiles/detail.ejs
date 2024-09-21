@@ -1,0 +1,105 @@
+<div class="hero block p-4 has-background-white">
+    <div class="columns">
+
+        <div class="column is-one-third ">
+
+            <figure class="container image is-128x128">
+                <img class="is-rounded" src="<%= `${profile.profilePic.url}` %>" alt="Profile Picture">
+            </figure>
+        </div>
+
+        <div class="column">
+            <p class="title is-4">
+                <%= profile.userName %>
+            </p>
+            <br />
+            <p class="subtitle is-6">
+                <%= profile.email %>
+            </p>
+            <p class="subtitle is-6 is-italic">Role: <%= profile.role %>
+            </p>
+        </div>
+    </div>
+
+    <div class="content">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
+        iaculis mauris. <a>@bulmaio</a>.
+        <!-- <p class="subtitle is-6"><%# JSON.stringify(profile.socialLinks)  %></p>  -->
+        <br />
+
+    </div>
+
+    <div>
+        <% if (profile.createdEvents.length !=0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Created Events</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for( let ei=0; ei < profile.createdEvents.length; ei ++ ) { %>
+                        <tr>
+                            <td><a href="<%= `/api/v1/events/${profile.createdEvents[ei].id}`%>">
+                                    <%= profile.createdEvents[ei].name %>
+                                </a></td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+            <% } %>
+    </div>
+
+    <div>
+        <% if (profile.participantEvents.length !=0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Participated Events</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for( let epi=0; epi < profile.participantEvents.length; epi ++ ) { %>
+                        <tr>
+                            <td><a href="<%= `/api/v1/events/${profile.participantEvents[epi].id}`%>">
+                                    <%= profile.participantEvents[epi].name %>
+                                </a></td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+            <% } %>
+    </div>
+
+    <div>
+        <% if (profile.projectAssociations.length !=0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Projects Associated with:</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for( let pi=0; pi < profile.projectAssociations.length; pi ++ ) { %>
+                        <tr>
+                            <td><a href="<%= `/api/v1/projects/${profile.projectAssociations[pi].projectId}`%>">
+                                    <%= profile.projectAssociations[pi].project.name %>
+                                </a></td>
+                            <td>
+                                <%= profile.projectAssociations[pi].userRole %>
+                            </td>
+                            <td>
+                                <%= profile.projectAssociations[pi].status %>
+                            </td>
+                            <td><button class="button is-small is-danger is-outlined">Take Action</button></td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+
+            <% } %>
+    </div>
+</div>

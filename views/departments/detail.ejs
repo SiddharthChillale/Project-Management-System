@@ -1,0 +1,24 @@
+<div class="container content m-0 p-2 has-background-white">
+    <div class="content">
+        <p class="title is-4 has-text-weight-bold">
+            <%= department.name %>
+        </p>
+        <table>
+            <th>Courses</th>
+            <% for( let ci=0; ci < department.courses.length; ci ++ ) { %>
+                <tr>
+                    <td><a href="<%= `/api/v1/departments/${department.id}/courses/${department.courses[ci].id}`%>">
+                            <%= department.courses[ci].name %>
+                        </a>
+                    </td>
+                </tr>
+
+                <% } %>
+        </table>
+
+        <div class="field is-grouped">
+            <button class="control button is-info is-light is-small">Edit</button>
+            <button class="control button is-danger is-light is-small">Delete </button>
+        </div>
+    </div>
+</div>
