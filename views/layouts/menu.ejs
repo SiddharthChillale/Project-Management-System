@@ -21,12 +21,14 @@
                 <li><a href="/api/v1/projects">Projects</a></li>
                 <li><a href="/api/v1/users">Users</a></li>
             </ul>
-            <p class="menu-label">Other</p>
-            <ul class="menu-list">
-                <li><a href="/api/v1/score-category">Score Categories</a></li>
-                <li><a href="/api/v1/departments">Departments</a></li>
-                <li><a href="/api/v1/events">Events</a></li>
-            </ul>
+            <%= if (profile.role=="PROJECT_MANAGER" || profile.role=="ADMIN" ) { %>
+                <p class="menu-label">Other</p>
+                <ul class="menu-list">
+                    <li><a href="/api/v1/score-category">Score Categories</a></li>
+                    <li><a href="/api/v1/departments">Departments</a></li>
+                    <li><a href="/api/v1/events">Events</a></li>
+                </ul>
+                <% } %>
         </div>
     </aside>
 </section>
