@@ -136,7 +136,7 @@ export async function getEvents(req, res, err) {
             .render("pages/one-event.ejs", { event: result[0] });
     }
 
-    return res.status(200).render("pages/events.ejs", { events: result });
+    return res.status(200).render("events", { events: result });
 }
 
 export async function editEvent(req, res, err) {
