@@ -11,6 +11,7 @@ const app = express();
 // const __rootdir = path.join(import.meta.dirname, "../");
 
 // inform express how to deal with static files
+app.use(express.static("public"));
 // inform express how to deal with filesystem
 
 // middleware: set logging
@@ -37,7 +38,6 @@ app.use(
                 "default-src": ["'self'"],
                 "script-src": [
                     "'self'",
-                    "'unsafe-eval'",
                     "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js",
                     "https://cdn.jsdelivr.net/npm/@alpinejs/csp@3.x.x/dist/cdn.min.js"
                 ],
