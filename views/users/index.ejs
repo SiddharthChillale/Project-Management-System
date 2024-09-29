@@ -59,29 +59,52 @@
                                             <% } else { %>
 
                                                 <!-- <td class="dropdown is-active"> -->
-                                                <td class="dropdown ">
-                                                    <div class="dropdown-trigger">
-                                                        <button class="button is-info is-light is-small is-shadowless "
-                                                            aria-haspopup="true" aria-controls="dropdown-menu">
+                                                <td class="">
+                                                    <div x-data="{
+                                                        open: false,
+                                                        toggle() {
+                                                            if (this.open) {
+                                                                return this.close()
+                                                            }
+                                             
+                                                            this.$refs.button.focus()
+                                             
+                                                            this.open = true
+                                                        },
+                                                        close() {
+                                                            if (! this.open) return
+                                             
+                                                            this.open = false
+                                             
+                                                        }
+                                                    }" x-on:keydown.escape.prevent.stop="close()"
+                                                        x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
+                                                        class="">
+                                                        <button x-ref="button" x-on:click="toggle()"
+                                                            :aria-expanded="open" type="button"
+                                                            class="button is-info is-light is-small is-shadowless "
+                                                            aria-haspopup="true">
                                                             <span>View Profile</span>
                                                             <span class="icon is-small">
                                                                 <i class="fas fa-angle-down" aria-hidden="false"></i>
                                                             </span>
                                                         </button>
-
-                                                    </div>
-                                                    <div class="dropdown-menu " id="dropdown-menu" role="menu">
-                                                        <div class="dropdown-content is-shadowless "
-                                                            style="outline: 1px solid #d0d7de;">
-                                                            <% for( let pid=0; pid < users[ui].profiles.length; pid++ )
-                                                                { %>
-                                                                <a class="dropdown-item py-3 is-radiusless is-size-7 is-centered"
-                                                                    href="<%= `/api/v1/users/profile/${users[ui].profiles[pid].id}`%>">
-                                                                    <%= users[ui].profiles[pid].role %>
-                                                                </a>
-                                                                <% } %>
+                                                        <div x-ref="panel" x-show="open" x-transition.origin.top.left
+                                                            x-on:click.outside="close()" tyle="display: none;" class=""
+                                                            id="" role="menu">
+                                                            <div class=" is-shadowless "
+                                                                style="outline: 1px solid #d0d7de;">
+                                                                <% for( let pid=0; pid < users[ui].profiles.length;
+                                                                    pid++ ) { %>
+                                                                    <a class="py-3 is-radiusless is-size-7 is-centered"
+                                                                        href="<%= `/api/v1/users/profile/${users[ui].profiles[pid].id}`%>">
+                                                                        <%= users[ui].profiles[pid].role %>
+                                                                    </a>
+                                                                    <% } %>
+                                                            </div>
                                                         </div>
                                                     </div>
+
                                                 </td>
                                                 <% } %>
                                     </tr>

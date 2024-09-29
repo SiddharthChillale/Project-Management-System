@@ -34,6 +34,13 @@ app.use(
     helmet({
         contentSecurityPolicy: {
             directives: {
+                "default-src": ["'self'"],
+                "script-src": [
+                    "'self'",
+                    "'unsafe-eval'",
+                    "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js",
+                    "https://cdn.jsdelivr.net/npm/@alpinejs/csp@3.x.x/dist/cdn.min.js"
+                ],
                 "img-src": ["'self'", "https://avatars.githubusercontent.com"]
             }
         }
