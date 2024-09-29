@@ -8,5 +8,5 @@ export async function rootHandler(req, res, err) {
 }
 
 export async function sandboxHandler(req, res, err) {
-    res.status(200).render("partials/modals/assign/profile-chooser.ejs");
+    res.status(200).render("partials2/modals/profile-chooser.ejs");
 }

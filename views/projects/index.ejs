@@ -27,13 +27,16 @@
                                         <div class=" cell p-4 has-background-white">
                                             <span class="flex">
                                                 <div class="cell">
-                                                    <a class="title is-3 has-text-primary"
+                                                    <a class="title is-5 has-text-primary"
                                                         href="<%= `/api/v1/projects/${projects[pi].id}`%>">
                                                         <%= projects[pi].name %>
                                                     </a>
                                                 </div>
                                                 <div class="cell mt-2 ">
-                                                    <span class="subtitle has-text-primary-dark is-5">Seats available:
+
+
+                                                    <span class="subtitle has-text-primary-dark is-6">Seats
+                                                        available:
                                                         <%= projects[pi].teamSize -
                                                             projects[pi]._count.projectAssociations %>/<%=
                                                                 projects[pi].teamSize%>
@@ -47,9 +50,14 @@
                                                 <button class="cell button is-info is-light is-small"><a
                                                         href="<%= `/api/v1/projects/${projects[pi].id}`%>">Read
                                                         More</a></button>
+
                                                 <button class="cell button is-warning is-small"><a
                                                         href="<%= `/api/v1/projects/${projects[pi].id}`%>">Enroll</a></button>
+
+
+
                                             </span>
+
                                         </div>
                                         <% } %>
                                 </div>

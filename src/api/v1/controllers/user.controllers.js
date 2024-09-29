@@ -558,18 +558,14 @@ export async function getAvailableProfiles(req, res, err) {
     }
 
     if (!response || response.length == 0) {
-        return res
-            .status(203)
-            .render("partials/modals/assign/profile-chooser.ejs", {
-                profiles: []
-            });
+        return res.status(203).render("partials2/modals/profile-chooser.ejs", {
+            profiles: []
+        });
     }
 
-    return res
-        .status(200)
-        .render("partials/modals/assign/profile-chooser.ejs", {
-            profiles: response
-        });
+    return res.status(200).render("partials2/modals/profile-chooser.ejs", {
+        profiles: response
+    });
 }
 
 export async function chooseProfile(req, res, err) {
