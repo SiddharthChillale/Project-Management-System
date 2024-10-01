@@ -7,7 +7,8 @@ import {
     deleteProject,
     addRating,
     updateRating,
-    deleteRating
+    deleteRating,
+    getCreateProjectPage
 } from "../controllers/project.controllers.js";
 import { checkProjectExistenceById } from "../middlewares/projectValidation.middlewares.js";
 import checkForSchema from "../middlewares/schemaValidation.middlewares.js";
@@ -38,7 +39,7 @@ router
         ],
         addProject
     );
-
+router.route("/new").get(getCreateProjectPage);
 router
     .route("/:id")
     .get(

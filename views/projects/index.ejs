@@ -24,7 +24,7 @@
                                 <div class="grid is-col-min-14 is-gap-1">
 
                                     <% for( let pi=0; pi < projects.length; pi ++ ) { %>
-                                        <div class=" cell p-4 has-background-white">
+                                        <div class=" cell p-4 has-background-white ">
                                             <span class="flex">
                                                 <div class="cell">
                                                     <a class="title is-5 has-text-primary"
@@ -43,10 +43,9 @@
                                                     </span>
                                                 </div>
                                                 <div class="mt-3 cell content"
-                                                    style="max-height: 100px; overflow: hidden;">
+                                                    style="max-height: 8ex; overflow: hidden;">
                                                     <%= projects[pi].description %>
                                                 </div>
-                                                <br />
                                                 <button class="cell button is-info is-light is-small"><a
                                                         href="<%= `/api/v1/projects/${projects[pi].id}`%>">Read
                                                         More</a></button>

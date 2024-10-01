@@ -227,3 +227,7 @@ export async function deleteRating(req, res, err) {
     }
     return res.status(200).json(response);
 }
+
+export async function getCreateProjectPage(req, res, err) {
+    return res.status(200).render("projects/create.ejs");
+}
