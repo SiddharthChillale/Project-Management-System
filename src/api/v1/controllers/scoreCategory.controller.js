@@ -26,7 +26,7 @@ export async function getScoreCats(req, res, err) {
     // name is String
     // courses is an array of course objects
     const { id } = req.params;
-
+    const { user } = req;
     let options = {
         where: {
             id: id
@@ -47,9 +47,17 @@ export async function getScoreCats(req, res, err) {
     if (id) {
         return res
             .status(200)
-            .render("pages/one-scoreCat.ejs", { scoreCat: response[0] });
+            .render("score-categories/detail.ejs", {
+                scoreCat: response[0],
+                user: user ? user : undefined
+            });
     }
-    return res.status(200).render("score-categories", { scoreCats: response });
+    return res
+        .status(200)
+        .render("score-categories", {
+            scoreCats: response,
+            user: user ? user : undefined
+        });
 }
 
 export async function updateScoreCat(req, res, err) {

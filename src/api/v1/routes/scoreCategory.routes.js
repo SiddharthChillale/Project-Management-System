@@ -7,18 +7,24 @@ import {
 import express, { Router } from "express";
 import { validate } from "../validators/general.validators.js";
 import { body, param } from "express-validator";
+import { verifyTokenAndAttachUser } from "../middlewares/auth.middlewares.js";
 
 const router = Router();
 // const s = express.Router();
 
 router
     .route("/")
-    .get(getScoreCats)
+    .get(verifyTokenAndAttachUser, getScoreCats)
     .post(body("name").notEmpty().trim(), validate, createScoreCat);
 
 router
     .route("/:id")
-    .get(param("id").notEmpty().toInt(), validate, getScoreCats)
+    .get(
+        verifyTokenAndAttachUser,
+        param("id").notEmpty().toInt(),
+        validate,
+        getScoreCats
+    )
     .patch(
         param("id").notEmpty().toInt(),
         body("name").optional().trim(),
