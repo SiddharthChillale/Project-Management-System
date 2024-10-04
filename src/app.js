@@ -36,11 +36,7 @@ app.use(
         contentSecurityPolicy: {
             directives: {
                 "default-src": ["'self'"],
-                "script-src": [
-                    "'self'",
-                    "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js",
-                    "https://cdn.jsdelivr.net/npm/@alpinejs/csp@3.x.x/dist/cdn.min.js"
-                ],
+                "script-src": ["'self'", "https://unpkg.com/htmx.org@2.0.2"],
                 "img-src": ["'self'", "https://avatars.githubusercontent.com"]
             }
         }
