@@ -18,34 +18,37 @@
                 <div class="container content my-3">
                     <%- include ('../layouts/navbar.ejs'); %>
 
-                        <div class="mr-2">
+                        <div class="mr-2" id="project-body">
                             <div class="field is-grouped"></div>
                             <button class="control button is-success is-light is-small">Create Department +</button>
 
+
+                            <table class="mt-2 table is-narrow is-striped  container">
+
+                                <thead class="thead ">
+                                    <th>Name</th>
+                                    <th>Courses</th>
+
+                                </thead>
+                                <% for( let di=0; di < departments.length; di++ ) { %>
+                                    <tr>
+
+                                        <td><a hx-get="<%= `/api/v1/departments/${departments[di].id}`  %>"
+                                                hx-push-url="true" hx-target="#project-body" hx-swap="outerHTML"
+                                                href="<%= `/api/v1/departments/${departments[di].id}`  %>">
+                                                <%= departments[di].name %>
+                                            </a></td>
+                                        <td><button class="button is-small is-info is-light">
+                                                <a hx-get="<%= `/api/v1/departments/${departments[di].id}/courses/`%>"
+                                                    hx-push-url="true" hx-target="#project-body" hx-swap="outerHTML"
+                                                    hx-select="#course-body"
+                                                    href="<%= `/api/v1/departments/${departments[di].id}/courses/`%>">View
+                                                    Courses</a>
+                                            </button></td>
+                                    </tr>
+                                    <% } %>
+                            </table>
                         </div>
-                        <table class="mt-2 table is-narrow is-striped  container">
-
-                            <thead class="thead ">
-                                <th>Name</th>
-                                <th>Courses</th>
-
-                            </thead>
-                            <% for( let di=0; di < departments.length; di++ ) { %>
-                                <tr>
-
-                                    <td><a hx-get="<%= `/api/v1/departments/${departments[di].id}`  %>"
-                                            hx-push-url="true" hx-target="table" hx-swap="outerHTML"
-                                            href="<%= `/api/v1/departments/${departments[di].id}`  %>">
-                                            <%= departments[di].name %>
-                                        </a></td>
-                                    <td><button class="button is-small is-info is-light">
-                                            <a href="<%= `/api/v1/departments/${departments[di].id}/courses/`%>">View
-                                                Courses</a>
-                                        </button></td>
-                                </tr>
-                                <% } %>
-                        </table>
-
                 </div>
 
 

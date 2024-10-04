@@ -1,5 +1,5 @@
 <div class="container content m-0 p-2 has-background-white">
-    <div class="content">
+    <div class="content" id="department-body">
         <p class="title is-4 has-text-weight-bold">
             <%= department.name %>
         </p>
@@ -7,7 +7,9 @@
             <th>Courses</th>
             <% for( let ci=0; ci < department.courses.length; ci ++ ) { %>
                 <tr>
-                    <td><a href="<%= `/api/v1/departments/${department.id}/courses/${department.courses[ci].id}`%>">
+                    <td><a hx-get="<%= `/api/v1/departments/${department.id}/courses/${department.courses[ci].id}`%>"
+                            hx-push-url="true" hx-target="#department-body" hx-swap="outerHTML"
+                            href="<%= `/api/v1/departments/${department.id}/courses/${department.courses[ci].id}`%>">
                             <%= department.courses[ci].name %>
                         </a>
                     </td>

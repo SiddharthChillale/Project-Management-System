@@ -33,7 +33,7 @@ export async function createCourse(req, res, err) {
 
 export async function getCourses(req, res, err) {
     const { id, courseId } = req.params;
-
+    const { user } = req;
     let options = {
         where: {
             id: courseId,
@@ -66,12 +66,19 @@ export async function getCourses(req, res, err) {
     if (courseId) {
         return res
             .status(200)
-            .render("pages/one-course.ejs", { course: result[0] });
+            .render("departments/courses/detail.ejs", {
+                course: result[0],
+                user: user ? user : undefined
+            });
     }
 
     return res
         .status(200)
-        .render("departments/courses", { courses: result, departmentId: id });
+        .render("departments/courses", {
+            courses: result,
+            departmentId: id,
+            user: user ? user : undefined
+        });
 }
 
 export async function editCourse(req, res, err) {

@@ -46,7 +46,12 @@ router
 
 router
     .route("/:id/courses/")
-    .get(param("id").notEmpty().toInt(), validate, getCourses)
+    .get(
+        attachUserOrSilentFail,
+        param("id").notEmpty().toInt(),
+        validate,
+        getCourses
+    )
     .post(
         param("id").notEmpty().toInt(),
         body(["name", "semester", "code"]).notEmpty().trim(),
@@ -56,11 +61,17 @@ router
     );
 router
     .route("/courses/:courseId")
-    .get(param("courseId").notEmpty().toInt(), validate, getCourses);
+    .get(
+        attachUserOrSilentFail,
+        param("courseId").notEmpty().toInt(),
+        validate,
+        getCourses
+    );
 
 router
     .route("/:id/courses/:courseId")
     .get(
+        attachUserOrSilentFail,
         param("id").notEmpty().toInt(),
         param("courseId").notEmpty().toInt(),
         validate,
