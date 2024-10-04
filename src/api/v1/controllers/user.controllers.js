@@ -10,6 +10,7 @@ const JWTSecret = "randtoken";
 
 // Users
 export async function getUsers(req, res, err) {
+    const { user } = req;
     const [profiles, error] = await UserService.get({
         include: {
             profiles: true
@@ -21,10 +22,13 @@ export async function getUsers(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res.status(200).render("users", { users: profiles });
+    return res
+        .status(200)
+        .render("users", { users: profiles, user: user ? user : undefined });
 }
 
 export async function getUserProfile(req, res, err) {
+    const { user } = req;
     const { profile_id } = req.params;
     const [profile, error] = await ProfileService.findOne({
         where: {
@@ -61,7 +65,12 @@ export async function getUserProfile(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res.status(200).render("pages/one-user.ejs", { profile: profile });
+    return res
+        .status(200)
+        .render("users/profiles/detail.ejs", {
+            profile: profile,
+            user: user ? user : undefined
+        });
 }
 
 export async function createUsers(req, res, err) {
@@ -591,11 +600,31 @@ export async function chooseProfile(req, res, err) {
     let responseUser = { ...user };
     delete responseUser.profiles;
     responseUser.profiles = loggedinProfile;
+    let path = "dashboards/public.ejs";
+    switch (responseUser.profiles[0].role) {
+        case Role.PROJECT_MANAGER:
+            path = "dashboards/project-manager.ejs";
+            break;
+        case Role.ADMIN:
+            path = "dashboards/admin.ejs";
+            break;
+        case Role.DEVELOPER:
+            path = "dashboards/developer.ejs";
+            break;
+        case Role.CLIENT:
+            path = "dashboards/client.ejs";
+            break;
+        case Role.REVIEWER:
+            path = "dashboards/reviewer.ejs";
+            break;
+        default:
+            break;
+    }
     return res
         .status(200)
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
-        .render("pages/dashboard.ejs", {
+        .render(path, {
             profile: responseUser.profiles[0]
         });
 }

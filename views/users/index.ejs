@@ -9,14 +9,15 @@
         <title>Users</title>
 </head>
 
-<body class="has-bakground-white">
+<body class="has-background-white">
 
     <div class="columns ">
-        <%- include ('../layouts/menu.ejs'); %>
+        <%- include ('../layouts/menu.ejs', user?user:undefined); %>
+
             <section class="is-medium column p-0 ">
                 <div class="container content my-3">
                     <%- include ('../layouts/navbar.ejs'); %>
-                        <div class="mr-2">
+                        <div class="mr-2" id="right-side">
 
                             <div class="p-4 has-background-white">
                                 <div class="field is-grouped"></div>
@@ -76,6 +77,9 @@
                                                             <% for( let pid=0; pid < users[ui].profiles.length; pid++ )
                                                                 { %>
                                                                 <a class="dropdown-item px-3 py-0 is-radiusless is-size-7 is-centered"
+                                                                    hx-target="#right-side"
+                                                                    hx-get="<%= `/api/v1/users/profile/${users[ui].profiles[pid].id}`%>"
+                                                                    hx-swap="outerHTML" hx-push-url="true"
                                                                     href="<%= `/api/v1/users/profile/${users[ui].profiles[pid].id}`%>">
                                                                     <%= users[ui].profiles[pid].role %>
                                                                 </a>

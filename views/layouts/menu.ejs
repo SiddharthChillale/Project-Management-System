@@ -21,8 +21,10 @@
 
                         <% if(user){%>
                             <%# `${JSON.stringify(user)}` %>
-                                <li><a
-                                        href="<%= `/api/v1/users/${user.profiles[0].userId}/profile/${user.profiles[0].id}`%>">My
+                                <li><a hx-target="#right-side"
+                                        hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>"
+                                        hx-swap="outerHTML" hx-push-url="true"
+                                        href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">My
                                         Profile</a></li>
                                 <% } %>
                     </ul>
