@@ -1,57 +1,99 @@
-<div class="container content p-5 m-0 has-background-white">
-    <p class="hero title is-4">
-        <%= event.name %>
-    </p>
-    <p>Starts at: <%= event.startDate %>
-    </p>
-    <p>Ends at: <%= event.endDate %>
-    </p>
-    <p class="subtitle is-7 has-text-weight-semibold">Creator: <%= event.creator.email %>
-    </p>
-    <% if (event.projects.length !=0) { %>
-        <table class="table is-striped ">
-            <thead>
-                <tr>
-                    <th>Projects in the Event</th>
-                </tr>
-                <% for( let pi=0; pi < event.projects.length; pi ++ ) { %>
-                    <tr>
-                        <td><a href="<%= `/api/v1/projects/${event.projects[pi].id}`%>">
-                                <%= event.projects[pi].name %>
-                            </a></td>
-                    </tr>
-                    <% } %>
-        </table>
+<!doctype html>
+<html lang="en" data-theme="light">
 
-        <% } %>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%- include('../layouts/header.ejs'); %>
+        <title>Events</title>
+</head>
 
-            <% if (event.participants.length !=0) { %>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Participant Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                        </tr>
-                    </thead>
-                    <% for( let pi=0; pi < event.participants.length; pi ++ ) { %>
-                        <tr>
-                            <td><a href="<%= `/api/v1/users/profile/${event.participants[pi].id}`%>">
-                                    <%= event.participants[pi].userName %>
-                                </a></td>
-                            <td>
-                                <%= event.participants[pi].email %>
-                            </td>
-                            <td>
-                                <%= event.participants[pi].role %>
-                            </td>
-                        </tr>
-                        <% } %>
-                </table>
-                <% } %>
+<body class="has-background-white">
 
-                    <div class="field is-grouped">
-                        <button class="control button is-info is-light is-small">Edit</button>
-                        <button class="control button is-danger is-light is-small">Delete </button>
-                    </div>
-</div>
+    <div class="columns ">
+        <%- include ('../layouts/menu.ejs', user?user:undefined); %>
+
+            <section class="is-medium column p-0 ">
+                <div class="container content my-3">
+                    <%- include ('../layouts/navbar.ejs'); %>
+
+                        <div class="mr-2">
+                            <div id="event-body">
+                                <div class="container content p-5 m-0 has-background-white">
+                                    <p class="hero title is-4">
+                                        <%= event.name %>
+                                    </p>
+                                    <p>Starts at: <%= event.startDate %>
+                                    </p>
+                                    <p>Ends at: <%= event.endDate %>
+                                    </p>
+                                    <p class="subtitle is-7 has-text-weight-semibold">Creator: <%= event.creator.email
+                                            %>
+                                    </p>
+                                    <% if (event.projects.length !=0) { %>
+                                        <table class="table is-striped ">
+                                            <thead>
+                                                <tr>
+                                                    <th>Projects in the Event</th>
+                                                </tr>
+                                                <% for( let pi=0; pi < event.projects.length; pi ++ ) { %>
+                                                    <tr>
+                                                        <td><a href="<%= `/api/v1/projects/${event.projects[pi].id}`%>">
+                                                                <%= event.projects[pi].name %>
+                                                            </a></td>
+                                                    </tr>
+                                                    <% } %>
+                                        </table>
+
+                                        <% } %>
+
+                                            <% if (event.participants.length !=0) { %>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Participant Name</th>
+                                                            <th>Email</th>
+                                                            <th>Role</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <% for( let pi=0; pi < event.participants.length; pi ++ ) { %>
+                                                        <tr>
+                                                            <td><a
+                                                                    href="<%= `/api/v1/users/profile/${event.participants[pi].id}`%>">
+                                                                    <%= event.participants[pi].userName %>
+                                                                </a></td>
+                                                            <td>
+                                                                <%= event.participants[pi].email %>
+                                                            </td>
+                                                            <td>
+                                                                <%= event.participants[pi].role %>
+                                                            </td>
+                                                        </tr>
+                                                        <% } %>
+                                                </table>
+                                                <% } %>
+
+                                                    <div class="field is-grouped">
+                                                        <button
+                                                            class="control button is-info is-light is-small">Edit</button>
+                                                        <button
+                                                            class="control button is-danger is-light is-small">Delete
+                                                        </button>
+                                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                </div>
+
+    </div>
+
+    </section>
+    </div>
+    <%- include('../layouts/footer.ejs'); %>
+</body>
+
+</html>

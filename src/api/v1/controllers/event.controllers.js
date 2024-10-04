@@ -69,6 +69,7 @@ export async function createEvent(req, res, err) {
 
 export async function getEvents(req, res, err) {
     const { id } = req.params;
+    const { user } = req;
     const { date } = req.query;
     const { includeAdditional = false } = req.query;
     let options = {
@@ -131,12 +132,16 @@ export async function getEvents(req, res, err) {
     }
 
     if (id) {
-        return res
-            .status(200)
-            .render("pages/one-event.ejs", { event: result[0] });
+        wlogger.debug(`user: ${JSON.stringify(user)}`);
+        return res.status(200).render("events/detail.ejs", {
+            event: result[0],
+            user: user ? user : undefined
+        });
     }
 
-    return res.status(200).render("events", { events: result });
+    return res
+        .status(200)
+        .render("events", { events: result, user: user ? user : undefined });
 }
 
 export async function editEvent(req, res, err) {

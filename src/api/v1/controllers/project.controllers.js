@@ -74,7 +74,8 @@ export async function getProjects(req, res, err) {
     let templateName = "details/public.ejs";
     let path = "projects/item.ejs";
     let obj = { templateName: templateName };
-
+    // projects/item.ejs, {templateName (role-specific path), project}
+    // projects, {templateName: details/public, projects}
     if (id) {
         if (user) {
             switch (user.profiles[0].role) {
@@ -100,7 +101,8 @@ export async function getProjects(req, res, err) {
         path = "projects";
         obj = { ...obj, projects: body };
     }
-
+    obj = { ...obj, user: user };
+    wlogger.debug(`obj.user: ${JSON.stringify(obj.user)}`);
     return res.status(200).render(path, obj);
 }
 
@@ -229,5 +231,7 @@ export async function deleteRating(req, res, err) {
 }
 
 export async function getCreateProjectPage(req, res, err) {
+    wlogger.debug("in getCreateProjectPage");
+
     return res.status(200).render("projects/create.ejs");
 }

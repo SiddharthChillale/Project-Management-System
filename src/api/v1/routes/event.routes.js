@@ -7,13 +7,19 @@ import {
 } from "../controllers/event.controllers.js";
 import { body, param, query } from "express-validator";
 import { validate } from "../validators/general.validators.js";
+import { attachUserOrSilentFail } from "../middlewares/auth.middlewares.js";
 
 const router = Router();
 // const s = express.Router();
 
 router
     .route("/")
-    .get(query("includeAdditional").optional().toBoolean(), validate, getEvents)
+    .get(
+        attachUserOrSilentFail,
+        query("includeAdditional").optional().toBoolean(),
+        validate,
+        getEvents
+    )
     .post(
         body("name").notEmpty().trim(),
         body(["startDate", "endDate"]).notEmpty().isDate(),
@@ -23,7 +29,12 @@ router
 
 router
     .route("/:id")
-    .get(param("id").notEmpty().toInt(), validate, getEvents)
+    .get(
+        attachUserOrSilentFail,
+        param("id").notEmpty().toInt(),
+        validate,
+        getEvents
+    )
     .patch(
         param("id").notEmpty().toInt(),
         body("name").optional().trim(),
