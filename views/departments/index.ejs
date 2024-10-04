@@ -9,10 +9,11 @@
         <title>Departments</title>
 </head>
 
-<body class="has-bakground-white">
+<body class="has-background-white">
 
     <div class="columns ">
-        <%- include ('../layouts/menu.ejs'); %>
+        <%- include ('../layouts/menu.ejs', user?user:undefined); %>
+
             <section class="is-medium column p-0 ">
                 <div class="container content my-3">
                     <%- include ('../layouts/navbar.ejs'); %>
@@ -32,7 +33,9 @@
                             <% for( let di=0; di < departments.length; di++ ) { %>
                                 <tr>
 
-                                    <td><a href="<%= `/api/v1/departments/${departments[di].id}`  %>">
+                                    <td><a hx-get="<%= `/api/v1/departments/${departments[di].id}`  %>"
+                                            hx-push-url="true" hx-target="table" hx-swap="outerHTML"
+                                            href="<%= `/api/v1/departments/${departments[di].id}`  %>">
                                             <%= departments[di].name %>
                                         </a></td>
                                     <td><button class="button is-small is-info is-light">

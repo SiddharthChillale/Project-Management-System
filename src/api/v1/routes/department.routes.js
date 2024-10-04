@@ -14,17 +14,27 @@ import {
 } from "../controllers/course.controllers.js";
 import { validate } from "../validators/general.validators.js";
 import { param, body } from "express-validator";
+import {
+    attachUserOrSilentFail,
+    verifyTokenAndAttachUser
+} from "../middlewares/auth.middlewares.js";
 const router = Router();
 // const s = express.Router();
 
 router
     .route("/")
-    .get(getDepartments)
+    .get(verifyTokenAndAttachUser, getDepartments)
     .post(body("name").notEmpty().trim(), validate, createDepartment);
 
 router
     .route("/:id")
-    .get(param("id").notEmpty().toInt(), validate, getDepartments)
+    .get(
+        verifyTokenAndAttachUser,
+        // attachUserOrSilentFail,
+        param("id").notEmpty().toInt(),
+        validate,
+        getDepartments
+    )
     .patch(
         param("id").notEmpty().toInt(),
         body("name").optional().trim(),

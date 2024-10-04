@@ -25,7 +25,7 @@ export async function getDepartments(req, res, err) {
     // name is String
     // courses is an array of course objects
     const { id, includeCourses = false } = req.params;
-
+    const { user } = req;
     let options = {
         include: {
             courses: true
@@ -42,11 +42,15 @@ export async function getDepartments(req, res, err) {
         return res.status(500).json(error);
     }
     if (id) {
-        return res
-            .status(200)
-            .render("pages/one-department.ejs", { department: response[0] });
+        return res.status(200).render("departments/detail.ejs", {
+            department: response[0],
+            user: user ? user : undefined
+        });
     }
-    return res.status(200).render("departments", { departments: response });
+    return res.status(200).render("departments", {
+        departments: response,
+        user: user ? user : undefined
+    });
 }
 
 export async function updateDepartment(req, res, err) {
