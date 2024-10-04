@@ -46,6 +46,8 @@
 
             <% if (project.event) { %>
                 <a class="is-size-4 has-text-weight-bold"
+                    hx-get="<%= `/api/v1/events/${project.event.id}?includeAdditional=true`%>" hx-swap="outerHTML"
+                    hx-target="#projects-body" hx-push-url="true" hx-select="#event-body"
                     href="<%= `/api/v1/events/${project.event.id}?includeAdditional=true`%>">
                     <%= project.event.name %>
                 </a>

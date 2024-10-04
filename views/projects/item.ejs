@@ -9,14 +9,18 @@
         <title>Projects-All</title>
 </head>
 
-<body class="has-bakground-white">
+<body class="has-background-white">
     <div class="columns">
-        <%- include ('../layouts/menu.ejs'); %>
+        <%- include ('../layouts/menu.ejs', user); %>
             <section class="is-medium column p-0">
                 <div class="container content my-3">
                     <%- include ('../layouts/navbar.ejs'); %>
 
-                        <%- include(templateName, project) %>
+                        <div class="mr-3">
+                            <div id="projects-body">
+                                <%- include(templateName, project) %>
+                            </div>
+                        </div>
                 </div>
 
             </section>

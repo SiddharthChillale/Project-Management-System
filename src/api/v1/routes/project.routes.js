@@ -25,6 +25,7 @@ router
     .get(
         [
             //validateHeaders, authentication, checkAuthorization
+            attachUserOrSilentFail,
             query("page").optional().toInt(),
             query("take").optional().toInt()
         ],
