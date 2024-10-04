@@ -31,14 +31,18 @@
                     <p class="menu-label">General</p>
                     <ul class="menu-list">
                         <li><a href="/api/v1/projects">Projects</a></li>
-                        <li><a href="/api/v1/users">Users</a></li>
+
+                        <% if (user && (user.profiles[0].role=="PROJECT_MANAGER" || user.profiles[0].role=="ADMIN" ) ){
+                            %>
+                            <li><a href="/api/v1/users">Users</a></li>
                     </ul>
-                    <% if (user && (user.profiles[0].role=="PROJECT_MANAGER" || user.profiles[0].role=="ADMIN" ) ){ %>
-                        <p class="menu-label">Other</p>
-                        <ul class="menu-list">
-                            <li><a href="/api/v1/score-category">Score Categories</a></li>
-                            <li><a href="/api/v1/departments">Departments</a></li>
-                            <li><a href="/api/v1/events">Events</a></li>
+                    <p class="menu-label">Other</p>
+                    <ul class="menu-list">
+                        <li><a href="/api/v1/score-category">Score Categories</a></li>
+                        <li><a href="/api/v1/departments">Departments</a></li>
+                        <li><a href="/api/v1/events">Events</a></li>
+                    </ul>
+                    <% } else { %>
                         </ul>
                         <% } %>
         </div>

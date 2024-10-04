@@ -8,17 +8,21 @@
         <title>Projects-All</title>
 </head>
 
-<body class="has-bakground-white">
+<body class="has-background-white">
 
     <div class="columns ">
-        <%- include ('../layouts/menu.ejs'); %>
+        <%- include ('../layouts/menu.ejs', user?user:undefined); %>
+
             <section class="is-medium column p-0 ">
                 <div class="container content my-3">
                     <%- include ('../layouts/navbar.ejs'); %>
 
-                        <div class="mr-2">
+                        <div class="mr-2" id="right-side">
 
-                            <section class="section container has-text-centered">Hello</section>
+                            <section class="section container has-text-centered">Your profile doesn't have a role yet.
+                            </section>
+                            <%= `${JSON.stringify(profile)}` %>
+
                         </div>
 
 

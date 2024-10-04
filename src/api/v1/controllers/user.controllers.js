@@ -65,12 +65,10 @@ export async function getUserProfile(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res
-        .status(200)
-        .render("users/profiles/detail.ejs", {
-            profile: profile,
-            user: user ? user : undefined
-        });
+    return res.status(200).render("users/profiles/detail.ejs", {
+        profile: profile,
+        user: user ? user : undefined
+    });
 }
 
 export async function createUsers(req, res, err) {
@@ -183,7 +181,39 @@ export async function dashboardViewHandler(req, res, err) {
     // choose dashboard accoring to user profile role.
     // This might require unpacking the JWT to determine the profile to fetch.
     // For now, This will go to simple unprotected dashboard.
-    return res.status(200).render("dashboards/public.ejs");
+    switch (user?.profiles[0].role) {
+        case "PROJECT_MANAGER":
+            return res.status(200).render("dashboards/project-manager.ejs", {
+                profile: user.profiles[0]
+            });
+        case "ADMIN":
+            return res.status(200).render("dashboards/admin.ejs", {
+                profile: user.profiles[0],
+                user: user
+            });
+        case "DEVELOPER":
+            return res.status(200).render("dashboards/developer.ejs", {
+                profile: user.profiles[0],
+                user: user
+            });
+        case "CLIENT":
+            return res
+                .status(200)
+                .render("dashboards/client.ejs", { profile: user.profiles[0] });
+        case "REVIEWER":
+            return res.status(200).render("dashboards/reviewer.ejs", {
+                profile: user.profiles[0],
+                user: user
+            });
+        default:
+            return res.status(200).render("dashboards/public.ejs", {
+                profile: user ? user.profiles[0] : undefined,
+                user: user ? user : undefined
+            });
+    }
+    return res
+        .status(200)
+        .render("dashboards/public.ejs", { profile: user.profiles[0] });
 }
 
 export async function registerHandler(req, res, err) {
@@ -625,6 +655,7 @@ export async function chooseProfile(req, res, err) {
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
         .render(path, {
-            profile: responseUser.profiles[0]
+            profile: responseUser.profiles[0],
+            user: user
         });
 }

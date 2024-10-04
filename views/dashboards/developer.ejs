@@ -1,7 +1,38 @@
-<div></div>
-<%- profile %>
-    <hr>
-    <p>My Projects</p>
-    <p>Last convo with PM</p>
+<!doctype html>
+<html lang="en" data-theme="light">
 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%- include('../layouts/header.ejs'); %>
+
+        <title>Departments</title>
+</head>
+
+<body class="has-background-white">
+
+    <div class="columns ">
+        <%- include ('../layouts/menu.ejs', user?user:undefined); %>
+
+            <section class="is-medium column p-0 ">
+                <div class="container content my-3">
+                    <%- include ('../layouts/navbar.ejs'); %>
+
+                        <div class="mr-2" id="right-side">
+                            <div>
+                                <%= `${JSON.stringify(profile)}` %>
+
+                                    <hr>
+                                    <p>My Projects</p>
+                                    <p>Last convo with PM</p>
+
+                            </div>
+                        </div>
+                </div>
+            </section>
     </div>
+    <%- include('../layouts/footer.ejs'); %>
+
+</body>
+
+</html>

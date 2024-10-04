@@ -48,7 +48,7 @@ router
         registerHandler
     );
 
-router.route("/dashboard").get(dashboardViewHandler);
+router.route("/dashboard").get(attachUserOrSilentFail, dashboardViewHandler);
 router.route("/refresh-token").post(refreshAccessToken);
 
 router.route("/create-users").post(verifyTokenAndAttachUser, createUsers);
