@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { Role, Status } from "@prisma/client";
 import wlogger from "../../../logger/winston.logger.js";
 import { profile } from "node:console";
+import { strict } from "node:assert";
 
 const JWTSecret = "randtoken";
 
@@ -55,7 +56,7 @@ export async function getUserProfile(req, res, err) {
         }
     });
     if (req.user) {
-        wlogger.info(`User ${req.user.userName} is logged in`);
+        wlogger.info(`User ${req.user.profiles[0].userName} is logged in`);
     }
     if (error) {
         if (error.code == "NotFoundError") {
@@ -426,14 +427,29 @@ export async function refreshAccessToken(req, res, err) {
      * generate AccessToken and refreshToken
      * attach to response body and return response
      */
+    wlogger.debug("In refresh-token");
+    const options = {
+        httpOnly: true,
+        secure: false
+    };
     const token = req.cookies?.refreshToken || req.body.refreshToken;
     if (!token) {
         // no refreshToken found in cookies or authorization header. redirect to login
-        return res.status(400).json("Login again");
+        return res
+            .clearCookie("accessToken", options)
+            .redirect("/api/v1/users/login"); // redirect to login page.
     }
 
-    const decoded = jwt.verify(token, "randtoken");
-    // possible that token given has expired. possible redirect to login page?
+    let decoded = undefined;
+    try {
+        decoded = jwt.verify(token, "randtoken");
+    } catch (err) {
+        wlogger.error(`error: ${err}`);
+        return res
+            .clearCookie("accessToken", options)
+            .clearCookie("refreshToken", options)
+            .redirect("/api/v1/users/login"); // redirect to login page.
+    }
 
     const profile_id = decoded.profile_id;
     const [user, error] = await UserService.get({
@@ -443,26 +459,26 @@ export async function refreshAccessToken(req, res, err) {
     if (error) {
         // token is valid but no such user found. Redirect to login page?
         wlogger.error(`no user with provided token`);
-        return res.status(400).json(error);
+        return res.status(404).json({ message: "No such user" });
     }
-
     if (user.refreshToken !== token) {
         // User has logged out. Redirect to Login again?
-        return res.status(400).json("User has logged out. Login again");
+        return res.redirect("/api/v1/users/login");
     }
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
         user,
         profile_id
     );
-    const cookieOptions = {
-        httpOnly: true,
-        secure: false
-    };
+    // const cookieOptions = {
+    //     httpOnly: true,
+    //     secure: false
+    // };
+    wlogger.info(`Access Token refreshed`);
     return res
         .status(200)
-        .cookie("accessToken", accessToken, cookieOptions)
-        .cookie("refreshToken", refreshToken, cookieOptions)
-        .json("refreshed");
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json({ message: "Access Token refreshed" });
 }
 
 export async function assignmentHandler(req, res, err) {
@@ -610,52 +626,50 @@ export async function getAvailableProfiles(req, res, err) {
 export async function chooseProfile(req, res, err) {
     const { user } = req;
     const { profileId } = req.params;
-    const { profile_id } = req.body;
-
+    const { profile_Id } = req.body;
+    wlogger.debug(`profile_id: ${profile_Id}`);
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
         user,
-        profileId
+        profile_Id
     );
 
     await UserService.updateTokenById(user.id, "refreshToken", refreshToken);
 
+    // let allProfiles = user.profiles;
+    // const loggedinProfile = allProfiles.filter(
+    //     (profile) => profile.id == profile_Id
+    // );
+    // let responseUser = { ...user };
+    // delete responseUser.profiles;
+    // responseUser.profiles = loggedinProfile;
+    // let path = "dashboards/public.ejs";
+    // switch (responseUser.profiles[0].role) {
+    //     case Role.PROJECT_MANAGER:
+    //         path = "dashboards/project-manager.ejs";
+    //         break;
+    //     case Role.ADMIN:
+    //         path = "dashboards/admin.ejs";
+    //         break;
+    //     case Role.DEVELOPER:
+    //         path = "dashboards/developer.ejs";
+    //         break;
+    //     case Role.CLIENT:
+    //         path = "dashboards/client.ejs";
+    //         break;
+    //     case Role.REVIEWER:
+    //         path = "dashboards/reviewer.ejs";
+    //         break;
+    //     default:
+    //         break;
+    // }
     const cookieOptions = {
         httpOnly: true,
-        secure: false // make this dependant on NODE_ENV. should be false in dev, true in prod.
+        secure: false,
+        sameSite: "none"
     };
-    let allProfiles = user.profiles;
-    const loggedinProfile = allProfiles.filter(
-        (profile) => profile.id == profileId
-    );
-    let responseUser = { ...user };
-    delete responseUser.profiles;
-    responseUser.profiles = loggedinProfile;
-    let path = "dashboards/public.ejs";
-    switch (responseUser.profiles[0].role) {
-        case Role.PROJECT_MANAGER:
-            path = "dashboards/project-manager.ejs";
-            break;
-        case Role.ADMIN:
-            path = "dashboards/admin.ejs";
-            break;
-        case Role.DEVELOPER:
-            path = "dashboards/developer.ejs";
-            break;
-        case Role.CLIENT:
-            path = "dashboards/client.ejs";
-            break;
-        case Role.REVIEWER:
-            path = "dashboards/reviewer.ejs";
-            break;
-        default:
-            break;
-    }
     return res
         .status(200)
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
-        .render(path, {
-            profile: responseUser.profiles[0],
-            user: user
-        });
+        .redirect("/api/v1/users/dashboard");
 }

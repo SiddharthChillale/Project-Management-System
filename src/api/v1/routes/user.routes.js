@@ -57,11 +57,16 @@ router.route("/logout").post(verifyTokenAndAttachUser, logoutHandler);
 
 router
     .route("/profile/choose")
-    .get(verifyTokenAndAttachUser, getAvailableProfiles);
+    .get(verifyTokenAndAttachUser, getAvailableProfiles)
+    .post(
+        verifyTokenAndAttachUser,
+        body("profile_id").notEmpty().toInt(),
+        chooseProfile
+    );
 
-router
-    .route("/profile/choose/:profileId")
-    .get(verifyTokenAndAttachUser, param("profileId").toInt(), chooseProfile);
+// router
+//     .route("/profile/choose/:profileId")
+//     .get(verifyTokenAndAttachUser, param("profileId").toInt(), chooseProfile);
 
 router
     .route("/profile/:profile_id")
