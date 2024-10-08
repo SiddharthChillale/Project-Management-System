@@ -194,16 +194,21 @@ async function dumCourseTable(departmentIds, numCourses) {
 }
 
 async function dumUserProfile(user) {
-    const p = Role;
-    const rrole = faker.helpers.objectValue(Role);
-    const v = Role.PROJECT_MANAGER;
-    return {
-        email: user.email,
-        userName: user.email.split("@")[0],
-        role: faker.helpers.objectValue(Role),
-        userId: user.id,
-        profilePic: { url: faker.image.avatarGitHub() }
-    };
+    const rolesArray = faker.helpers.uniqueArray(
+        Object.values(Role),
+        faker.number.int({ min: 1, max: 5 })
+    );
+    let profileArray = [];
+    for (const role of rolesArray) {
+        profileArray.push({
+            email: user.email,
+            userName: user.email.split("@")[0] + " " + faker.person.suffix(),
+            role: role,
+            userId: user.id,
+            profilePic: { url: faker.image.avatarGitHub() }
+        });
+    }
+    return profileArray;
 }
 
 async function dumUserProfileTable(users, numUserProfiles) {
@@ -216,11 +221,13 @@ async function dumUserProfileTable(users, numUserProfiles) {
     //     })
     // );
     let uprofiles = [];
-
-    for (let i = 0; i < numUserProfiles; i++) {
-        const a = faker.helpers.arrayElement(users);
-        const one = await dumUserProfile(a);
-        uprofiles.push(one);
+    let usersArray = faker.helpers.uniqueArray(
+        users,
+        faker.number.int({ min: users.length / 2, max: users.length })
+    );
+    for (const user of usersArray) {
+        const profileArray = await dumUserProfile(user);
+        uprofiles.push(...profileArray);
     }
     try {
         const response = await prisma.userProfile.createManyAndReturn({
@@ -256,6 +263,7 @@ async function dumEventTable(profiles, numOfEvents) {
     wlogger.info(`creating events: start`);
     let eventIds = [];
     let eventCreatorIds = [];
+
     for (const profile of profiles) {
         if (
             profile.role == Role.ADMIN ||
@@ -276,7 +284,6 @@ async function dumEventTable(profiles, numOfEvents) {
         },
         { count: numOfEvents }
     );
-
     try {
         const response = await prisma.event.createManyAndReturn({
             data: events,
@@ -617,15 +624,15 @@ async function setup() {
     let parents;
     const params = {
         numUsers: 20,
-        numUserProfiles: 15,
+        numUserProfiles: 28,
         numScoreCategories: 5,
         numDepartments: 5,
         numCourses: 2,
         numProjects: 20,
-        numProjectAssociations: 7,
+        numProjectAssociations: 15,
         numEvents: 3,
         numRatings: 2,
-        numCourseProfiles: 6,
+        numCourseProfiles: 10,
         numCourseProjects: 10,
         numEventProjects: 10
     };
