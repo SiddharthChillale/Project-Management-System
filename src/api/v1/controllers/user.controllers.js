@@ -182,10 +182,13 @@ export async function dashboardViewHandler(req, res, err) {
     // choose dashboard accoring to user profile role.
     // This might require unpacking the JWT to determine the profile to fetch.
     // For now, This will go to simple unprotected dashboard.
+    //
+    //
     switch (user?.profiles[0].role) {
         case "PROJECT_MANAGER":
             return res.status(200).render("dashboards/project-manager.ejs", {
-                profile: user.profiles[0]
+                profile: user.profiles[0],
+                user: user
             });
         case "ADMIN":
             return res.status(200).render("dashboards/admin.ejs", {
@@ -200,7 +203,10 @@ export async function dashboardViewHandler(req, res, err) {
         case "CLIENT":
             return res
                 .status(200)
-                .render("dashboards/client.ejs", { profile: user.profiles[0] });
+                .render("dashboards/client.ejs", {
+                    profile: user.profiles[0],
+                    user: user
+                });
         case "REVIEWER":
             return res.status(200).render("dashboards/reviewer.ejs", {
                 profile: user.profiles[0],
@@ -361,13 +367,17 @@ export async function logoutHandler(req, res, err) {
         .status(200)
         .clearCookie("accessToken", options)
         .clearCookie("refreshToken", options)
-        .json("Logout Successful");
+        .redirect("/");
+    // .json({ message: "Logged out" });
 }
 
 //Tokenizer
 export async function generateAccessToken(user, profile_id = undefined) {
     // const JWTSecret = process.env.JWT_TOKEN;
     // const JWTSecret = "randtoken";
+    wlogger.debug(
+        `in generateAccessToken with user ${JSON.stringify(user)} and profile_id ${profile_id}`
+    );
     if (!profile_id) {
         return jwt.sign({ id: user.id, email: user.email }, JWTSecret, {
             expiresIn: "20m"
@@ -406,8 +416,10 @@ export async function generateAccessAndRefreshTokens(
      *
      * return {accessToken, refreshToken}
      */
-
+    //
+    //
     const accessToken = await generateAccessToken(user, profile_id);
+
     const refreshToken = await generateRefreshToken(user, profile_id);
     return { accessToken, refreshToken };
 }
@@ -427,7 +439,7 @@ export async function refreshAccessToken(req, res, err) {
      * generate AccessToken and refreshToken
      * attach to response body and return response
      */
-    wlogger.debug("In refresh-token");
+
     const options = {
         httpOnly: true,
         secure: false
@@ -625,9 +637,9 @@ export async function getAvailableProfiles(req, res, err) {
 
 export async function chooseProfile(req, res, err) {
     const { user } = req;
-    const { profileId } = req.params;
-    const { profile_Id } = req.body;
-    wlogger.debug(`profile_id: ${profile_Id}`);
+    // const { profileId } = req.params;
+    const profile_Id = parseInt(req.body.profile_Id);
+    //
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
         user,
         profile_Id
@@ -664,8 +676,7 @@ export async function chooseProfile(req, res, err) {
     // }
     const cookieOptions = {
         httpOnly: true,
-        secure: false,
-        sameSite: "none"
+        secure: false
     };
     return res
         .status(200)
