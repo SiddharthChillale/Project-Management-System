@@ -41,9 +41,9 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     let decoded;
     try {
         decoded = jwt.verify(token, "randtoken");
-    } catch (err) {
+    } catch (error) {
         //Token expired
-        wlogger.error(`error: ${err}`);
+        wlogger.error(`error: ${error}`);
         if (error.name === "TokenExpiredError") {
             // return res.status(401).json({
             //     message:
@@ -89,7 +89,11 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     const [user, error] = await UserService.get({
         where: { id: decoded.id },
         include: {
-            profiles: true
+            profiles: {
+                where: {
+                    id: decoded.profile_id
+                }
+            }
         }
     });
 
