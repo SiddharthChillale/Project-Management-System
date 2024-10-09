@@ -46,18 +46,18 @@
                                                 </figure>
 
                                                 <div class=" is-size-8 has-text-weight-light is-italic ">
-                                                    <form action="/api/v1/users/profile/choose/" method="POST">
-                                                        <!-- <form> -->
-                                                        <button type="submit" value="<%= profiles[pi].id %>">
-                                                            <%= profiles[pi].role %>
-                                                        </button>
-                                                        <!-- <button hx-trigger="click"
-                                                            hx-post="/api/v1/users/profile/choose/"
-                                                            hx-vals='{"profile_Id": "<%# profiles[pi].id %>"}'
-                                                            hx-target="body">
-                                                            <%# profiles[pi].role %>
-                                                        </button> -->
-                                                    </form>
+                                                    <!-- <form action="/api/v1/users/profile/choose/" method="POST"> -->
+                                                    <!-- <form> -->
+                                                    <!-- <button type="submit" name="profile_Id"
+                                                        value="<%# profiles[pi].id %>">
+                                                        <%# profiles[pi].role %>
+                                                    </button> -->
+                                                    <button hx-trigger="click" hx-post="/api/v1/users/profile/choose/"
+                                                        hx-vals='{"profile_Id": "<%= profiles[pi].id %>"}'
+                                                        hx-target="body">
+                                                        <%= profiles[pi].role %>
+                                                    </button>
+                                                    <!-- </form> -->
                                                 </div>
                                             </div>
                                             <% } %>
