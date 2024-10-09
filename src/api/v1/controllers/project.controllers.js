@@ -102,7 +102,7 @@ export async function getProjects(req, res, err) {
         obj = { ...obj, projects: body };
     }
     obj = { ...obj, user: user };
-    wlogger.debug(`obj.user: ${JSON.stringify(obj.user)}`);
+
     return res.status(200).render(path, obj);
 }
 
@@ -231,7 +231,5 @@ export async function deleteRating(req, res, err) {
 }
 
 export async function getCreateProjectPage(req, res, err) {
-    wlogger.debug("in getCreateProjectPage");
-
     return res.status(200).render("projects/create.ejs");
 }

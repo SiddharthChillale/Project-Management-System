@@ -132,7 +132,6 @@ export async function getEvents(req, res, err) {
     }
 
     if (id) {
-        wlogger.debug(`user: ${JSON.stringify(user)}`);
         return res.status(200).render("events/detail.ejs", {
             event: result[0],
             user: user ? user : undefined
