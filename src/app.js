@@ -37,9 +37,11 @@ app.use(
             directives: {
                 "default-src": ["'self'"],
                 "script-src": ["'self'", "https://unpkg.com/htmx.org@2.0.2"],
-                "img-src": ["'self'", "https://avatars.githubusercontent.com"]
+                "img-src": ["'self'", "https://avatars.githubusercontent.com"],
+                upgradeInsecureRequests: []
             }
-        }
+        },
+        contentSecurityPolicy: false
     })
 );
 app.use(cookieParser());
