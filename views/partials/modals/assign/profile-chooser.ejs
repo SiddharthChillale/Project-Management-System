@@ -41,8 +41,8 @@
                                                     </figure>
 
                                                     <div class=" is-size-8 has-text-weight-light is-italic ">
-                                                        <a
-                                                            href="<%= `/api/v1/users/profile/choose/${profiles[pi].id}`  %>">
+                                                        <a hx-post="<%= `/api/v1/users/profile/choose/`  %>"
+                                                            hx-vals="js:{profile_id: profiles[pi].id}">
                                                             <%= profiles[pi].role %>
                                                         </a>
                                                     </div>

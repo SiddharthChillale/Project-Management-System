@@ -11,12 +11,12 @@
 
 <body class="has-background-white">
 
-    <div class="columns ">
-        <%- include ('../layouts/menu.ejs', user?user:undefined); %>
+    <%- include ('../layouts/navbar.ejs'); %>
+        <div class="columns ">
+            <%- include ('../layouts/menu.ejs', user?user:undefined); %>
 
-            <section class="is-medium column p-0 ">
-                <div class="container content my-3">
-                    <%- include ('../layouts/navbar.ejs'); %>
+                <section class="is-medium column p-0 ">
+                    <div class="container content my-3">
 
                         <div class="mr-2" id="project-body">
                             <div class="field is-grouped"></div>
@@ -49,17 +49,17 @@
                                     <% } %>
                             </table>
                         </div>
-                </div>
+                    </div>
 
 
 
-    </div>
+        </div>
 
-    </div>
+        </div>
 
-    </section>
-    </div>
-    <%- include('../layouts/footer.ejs'); %>
+        </section>
+        </div>
+        <%- include('../layouts/footer.ejs'); %>
 </body>
 
 </html>

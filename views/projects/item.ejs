@@ -10,10 +10,10 @@
 </head>
 
 <body class="has-background-white">
-    <div class="columns">
-        <%- include ('../layouts/menu.ejs', user); %>
-            <section class="is-medium column p-0">
-                <div class="container content my-3">
+    <div class="container content my-3">
+        <div class="columns">
+            <%- include ('../layouts/menu.ejs', user); %>
+                <section class="is-medium column p-0">
                     <%- include ('../layouts/navbar.ejs'); %>
 
                         <div class="mr-3">
@@ -21,9 +21,9 @@
                                 <%- include(templateName, project) %>
                             </div>
                         </div>
-                </div>
+        </div>
 
-            </section>
+        </section>
     </div>
 
 

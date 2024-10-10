@@ -9,15 +9,15 @@
 </head>
 
 <body class="has-background-white">
+    <%- include ('../layouts/navbar.ejs'); %>
 
-    <div class="columns ">
-        <%- include ('../layouts/menu.ejs', user?user:undefined); %>
+        <div class="columns ">
+            <%- include ('../layouts/menu.ejs', user?user:undefined); %>
 
-            <section class="is-medium column p-0 ">
-                <div class="container content my-3">
-                    <%- include ('../layouts/navbar.ejs'); %>
+                <section class="is-medium column p-0 ">
+                    <div class="container content my-3">
 
-                        <div class="mr-2">
+                        <div class="mr-2" id="right-side">
                             <section class="section " id="projects-body">
                                 <div class="container">
                                     <div class="" id="create-project">
@@ -71,12 +71,12 @@
 
                         </div>
 
-                </div>
+                    </div>
 
-            </section>
-    </div>
+                </section>
+        </div>
 
-    <%- include('../layouts/footer.ejs'); %>
+        <%- include('../layouts/footer.ejs'); %>
 </body>
 
 </html>
