@@ -19,9 +19,13 @@
                             <span class="navbar-item has-text-weight-bold is-size-5">Project Management System</span>
                         </div>
                         <div class="navbar-end">
-                            <a href="/api/v1/users/dashboard" class="navbar-item">Dashboard</a>
-                            <a href="/api/v1/users/login" class="navbar-item">Login</a>
-                            <a href="/api/v1/users/register" class="navbar-item">Register</a>
+
+                            <a hx-get="/api/v1/projects" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
+                                class="navbar-item">Projects</a>
+                            <a hx-get="/api/v1/users/login" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
+                                class="navbar-item">Login</a>
+                            <a hx-get="/api/v1/users/register" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
+                                class="navbar-item">Register</a>
                         </div>
                     </div>
                 </div>

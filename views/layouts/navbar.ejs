@@ -1,13 +1,31 @@
-<nav class="navbar m-0 mb-2 px-2 py-2 has-background-primary level">
+<nav class="navbar m-0 mb-2 px-2 py-2 has-background-primary-light level">
     <span class="navbar-left  is-size-6 has-text-weight-bold">Project Management System</span>
     <span class="navbar-left">
         <input class="input" placeholder="Search..." />
     </span>
-    <span class="navbar-right is-size-6 has-text-weight-bold">
-        <button class="button is-danger is-light is-small"><a href="/api/v1/users/logout">Logout</a></button>
-        <button class="button is-danger is-light is-small"><a href="/api/v1/users/logout">Login</a></button>
-    </span>
-
+    <% if(user){%>
+        <%# `${JSON.stringify(user)}` %>
+            <span class="navbar-item is-hoverable">
+                <figure class="image is-24x24 level-item">
+                    <a hx-target="#right-side" hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>"
+                        hx-swap="outerHTML" hx-push-url="true"
+                        href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">
+                        <img id="profile_img" class="is-rounded" src="<%= `${user.profiles[0].profilePic.url}` %>"
+                            alt="Profile Picture">
+                    </a>
+                </figure>
+                <a class="level-item" hx-target="#right-side"
+                    hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>" hx-swap="outerHTML" hx-push-url="true"
+                    href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">
+                    <%= user.profiles[0].userName %>
+                </a>
+            </span>
+            <% } else { %>
+                <span class="navbar-right is-size-6 has-text-weight-bold">
+                    <button hx-get="/api/v1/users/login" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
+                        class="button is-danger is-light is-small">Login</button>
+                </span>
+                <%}%>
 
 
 </nav>

@@ -1,29 +1,12 @@
 <section class="column p-0 has-background-white" style="max-width: min-content;">
     <aside class="menu p-4 has-white-background">
-        <!-- <div class="is-flex is-flex-wrap-wrap mb-3 pl-2">
-            <div class="has-text-weight-bold is-size-4 mr-2">Project</div>
-            <div class="has-text-weight-bold is-size-4 mr-2">Management</div>
-            <div class="has-text-weight-bold is-size-4 mr-2">System</div>
-        </div> -->
-        <!-- <div>
-            <span class="">
-                <input class="input" placeholder="Search..." />
-            </span>
-        </div> -->
+
         <div class="p-3">
 
             <p class="menu-label">Personal</p>
             <ul class="menu-list">
                 <li><a href="/api/v1/users/dashboard">Dashboard</a></li>
 
-                <% if(user){%>
-                    <%# `${JSON.stringify(user)}` %>
-                        <li><a hx-target="#right-side" hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>"
-                                hx-swap="outerHTML" hx-push-url="true"
-                                href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">
-                                <%= user.profiles[0].userName %>
-                            </a></li>
-                        <% } %>
             </ul>
             <p class="menu-label">General</p>
             <ul class="menu-list">
