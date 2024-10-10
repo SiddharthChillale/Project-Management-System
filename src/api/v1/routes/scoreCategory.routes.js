@@ -1,6 +1,8 @@
 import {
     createScoreCat,
     deleteScoreCat,
+    getEditPage,
+    getNewCategoryPage,
     getScoreCats,
     updateScoreCat
 } from "../controllers/scoreCategory.controller.js";
@@ -17,6 +19,10 @@ router
     .get(verifyTokenAndAttachUser, getScoreCats)
     .post(body("name").notEmpty().trim(), validate, createScoreCat);
 
+router.route("/new").get(verifyTokenAndAttachUser, getNewCategoryPage);
+router
+    .route("/:id/edit")
+    .get(verifyTokenAndAttachUser, param("id").notEmpty().toInt(), getEditPage);
 router
     .route("/:id")
     .get(

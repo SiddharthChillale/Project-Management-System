@@ -1,0 +1,32 @@
+<div class="modal is-active" id="edit-score-category">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+        <div class="modal-card">
+            <div class="modal-card-head">
+                <p class="modal-card-title">Edit Score Category</p>
+                <button class="modal-close is-large" hx-get="/api/v1/score-category/" hx-target="body"
+                    hx-swap="outerHTML" aria-label="close"></button>
+            </div>
+            <div class="modal-card-body">
+                <form id="edit-scorecat-form">
+                    <div class="field">
+                        <div class="control">
+                            <label class="label">Score Category Name</label>
+                            <input class="input" type="text" name="name" id="name" value="<%= scoreCat.name %>">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-card-foot">
+                <button class="button is-success is-light" hx-patch="/api/v1/score-category/<%= scoreCat.id %>"
+                    hx-swap="delete" hx-include="#edit-scorecat-form">
+                    Update
+                </button>
+                <button class="button is-danger is-light" hx-get="/api/v1/score-category/" hx-target="body"
+                    hx-swap="outerHTML">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>

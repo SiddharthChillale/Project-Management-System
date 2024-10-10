@@ -17,32 +17,40 @@
                 <div class="container content my-3">
                     <%- include ('../layouts/navbar.ejs'); %>
 
-                        <div class="mr-2">
-                            <div class="p-3 section">
+                        <div class="mr-2" id="right-side">
+                            <button class="button is-primary is-light" hx-get="/api/v1/score-category/new"
+                                hx-target="this" hx-swap="outerHTML">
+                                Create category +
+                            </button>
+                            <div class="p-3 section ">
 
 
-                                <table class="table is-narrow is-striped ">
+                                <table class="table is-narrow is-striped">
 
                                     <thead class="thead ">
-                                        <th class="container">Name</th>
-                                        <th class="container">Action</th>
+                                        <th class="">Name</th>
+                                        <th class="">Action</th>
                                     </thead>
-                                    <% for( let ci=0; ci < scoreCats.length; ci++ ) { %>
-                                        <tr>
-                                            <td class="has-text-weight-bold is-size-5">
-                                                <%= scoreCats[ci].name %>
-                                            </td>
-                                            <td class="field is-grouped">
-                                                <button class="is-size-6 control button is-small is-primary is-light"
-                                                    href="#">Add</button>
-                                                <button class="is-size-6 control button is-small is-secondary is-light"
-                                                    href="#">Edit</button>
-                                                <button class="is-size-6 control button is-small is-danger is-light"
-                                                    href="#">Delete</button>
-                                            </td>
+                                    <tbody id="score-categories-table">
+                                        <% for( let ci=0; ci < scoreCats.length; ci++ ) { %>
+                                            <tr>
+                                                <td class="is-size-6">
+                                                    <%= scoreCats[ci].name %>
+                                                </td>
+                                                <td class="buttons are-small">
 
-                                        </tr>
-                                        <% } %>
+                                                    <button class="button is-secondary is-light"
+                                                        hx-get="/api/v1/score-category/<%=scoreCats[ci].id%>/edit"
+                                                        hx-target="this" hx-swap="outerHTML">Edit</button>
+                                                    <button hx-delete="/api/v1/score-category/<%= scoreCats[ci].id %>"
+                                                        hx-swap="delete"
+                                                        hx-confirm="Delete category: <%= scoreCats[ci].name %> ?"
+                                                        class="button is-danger is-light">Delete</button>
+                                                </td>
+
+                                            </tr>
+                                            <% } %>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
