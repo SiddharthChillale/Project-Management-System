@@ -40,7 +40,7 @@ router
         ],
         addProject
     );
-router.route("/new").get(getCreateProjectPage);
+router.route("/new").get(verifyTokenAndAttachUser, getCreateProjectPage);
 router
     .route("/:id")
     .get(
