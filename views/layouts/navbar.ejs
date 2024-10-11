@@ -1,7 +1,9 @@
 <nav class="navbar m-0 mb-2 px-2 py-2 has-background-primary-light level">
     <span class="navbar-left  is-size-6 has-text-weight-bold">Project Management System</span>
     <span class="navbar-left">
-        <input class="input" placeholder="Search..." />
+        <sl-input placeholder="Search..." size="small" clearable>
+        </sl-input>
+
     </span>
     <% if(user){%>
         <%# `${JSON.stringify(user)}` %>
