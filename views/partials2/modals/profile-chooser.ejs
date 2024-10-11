@@ -27,6 +27,12 @@
                                 <div class="has-text-centered is-size-7">Sorry, but you have no Profiles yet.</div>
                                 <div class="has-text-centered is-size-7">Please wait to be assigned a Profile by
                                     your Project Manager or Admin.</div>
+                                <div class="has-text-centered is-size-7">
+                                    Meanwhile, you can view projects here
+                                </div>
+                                <button hx-get="/api/v1/projects" hx-target="body" hx-swap="outerHTML"
+                                    hx-push-url="true" class="button is-light is-info is-small">View
+                                    Projects</button>
 
                                 <% } else { %>
 

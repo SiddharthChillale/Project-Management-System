@@ -19,7 +19,7 @@ async function dbGetUniqueUser(filterClause) {
 }
 
 //meant for self-registering users, returns id created
-async function dbCreateUser(email, password) {
+async function dbCreateUser(email, password, role = undefined) {
     const salt = "salt";
     const hashedPassword = crypto
         .scryptSync(password, salt, 12)
@@ -28,8 +28,7 @@ async function dbCreateUser(email, password) {
     const goCreate = goStyleExceptionWrapper(prisma.user.create);
 
     let response, error;
-
-    [response, error] = await goCreate({
+    let options = {
         select: {
             id: true
         },
@@ -38,7 +37,23 @@ async function dbCreateUser(email, password) {
             salt: salt,
             password: hashedPassword
         }
-    });
+    };
+    if (role) {
+        options.data = {
+            ...options.data,
+            profiles: {
+                create: {
+                    role: role,
+                    email: email,
+                    userName: email.split("@")[0],
+                    profilePic: {
+                        url: "public/default.png"
+                    }
+                }
+            }
+        };
+    }
+    [response, error] = await goCreate(options);
 
     return [response, error];
 }

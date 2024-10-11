@@ -201,12 +201,10 @@ export async function dashboardViewHandler(req, res, err) {
                 user: user
             });
         case "CLIENT":
-            return res
-                .status(200)
-                .render("dashboards/client.ejs", {
-                    profile: user.profiles[0],
-                    user: user
-                });
+            return res.status(200).render("dashboards/client.ejs", {
+                profile: user.profiles[0],
+                user: user
+            });
         case "REVIEWER":
             return res.status(200).render("dashboards/reviewer.ejs", {
                 profile: user.profiles[0],
@@ -244,7 +242,11 @@ export async function registerHandler(req, res, err) {
 
     const { email, password } = req.body;
 
-    const [response, error] = await UserService.create(email, password);
+    const [response, error] = await UserService.create(
+        email,
+        password,
+        Role.PUBLIC
+    );
 
     if (error) {
         wlogger.error(`error: ${error}`);
@@ -252,7 +254,7 @@ export async function registerHandler(req, res, err) {
     }
     wlogger.info(`success: registered: ${email}`);
 
-    return res.status(200).json(response);
+    return res.redirect("/api/v1/users/login");
 }
 export async function loginHandler(req, res, err) {
     /**
