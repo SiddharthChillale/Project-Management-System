@@ -31,7 +31,6 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     if (!token) {
         wlogger.error(`token not found`);
 
-        // return res.status(401).render("pages/login.ejs");
         return res
             .status(401)
             .json({ message: "Athentication token not found" });
