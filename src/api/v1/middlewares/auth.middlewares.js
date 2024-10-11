@@ -171,20 +171,24 @@ export async function attachUserOrSilentFail(req, res, next) {
                         //     .clearCookie("refreshToken", options)
                         //     .redirect("/api/v1/users/login"); // redirect to login page.
                     }
+                    if (decoded) {
+                        const profile_id = decoded.profile_id;
+                        const user_Id = decoded.id;
+                        const user = { id: user_Id };
+                        const { accessToken, refreshToken } =
+                            await generateAccessAndRefreshTokens(
+                                user,
+                                profile_id
+                            );
 
-                    const profile_id = decoded.profile_id;
-                    const user_Id = decoded.id;
-                    const user = { id: user_Id };
-                    const { accessToken, refreshToken } =
-                        await generateAccessAndRefreshTokens(user, profile_id);
+                        wlogger.info(
+                            `Access Token refreshed in attachUserOrSilentFail`
+                        );
 
-                    wlogger.info(
-                        `Access Token refreshed in attachUserOrSilentFail`
-                    );
-
-                    res.cookie("accessToken", accessToken, options);
-                    res.cookie("refreshToken", refreshToken, options);
-                    return res.redirect(req.url);
+                        res.cookie("accessToken", accessToken, options);
+                        res.cookie("refreshToken", refreshToken, options);
+                        return res.redirect(req.url);
+                    }
                 }
             }
         }

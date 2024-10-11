@@ -13,16 +13,19 @@
                 <%= profile.userName %>
             </p>
             <br />
-            <p class="subtitle is-6">
-                <%= profile.email %>
+            <p class="subtitle is-6" id="user-email">
+                <%= profile.email %> <sl-copy-button from="user-email"></sl-copy-button>
             </p>
             <p class="subtitle is-6 is-italic">Role: <%= profile.role %>
             </p>
         </div>
-        <div class="column" style="max-width: min-content;">
-            <button class="button is-danger is-light" hx-post="/api/v1/users/logout" hx-target="body"
-                hx-swap="outerHTML" hx-push-url="true">Logout</button>
-        </div>
+        <% if(profile.id==user.profiles[0].id) {%>
+            <div class="column" style="max-width: min-content;">
+                <button class="button is-danger is-light" hx-post="/api/v1/users/logout" hx-target="body"
+                    hx-swap="outerHTML" hx-push-url="true">Logout</button>
+            </div>
+            <% } %>
+
     </div>
 
     <div class="content">
