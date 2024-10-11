@@ -32,10 +32,10 @@
             <div class="level-left">
                 <div>
                     <p class="subtitle is-7">
-                        Last Updated: <%= project.updatedAt %>
+                        Last Updated: <sl-relative-time date="<%= project.updatedAt %>"></sl-relative-time>
                     </p>
                     <p class="subtitle is-7">
-                        Started: <%= project.createdAt %>
+                        Started: <sl-relative-time date="<%= project.createdAt %>"></sl-relative-time>
                     </p>
                 </div>
             </div>
@@ -57,14 +57,21 @@
 
                 <% if (project.event) { %>
                     <a class="is-size-4 has-text-weight-bold"
+                        hx-get="<%= `/api/v1/events/${project.event.id}?includeAdditional=true`%>"
+                        hx-target="#right-side" hx-swap="outerHTML" hx-push-url="true"
                         href="<%= `/api/v1/events/${project.event.id}?includeAdditional=true`%>">
                         <%= project.event.name %>
                     </a>
 
                     <div>
-                        From: <%= project.event.startDate %>
+                        From:
+
+                        <sl-format-date date="<%=project.event.startDate%>" month="long" day="numeric"
+                            year="numeric"></sl-format-date>
                     </div>
-                    <div>To: <%= project.event.endDate %>
+                    <div>To:
+                        <sl-format-date date="<%=project.event.endDate%>" month="long" day="numeric"
+                            year="numeric"></sl-format-date>
                     </div>
 
                     <% } else { %>
@@ -72,12 +79,17 @@
                         <% } %>
 
                             <div class="is-size-7 is-italic has-text-weight-light">Event</div>
+
+                            <div hx-get="/api/v1/projects/<%=project.id %>/score?" hx-trigger="load"></div>
+
             </div>
             <div class="cell">
                 <% if (project.course) { %>
                     <div>
 
                         <a class="is-size-4 has-text-weight-bold"
+                            hx-get="<%= `/api/v1/departments/courses/${project.course.id}`%>" hx-target="#right-side"
+                            hx-swap="outerHTML" hx-push-url="true"
                             href="<%= `/api/v1/departments/courses/${project.course.id}`%>">
                             <%= project.course.name %>
                         </a>

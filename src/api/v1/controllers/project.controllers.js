@@ -54,22 +54,22 @@ export async function getProjects(req, res, err) {
         return res.status(500).json(error);
     }
 
-    for (let project of body) {
-        if (
-            project.event &&
-            project.event != null &&
-            project.event != undefined
-        ) {
-            project.event.startDate = convertToReadableDate(
-                project.event.startDate
-            );
-            project.event.endDate = convertToReadableDate(
-                project.event.endDate
-            );
-        }
-        project.createdAt = convertToReadableDate(project.createdAt);
-        project.updatedAt = convertToReadableDate(project.updatedAt);
-    }
+    // for (let project of body) {
+    //     if (
+    //         project.event &&
+    //         project.event != null &&
+    //         project.event != undefined
+    //     ) {
+    //         project.event.startDate = convertToReadableDate(
+    //             project.event.startDate
+    //         );
+    //         project.event.endDate = convertToReadableDate(
+    //             project.event.endDate
+    //         );
+    //     }
+    //     project.createdAt = convertToReadableDate(project.createdAt);
+    //     project.updatedAt = convertToReadableDate(project.updatedAt);
+    // }
 
     let templateName = "details/public.ejs";
     let path = "projects/item.ejs";
@@ -96,6 +96,7 @@ export async function getProjects(req, res, err) {
                     break;
             }
         }
+        wlogger.debug(`project details: ${JSON.stringify(body[0])}`);
         obj = { ...obj, project: body[0] };
     } else {
         path = "projects";
@@ -188,6 +189,19 @@ export async function deleteProject(req, res, err) {
 export async function getRating(req, res, err) {
     //doesn't make sense to get individual rating.
     // Get a rating for a project through getting the project
+    const { projectId } = req.params.id;
+    const [response, error] = await dbFindRating(projectId);
+    if (error) {
+        wlogger.error(`error in getRating: ${error}`);
+        return res.status(500).json(error);
+    }
+    wlogger.debug(`response in ratings: ${JSON.stringify(response)}`);
+    let finalScore = 0;
+    for (const rating of response) {
+        finalScore += rating.score;
+    }
+    finalScore = finalScore / response.length;
+    return res.render("partials2/ratings.ejs", { rating: finalScore });
 }
 
 export async function addRating(req, res, err) {

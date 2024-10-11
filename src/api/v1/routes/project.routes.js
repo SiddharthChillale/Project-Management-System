@@ -8,7 +8,8 @@ import {
     addRating,
     updateRating,
     deleteRating,
-    getCreateProjectPage
+    getCreateProjectPage,
+    getRating
 } from "../controllers/project.controllers.js";
 import { checkProjectExistenceById } from "../middlewares/projectValidation.middlewares.js";
 import checkForSchema from "../middlewares/schemaValidation.middlewares.js";
@@ -71,7 +72,8 @@ router
     );
 
 router
-    .route("/:id/rate")
+    .route("/:id/score")
+    .get(verifyTokenAndAttachUser, param("id").toInt(), getRating)
     .post(
         verifyTokenAndAttachUser,
         param("id").toInt(),

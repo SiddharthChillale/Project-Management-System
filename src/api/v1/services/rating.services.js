@@ -53,8 +53,10 @@ export async function dbDeleteRating(ratingId) {
     return [response, error];
 }
 
-export async function dbFindRating(clause) {
+export async function dbFindRating(projectId) {
     const goFindScore = goStyleExceptionWrapper(prisma.ratings.findMany);
-    const [response, error] = await goFindScore(clause);
+    const [response, error] = await goFindScore({
+        where: { projectId: projectId }
+    });
     return [response, error];
 }
