@@ -17,7 +17,7 @@
                 <section class="is-medium column p-0 ">
                     <div class="container content my-3">
 
-                        <div class="mr-2">
+                        <div class="mr-2" id="right-side">
                             <div class="field is-grouped">
                                 <button class="control button is-success is-light is-small">Create Event +</button>
 
@@ -32,14 +32,21 @@
                                 <% for( let evi=0; evi < events.length; evi++ ) { %>
                                     <tr>
 
-                                        <td><a href="<%= `/api/v1/events/${events[evi].id}?includeAdditional=true`  %>">
-                                                <%= events[evi].name %>
-                                            </a></td>
                                         <td>
-                                            <%= events[evi].startDate %>
+                                            <a hx-get="<%= `/api/v1/events/${events[evi].id}?includeAdditional=true`  %>"
+                                                hx-target="#right-side" hx-push-url="true" hx-swap="outerHTML"
+                                                hx-select="#right-side"
+                                                href="<%= `/api/v1/events/${events[evi].id}?includeAdditional=true`  %>">
+                                                <%= events[evi].name %>
+                                            </a>
                                         </td>
                                         <td>
-                                            <%= events[evi].endDate %>
+                                            <sl-format-date date="<%=events[evi].startDate%>" month="long" day="numeric"
+                                                year="numeric"></sl-format-date>
+                                        </td>
+                                        <td>
+                                            <sl-format-date date="<%=events[evi].endDate%>" month="long" day="numeric"
+                                                year="numeric"></sl-format-date>
                                         </td>
                                     </tr>
                                     <% } %>

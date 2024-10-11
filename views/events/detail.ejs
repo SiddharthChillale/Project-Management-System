@@ -17,18 +17,21 @@
                 <section class="is-medium column p-0 ">
                     <div class="container content my-3">
 
-                        <div class="mr-2">
+                        <div class="mr-2" id="right-side">
                             <div id="event-body">
                                 <div class="container content p-5 m-0 has-background-white">
                                     <p class="hero title is-4">
                                         <%= event.name %>
                                     </p>
-                                    <p>Starts at: <%= event.startDate %>
+                                    <p>Starts at: <sl-format-date date="<%=event.startDate%>" month="long" day="numeric"
+                                            year="numeric"></sl-format-date>
                                     </p>
-                                    <p>Ends at: <%= event.endDate %>
+                                    <p>Ends at: <sl-format-date date="<%=event.endDate%>" month="long" day="numeric"
+                                            year="numeric"></sl-format-date>
                                     </p>
-                                    <p class="subtitle is-7 has-text-weight-semibold">Creator: <%= event.creator.email
-                                            %>
+                                    <p class="subtitle is-7 has-text-weight-semibold">Creator: <span id="creator-email">
+                                            <%= event.creator.email %>
+                                        </span> <sl-copy-button from="creator-email"></sl-copy-button>
                                     </p>
                                     <% if (event.projects.length !=0) { %>
                                         <table class="table is-striped ">
@@ -38,9 +41,13 @@
                                                 </tr>
                                                 <% for( let pi=0; pi < event.projects.length; pi ++ ) { %>
                                                     <tr>
-                                                        <td><a href="<%= `/api/v1/projects/${event.projects[pi].id}`%>">
+                                                        <td>
+                                                            <a hx-get="<%= `/api/v1/projects/${event.projects[pi].id}`%>"
+                                                                hx-target="body" hx-push-url="true"
+                                                                href="<%= `/api/v1/projects/${event.projects[pi].id}`%>">
                                                                 <%= event.projects[pi].name %>
-                                                            </a></td>
+                                                            </a>
+                                                        </td>
                                                     </tr>
                                                     <% } %>
                                         </table>
