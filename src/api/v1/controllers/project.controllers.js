@@ -96,7 +96,6 @@ export async function getProjects(req, res, err) {
                     break;
             }
         }
-        wlogger.debug(`project details: ${JSON.stringify(body[0])}`);
         obj = { ...obj, project: body[0] };
     } else {
         path = "projects";
@@ -195,7 +194,6 @@ export async function getRating(req, res, err) {
         wlogger.error(`error in getRating: ${error}`);
         return res.status(500).json(error);
     }
-    wlogger.debug(`response in ratings: ${JSON.stringify(response)}`);
     let finalScore = 0;
     for (const rating of response) {
         finalScore += rating.score;

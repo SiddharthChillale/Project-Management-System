@@ -377,9 +377,7 @@ export async function logoutHandler(req, res, err) {
 export async function generateAccessToken(user, profile_id = undefined) {
     // const JWTSecret = process.env.JWT_TOKEN;
     // const JWTSecret = "randtoken";
-    wlogger.debug(
-        `in generateAccessToken with user ${JSON.stringify(user)} and profile_id ${profile_id}`
-    );
+
     if (!profile_id) {
         return jwt.sign({ id: user.id, email: user.email }, JWTSecret, {
             expiresIn: "20m"
