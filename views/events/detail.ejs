@@ -82,11 +82,13 @@
 
                                                     <div class="field is-grouped">
                                                         <button class="control button is-info is-light is-small"
-                                                            hx-get="/api/v1/events/edit" hx-target="#right-side"
-                                                            hx-push-url="false">Edit</button>
+                                                            hx-get="/api/v1/events/<%= event.id%>/edit"
+                                                            hx-target="#right-side" hx-push-url="false">Edit</button>
                                                         <button class="control button is-danger is-light is-small"
                                                             hx-delete="/api/v1/events/<%= event.id %>"
-                                                            hx-replace-url="/api/v1/events" hx-push-url="false">Delete
+                                                            hx-confirm="You are deleting this event: <%event.name%>. Are you sure?"
+                                                            hx-replace-url="/api/v1/events" hx-target="body"
+                                                            hx-push-url="false">Delete
                                                         </button>
                                                     </div>
                                 </div>

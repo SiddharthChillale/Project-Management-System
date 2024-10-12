@@ -26,14 +26,27 @@ router
         getEvents
     )
     .post(
+        verifyTokenAndAttachUser,
         body("name").notEmpty().trim(),
-        body(["startDate", "endDate"]).notEmpty().isDate(),
+        body("startDate")
+            .notEmpty()
+            .customSanitizer((value) => new Date(value).toISOString()),
+        body("endDate")
+            .notEmpty()
+            .customSanitizer((value) => new Date(value).toISOString()),
         validate,
         createEvent
     );
 
 router.route("/new").get(verifyTokenAndAttachUser, getCreateForm);
-router.route("/edit").get(verifyTokenAndAttachUser, getEditForm);
+router
+    .route("/:id/edit")
+    .get(
+        verifyTokenAndAttachUser,
+        param("id").notEmpty().toInt(),
+        validate,
+        getEditForm
+    );
 
 router
     .route("/:id")
@@ -44,6 +57,7 @@ router
         getEvents
     )
     .patch(
+        verifyTokenAndAttachUser,
         param("id").notEmpty().toInt(),
         body("name").optional().trim(),
         body(["startDate", "endDate"]).optional().isDate(),
@@ -52,6 +66,11 @@ router
         validate,
         editEvent
     )
-    .delete(param("id").notEmpty().toInt(), validate, deleteEvent);
+    .delete(
+        verifyTokenAndAttachUser,
+        param("id").notEmpty().toInt(),
+        validate,
+        deleteEvent
+    );
 
 export default router;

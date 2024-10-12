@@ -7,8 +7,9 @@ import wlogger from "../../../logger/winston.logger.js";
 
 export async function createEvent(req, res, err) {
     const { name, startDate, endDate } = req.body;
-    const creatorId = req.user.id;
-    const participantIdArray = req.body;
+    const creatorId = req.user.profiles[0].id;
+    const { user } = req;
+    const { participantIdArray } = req.body;
 
     let createData = {
         name: name,
@@ -21,7 +22,7 @@ export async function createEvent(req, res, err) {
 
     if (participantIdArray && participantIdArray.length != 0) {
         //check if participants exists for all given Ids
-        const [result, error] = ProfileService.findAll({
+        const [result, error] = await ProfileService.findAll({
             select: {
                 id: true
             },
@@ -62,9 +63,7 @@ export async function createEvent(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res
-        .status(200)
-        .json({ message: "succesful event creation", response });
+    return res.status(200).redirect("/api/v1/events");
 }
 
 export async function getEvents(req, res, err) {
@@ -131,6 +130,9 @@ export async function getEvents(req, res, err) {
         return res.status(500).json(error);
     }
 
+    if (result.length == 0) {
+        return res.status(404).json({ message: "No Events" });
+    }
     if (id) {
         return res.status(200).render("events/detail.ejs", {
             event: result[0],
@@ -246,9 +248,7 @@ export async function deleteEvent(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res
-        .status(200)
-        .json({ message: "succesful event deletion", response });
+    return res.redirect(303, "/api/v1/events");
 }
 
 export async function getCreateForm(req, res, err) {
@@ -259,15 +259,23 @@ export async function getCreateForm(req, res, err) {
 export async function getEditForm(req, res, err) {
     const { user } = req;
     const { id } = req.params;
+
     const options = {
         where: {
             id: id
         }
     };
-    const [event, error] = await EventService.findMany(options);
+    let [event, error] = await EventService.findMany(options);
     if (error) {
         wlogger.error(`error in getEditForm: ${error}`);
         return res.status(500).json(error);
     }
+    const a = event[0].startDate;
+    const b = event[0].startDate.toISOString().split(".")[0];
+    const c = event[0].endDate.toISOString().split(".")[0];
+
+    event[0].startDate = b;
+    event[0].endDate = c;
+
     return res.render("events/edit", { event: event[0], user: user });
 }

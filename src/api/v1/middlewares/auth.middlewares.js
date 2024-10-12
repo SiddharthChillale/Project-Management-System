@@ -80,6 +80,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
 
             res.cookie("accessToken", accessToken, options);
             res.cookie("refreshToken", refreshToken, options);
+            wlogger.debug(`redirected url: ${req.url}`);
             return res.redirect(req.url);
         }
         return res.status(401).json({ message: "Invalid token" });

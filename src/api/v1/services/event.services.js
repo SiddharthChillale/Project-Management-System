@@ -1,8 +1,18 @@
+import wlogger from "../../../logger/winston.logger.js";
 import { goStyleExceptionWrapper } from "../utils/wrapper.utils.js";
 import { prisma } from "./main.services.js";
 
 export async function dbCreateEvent(data) {
     const goCreateEvent = goStyleExceptionWrapper(prisma.event.create);
+
+    let sD = new Date(data.startDate);
+    let eD = new Date(data.endDate);
+
+    sD.setSeconds(0);
+    eD.setSeconds(0);
+    data.startDate = sD.toISOString();
+    data.endDate = eD.toISOString();
+
     const [response, error] = await goCreateEvent({
         data: data
     });
@@ -27,7 +37,7 @@ export async function dbFindEvents(clause) {
 }
 
 export async function dbDeleteEvent(clause) {
-    const goFindMany = goStyleExceptionWrapper(prisma.event.findMany);
+    const goFindMany = goStyleExceptionWrapper(prisma.event.delete);
     const [response, error] = await goFindMany(clause);
     return [response, error];
 }

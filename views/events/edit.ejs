@@ -1,30 +1,23 @@
-<div id="right-side"></div>
+<div id="right-side">
+    <form style="max-width:fit-content;">
 
-<form>
-    <div class="">
-        <div class="">Create a new Event</div>
-        <label class="">
-            <div>Name</div>
-            <input type="text" name="name" id="name" value="<%= event.name %>">
-        </label>
-        <div class="is-flex">
-            <label>
-                <div>
-                    Start Date
-                </div>
-                <input type="datetime" name="startDate" id="startDate" value="<%= event.startDate %>">
-            </label>
-            <label>
-                <div>
-                    End Date
-                </div>
-                <input type="datetime" name="endDate" id="endDate" value="<%= event.endDate %>">
-            </label>
+        <div class="title is-7">Create a new Event</div>
+
+        <div class="is-flex is-flex-direction-column">
+            <sl-input label="Event Name" name="name" value="<%= event.name %>"></sl-input>
+
+            <br>
+            <sl-input type="datetime-local" label="Start Date" name="startDate" value="<%= event.startDate %>"
+                step="60"></sl-input>
+            <br>
+            <sl-input type="datetime-local" label="End Date" name="endDate" value="<%= event.endDate %>"></sl-input>
+        </div>
+        <br>
+        <div class="buttons are-small">
+            <button class="button is-light is-primary" hx-patch="/api/v1/events/<%= event.id %>"
+                hx-replace-url="/api/v1/events/">Save</button>
+            <button class="button is-light is-danger" hx-get="/api/v1/events/" hx-target="body">Cancel</button>
         </div>
 
-    </div>
-    <div><button class="button is-light is-primary" hx-patch="/api/v1/events/<%= event.id %>">Update</button></div>
-    <div><button class="button is-light is-danger" hx-get="/api/v1/events/" hx-target="body">Cancel</button>
-    </div>
-</form>
+    </form>
 </div>
