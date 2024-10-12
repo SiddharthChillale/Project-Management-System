@@ -3,11 +3,16 @@ import {
     createEvent,
     deleteEvent,
     editEvent,
+    getCreateForm,
+    getEditForm,
     getEvents
 } from "../controllers/event.controllers.js";
 import { body, param, query } from "express-validator";
 import { validate } from "../validators/general.validators.js";
-import { attachUserOrSilentFail } from "../middlewares/auth.middlewares.js";
+import {
+    attachUserOrSilentFail,
+    verifyTokenAndAttachUser
+} from "../middlewares/auth.middlewares.js";
 
 const router = Router();
 // const s = express.Router();
@@ -26,6 +31,9 @@ router
         validate,
         createEvent
     );
+
+router.route("/new").get(verifyTokenAndAttachUser, getCreateForm);
+router.route("/edit").get(verifyTokenAndAttachUser, getEditForm);
 
 router
     .route("/:id")

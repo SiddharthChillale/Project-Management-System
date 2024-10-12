@@ -250,3 +250,24 @@ export async function deleteEvent(req, res, err) {
         .status(200)
         .json({ message: "succesful event deletion", response });
 }
+
+export async function getCreateForm(req, res, err) {
+    const { user } = req;
+    return res.render("events/create", { user });
+}
+
+export async function getEditForm(req, res, err) {
+    const { user } = req;
+    const { id } = req.params;
+    const options = {
+        where: {
+            id: id
+        }
+    };
+    const [event, error] = await EventService.findMany(options);
+    if (error) {
+        wlogger.error(`error in getEditForm: ${error}`);
+        return res.status(500).json(error);
+    }
+    return res.render("events/edit", { event: event[0], user: user });
+}

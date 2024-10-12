@@ -19,7 +19,8 @@
 
                         <div class="mr-2" id="right-side">
                             <div class="field is-grouped">
-                                <button class="control button is-success is-light is-small">Create Event +</button>
+                                <button class="control button is-success is-light is-small" hx-get="/api/v1/events/new"
+                                    hx-target="#right-side" hx-push-url="false">Create Event</button>
 
                             </div>
                             <table class="table is-narrow is-striped  container">

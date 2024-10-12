@@ -1,0 +1,30 @@
+<div id="right-side"></div>
+
+<form>
+    <div class="">
+        <div class="">Create a new Event</div>
+        <label class="">
+            <div>Name</div>
+            <input type="text" name="name" id="name" value="<%= event.name %>">
+        </label>
+        <div class="is-flex">
+            <label>
+                <div>
+                    Start Date
+                </div>
+                <input type="datetime" name="startDate" id="startDate" value="<%= event.startDate %>">
+            </label>
+            <label>
+                <div>
+                    End Date
+                </div>
+                <input type="datetime" name="endDate" id="endDate" value="<%= event.endDate %>">
+            </label>
+        </div>
+
+    </div>
+    <div><button class="button is-light is-primary" hx-patch="/api/v1/events/<%= event.id %>">Update</button></div>
+    <div><button class="button is-light is-danger" hx-get="/api/v1/events/" hx-target="body">Cancel</button>
+    </div>
+</form>
+</div>
