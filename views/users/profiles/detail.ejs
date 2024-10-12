@@ -27,7 +27,6 @@
             <% } %>
 
     </div>
-
     <div class="content">
         <div class="level">
             <span class="level-left">
@@ -47,12 +46,15 @@
         <!-- <p class="subtitle is-6"><%# JSON.stringify(profile.socialLinks)  %></p>  -->
         <br />
 
+
     </div>
     <% if(profile.id==user.profiles[0].id) {%>
         <div class="level"><button class="level-left button is-primary is-light" hx-get="/api/v1/users/profile/choose"
                 hx-target="#right-side" hx-swap="outerHTML">Switch
                 Profile</button></div>
+        <sl-divider></sl-divider>
         <%}%>
+
             <div>
                 <% if (profile.createdEvents.length !=0) { %>
                     <table>
@@ -64,13 +66,18 @@
                         <tbody>
                             <% for( let ei=0; ei < profile.createdEvents.length; ei ++ ) { %>
                                 <tr>
-                                    <td><a href="<%= `/api/v1/events/${profile.createdEvents[ei].id}`%>">
+                                    <td>
+                                        <a hx-get="<%= `/api/v1/events/${profile.createdEvents[ei].id}?includeAdditional=true`  %>"
+                                            hx-target="body" hx-push-url="true"
+                                            href="<%= `/api/v1/events/${profile.createdEvents[ei].id}`%>">
                                             <%= profile.createdEvents[ei].name %>
-                                        </a></td>
+                                        </a>
+                                    </td>
                                 </tr>
                                 <% } %>
                         </tbody>
                     </table>
+                    <sl-divider></sl-divider>
                     <% } %>
             </div>
 
@@ -92,6 +99,7 @@
                                 <% } %>
                         </tbody>
                     </table>
+                    <sl-divider></sl-divider>
                     <% } %>
             </div>
 
@@ -123,6 +131,7 @@
                                 <% } %>
                         </tbody>
                     </table>
+                    <sl-divider></sl-divider>
 
                     <% } %>
             </div>

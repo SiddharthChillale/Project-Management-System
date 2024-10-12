@@ -1,10 +1,10 @@
-<form action="POST" class="mr-2 p-2">
+<form action="POST" class="mr-2 p-2" style="max-width: fit-content;">
     <div class="">Create a new Score Category</div>
     <div class="p-3">
         <div class="content">
-            <label>Score Category Name
-                <input type="text" name="name" id="name">
-            </label>
+
+            <sl-input label="Score Category Name" type="text" name="name" id="name"></sl-input>
+            <br>
             <div class="buttons are-small">
                 <button class="button is-primary is-light" hx-post="/api/v1/score-category/" hx-swap="none">
                     Create
@@ -12,6 +12,9 @@
                 <button class="button is-danger is-light " hx-get="/api/v1/score-category/" hx-target="body"
                     hx-swap="outerHTML">Cancel</button>
             </div>
+
         </div>
     </div>
+    <sl-divider></sl-divider>
+
 </form>
