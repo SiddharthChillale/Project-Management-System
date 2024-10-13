@@ -312,14 +312,14 @@ function dumProject(profileId) {
             " <p> " +
             faker.lorem.sentences(),
         teamSize: faker.number.int({ min: 2, max: 10 }),
-        publicAttachments: {
-            website: faker.internet.url(),
-            photos: faker.internet.url()
-        },
-        privateAttachments: {
-            github: faker.internet.url(),
-            slack: faker.internet.url()
-        },
+        publicAttachments: [
+            { url: faker.internet.url() },
+            { file: faker.internet.url() }
+        ],
+        privateAttachments: [
+            { url: faker.internet.url() },
+            { image: faker.internet.url() }
+        ],
         creatorProfileId: profileId
     };
 }
@@ -626,12 +626,12 @@ async function setup() {
         numUsers: 20,
         numUserProfiles: 28,
         numScoreCategories: 5,
-        numDepartments: 5,
-        numCourses: 2,
+        numDepartments: 7,
+        numCourses: 5,
         numProjects: 20,
         numProjectAssociations: 15,
-        numEvents: 3,
-        numRatings: 2,
+        numEvents: 5,
+        numRatings: 10,
         numCourseProfiles: 10,
         numCourseProjects: 10,
         numEventProjects: 10
