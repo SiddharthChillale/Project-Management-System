@@ -9,9 +9,10 @@ const body_project_schema = {
                 name: { type: "string" },
                 teamSize: { type: "integer" },
                 description: { type: "string" },
-                privateAttachments: { type: "object" },
-                publicAttachments: { type: "object" }
+                privateAttachments: { type: "array" },
+                publicAttachments: { type: "array" }
             },
+            required: ["name", "teamSize"],
             additionalProperties: { type: "string", format: "date-time" }
         }
     },
