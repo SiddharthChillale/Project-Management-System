@@ -312,14 +312,39 @@ function dumProject(profileId) {
             " <p> " +
             faker.lorem.sentences(),
         teamSize: faker.number.int({ min: 2, max: 10 }),
-        publicAttachments: [
-            { url: faker.internet.url() },
-            { file: faker.internet.url() }
-        ],
-        privateAttachments: [
-            { url: faker.internet.url() },
-            { image: faker.internet.url() }
-        ],
+        publicAttachments: {
+            url: [
+                {
+                    name: faker.internet.domainName(),
+                    address: faker.internet.url()
+                },
+                {
+                    name: faker.internet.domainName(),
+                    address: faker.internet.url()
+                },
+                {
+                    name: faker.internet.domainName(),
+                    address: faker.internet.url()
+                }
+            ],
+            file: { address: faker.internet.url() }
+        },
+        privateAttachments: {
+            url: [
+                {
+                    name: faker.internet.domainName(),
+                    address: faker.internet.url()
+                },
+                {
+                    name: faker.internet.domainName(),
+                    address: faker.internet.url()
+                }
+            ],
+            image: {
+                name: faker.internet.domainName(),
+                address: faker.internet.url()
+            }
+        },
         creatorProfileId: profileId
     };
 }

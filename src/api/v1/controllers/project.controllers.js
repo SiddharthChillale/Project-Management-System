@@ -128,25 +128,40 @@ export async function addProject(req, res, err) {
     let projectDetails = req.body.project;
     const { id } = req.user.id;
     const { eventId } = req.body;
+    let privateAttachments = { url: [] };
+    let publicAttachments = { url: [] };
+    for (const link of projectDetails.attachments.url) {
+        if (link.name && link.address) {
+            if (link.visibility == "private") {
+                privateAttachments.url.push(link);
+            } else {
+                publicAttachments.url.push(link);
+            }
+        }
+    }
+    delete projectDetails.attachments;
     projectDetails = {
         ...projectDetails,
+        privateAttachments: privateAttachments,
+        publicAttachments: publicAttachments,
         creator: { connect: { id: id } },
         event: { connect: { id: eventId } }
     };
-    details = cleanDeep(projectDetails);
+    const details = cleanDeep(projectDetails);
+    wlogger.debug(`projectDetails: ${JSON.stringify(details)}`);
+
     // if (eventId) {
     //     projectDetails = {
     //         ...projectDetails,
     //         event: { connect: { id: eventId } }
     //     };
     // }
-    const [pid, error] = await ProjectService.addOne(details);
+    const [result, error] = await ProjectService.addOne(details);
     if (error) {
-        res.status(400).json(error);
-        return;
+        wlogger.error(`error creating project: ${error}`);
+        return res.status(400).json(error);
     }
-    res.status(200).json(pid);
-    return;
+    return res.redirect(`/api/v1/projects/${result.id}`);
 }
 
 export async function editProject(req, res, err) {
@@ -245,4 +260,10 @@ export async function deleteRating(req, res, err) {
 export async function getCreateProjectPage(req, res, err) {
     const { user } = req;
     return res.status(200).render("projects/create.ejs", { user: user });
+}
+export async function getProjectLinksForm(req, res, err) {
+    const { index } = req.params;
+    return res.status(200).render("partials2/forms/project.links.ejs", {
+        index: index
+    });
 }

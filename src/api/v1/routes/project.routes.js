@@ -9,7 +9,8 @@ import {
     updateRating,
     deleteRating,
     getCreateProjectPage,
-    getRating
+    getRating,
+    getProjectLinksForm
 } from "../controllers/project.controllers.js";
 import { checkProjectExistenceById } from "../middlewares/projectValidation.middlewares.js";
 import checkForSchema from "../middlewares/schemaValidation.middlewares.js";
@@ -25,7 +26,6 @@ router
     .route("/")
     .get(
         [
-            //validateHeaders, authentication, checkAuthorization
             attachUserOrSilentFail,
             query("page").optional().toInt(),
             query("take").optional().toInt()
@@ -34,8 +34,13 @@ router
     )
     .post(
         [
-            //validateHeaders, authentication, checkAuthorization
-            body("project").isObject().withMessage("Must be Project Object"),
+            verifyTokenAndAttachUser,
+            // body("teamSize").notEmpty().toInt(),
+            // body("name").notEmpty().trim(),
+            body("project")
+                .isObject()
+                .withMessage("request must contain project Object"),
+            body("project.teamSize").notEmpty().toInt(),
             validate,
             checkForSchema(project_schema)
         ],
@@ -46,13 +51,13 @@ router
     .route("/:id")
     .get(
         attachUserOrSilentFail,
-        param("id").optional().toInt(),
+        param("id").notEmpty().isInt().toInt(),
         validate,
         getProjects
     )
     .put(
         [
-            //validateHeaders, authentication, checkAuthorization
+            verifyTokenAndAttachUser,
             param("id").notEmpty().toInt(),
             body("project").isObject(),
             validate,
@@ -63,7 +68,7 @@ router
     )
     .delete(
         [
-            //authentication, validateHeaders, checkAuthorization
+            verifyTokenAndAttachUser,
             param("id").notEmpty().toInt(),
             validate,
             checkProjectExistenceById
@@ -113,4 +118,12 @@ router
         assignmentHandler
     ); // creates an entry in ratings if role is reviewer, or an entry in associations if role is anything else.
 
+router
+    .route("/forms/links/:index")
+    .get(
+        verifyTokenAndAttachUser,
+        param("index").optional().toInt(),
+        validate,
+        getProjectLinksForm
+    );
 export default router;

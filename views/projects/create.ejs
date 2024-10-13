@@ -1,82 +1,57 @@
-<!doctype html>
-<html lang="en" data-theme="light">
+<section class="section " id="projects-body">
+    <div class="container">
+        <div class="" id="create-project">
+            <form>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <%- include('../layouts/header.ejs'); %>
-        <title>Projects</title>
-</head>
 
-<body class="has-background-white">
-    <%- include ('../layouts/navbar.ejs'); %>
+                <div class="field">
 
-        <div class="columns ">
-            <%- include ('../layouts/menu.ejs', user?user:undefined); %>
+                    <sl-input type="text" name="project[name]" label="Project Name" placeholder="e.g. Project-1"
+                        required></sl-input>
+                    <sl-input type="number" name="project[teamSize]" label="Team Size" placeholder="e.g. 5"
+                        required></sl-input>
+                    <br>
 
-                <section class="is-medium column p-0 ">
-                    <div class="container content my-3">
+                    <fieldset>
 
-                        <div class="mr-2" id="right-side">
-                            <section class="section " id="projects-body">
-                                <div class="container">
-                                    <div class="" id="create-project">
-                                        <form action="/api/v1/projects" method="POST">
-
-                                            <div class="content ">
-                                                <div class="">
-
-                                                    <section class="">
-                                                        <div class="field">
-                                                            <label class="label">Project Name</label>
-                                                            <div class="control">
-                                                                <input class="input" type="text"
-                                                                    placeholder="Project Name" required>
-                                                            </div>
-                                                            <label class="label">Team size</label>
-                                                            <div class="control">
-                                                                <input class="input" type="number"
-                                                                    placeholder="Team Size">
-                                                            </div>
-                                                            <label class="label">Projects links(optional)</label>
-                                                            <div class="control">
-                                                                <input class="input" type="url" placeholder="Links">
-                                                            </div>
-                                                        </div>
-                                                        <div class="field">
-                                                            <label class="label">Description</label>
-                                                            <div class="control">
-                                                                <textarea class="textarea"
-                                                                    placeholder="Description"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </section>
-                                                    <footer class=" level">
-                                                        <span>Project Details &gt Add to Event &gt Add to Course &gt Add
-                                                            Reviewers >
-                                                            Confirm</span>
-                                                        <button class="level-item button is-shadowless is-small">
-                                                            &lt; Previous</button>
-                                                        <button class="level-item button is-info is-small">Next &gt;
-                                                        </button>
-                                                        <button
-                                                            class="level-item button is-danger is-light is-small">Cancel</button>
-                                                    </footer>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </section>
-
+                        <legend>Links</legend>
+                        <div>these links are visible to everyone</div>
+                        <div>
+                            <button hx-get="/api/v1/projects/forms/links/0" hx-target="this" hx-swap="outerHTML"
+                                class="button is-small is-primary">
+                                Add Link
+                            </button>
                         </div>
+                    </fieldset>
+                    <!-- <fieldset>
+                        <legend>Private Links</legend>
+                        <span>these links are visible to only people associated to work on the project</span>
+                        <div class="level">
+                            <div class="level-left">
 
-                    </div>
+                                <sl-input class="level-item" label="name" type="text"
+                                    name="project[privateAttachments][url][0][name]"
+                                    placeholder="e.g. website 🌐"></sl-input>
+                                <sl-input class="level-item" label="address" type="url"
+                                    name="project[privateAttachments][url][0][address]"
+                                    placeholder="e.g. https://www.website.com"></sl-input>
+                            </div>
+                        </div>
+                    </fieldset> -->
+                    <br>
+                    <sl-textarea label="Description" name="project[description]" rows="5" resize="auto"></sl-textarea>
+                </div>
+                <div class="buttons are-small">
+                    <button class="button is-primary is-light" hx-post="/api/v1/projects/"
+                        hx-replace-url="/api/v1/projects/" hx-target="body">
+                        Create
+                    </button>
+                    <button class="button is-danger is-light" hx-get="/api/v1/projects/" hx-target="body">
+                        Cancel
+                    </button>
+                </div>
 
-                </section>
+            </form>
         </div>
-
-        <%- include('../layouts/footer.ejs'); %>
-</body>
-
-</html>
+    </div>
+</section>

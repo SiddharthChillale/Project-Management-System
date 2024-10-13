@@ -39,18 +39,37 @@
                     </p>
                 </div>
             </div>
-            <!-- <span>
-                    <%# project.publicAttachments?.keys.forEach(link => { %> 
-                            <a href="<%# project.publicAttachments[link] %>"><%# project.publicAttachments[link] %></a>
-                    <%# }) %>
-                    
-                </span>
-                <span>
-                    <%# project.privateAttachments?.keys.forEach(link => { %> 
-                            <a href="<%# project.privateAttachments[link] %>"><%# project.privateAttachments[link] %></a>
-                    <%# }) %>
-            
-                </span> -->
+            <br>
+
+            <div>
+                <div class="level">
+
+                    <div>Public Links:</div>
+                    <%# JSON.stringify(project) %>
+                        <% project.publicAttachments.url?.forEach(link=> { %>
+                            <li class="level-item">
+                                <a href="<%= link.address %>" target="_blank" class="block">
+                                    <%= link.name %>
+                                </a>
+                            </li>
+                            <% }) %>
+
+                </div>
+
+                <sl-divider></sl-divider>
+
+                <div class="level">
+                    <div class="level-left">Private Links:</div>
+                    <% project.privateAttachments?.url?.forEach(link=> { %>
+
+                        <li class="level-item">
+                            <a href="<%= link.address %>" target="_blank" class="block">
+                                <%= link.name %>
+                            </a>
+                        </li>
+                        <% }) %>
+                </div>
+            </div>
         </div>
         <div class="grid">
             <div class="cell">

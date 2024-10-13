@@ -1,0 +1,15 @@
+<div></div>
+<div class="level">
+    <div class="level-left">
+        <sl-input class="level-item" label="name" type="text" name="project[privateAttachments][url][<%=index%>][name]"
+            placeholder="e.g. website 🌐"></sl-input>
+        <sl-input class="level-item" label="address" type="url"
+            name="project[privateAttachments][url][<%=index%>][address]"
+            placeholder="e.g. https://www.website.com"></sl-input>
+    </div>
+</div>
+<button hx-get="/api/v1/projects/forms/links/<%=index+1%>" hx-target="this" hx-swap="outerHTML"
+    class="button is-small is-primary">
+    Add Link
+</button>
+</div>
