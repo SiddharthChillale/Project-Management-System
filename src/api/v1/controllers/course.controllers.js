@@ -128,7 +128,5 @@ export async function deleteCourse(req, res, err) {
 export async function getCreateCourseForm(req, res, err) {
     const { user } = req;
     const deptId = req.params.id;
-    wlogger.debug(`deptId: ${deptId}`);
-    wlogger.debug(`type deptId: ${typeof deptId}`);
     return res.render("departments/courses/create", { user, deptId });
 }
