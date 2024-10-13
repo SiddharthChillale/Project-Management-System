@@ -2,7 +2,7 @@
 <div>
     <div class="buttons are-small" id="action-group">
         <% if(profile.id==user.profiles[0].id) {%>
-            <button class="button is-primary is-light" hx-get="/api/v1/users/profile/choose" hx-target="#right-side"
+            <button class="button is-primary is-light" hx-get="/api/v1/users/profile/choose" hx-target="body"
                 hx-swap="outerHTML">
                 Switch Profile
             </button>
