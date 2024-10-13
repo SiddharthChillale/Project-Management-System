@@ -20,7 +20,8 @@
 
                         <div class="mr-2" id="right-side">
                             <div class="field is-grouped"></div>
-                            <button class="control button is-success is-light is-small">Create Department +</button>
+                            <button class="control button is-success is-light is-small" hx-get="/api/v1/departments/new"
+                                hx-target="this" hx-swap="outerHTML">Create Department</button>
 
 
                             <table class="mt-2 table is-narrow is-striped  container">

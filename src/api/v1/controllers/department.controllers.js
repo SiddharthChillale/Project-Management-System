@@ -18,7 +18,7 @@ export async function createDepartment(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res.status(200).json(response);
+    return res.status(200).redirect("/api/v1/departments");
 }
 
 export async function getDepartments(req, res, err) {
@@ -95,4 +95,21 @@ export async function deleteDepartment(req, res, err) {
     }
 
     return res.status(200).json(response);
+}
+
+export async function getDepartmentCreateForm(req, res, err) {
+    const { user } = req;
+    return res.render("departments/create", { user });
+}
+
+export async function getDepartmentEditForm(req, res, err) {
+    const { user } = req;
+    const { id } = req.params;
+
+    const options = {
+        where: {
+            id: id
+        }
+    };
+    let [department, error] = await DepartmentService.findMany(options);
 }

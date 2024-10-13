@@ -19,7 +19,12 @@
 
                         <div class="mr-2" id="course-body">
                             <div class="field is-grouped"></div>
-                            <button class="control button is-success is-light is-small">Create Course +</button>
+                            <div class="">
+                                <button class="button is-light is-small is-info"
+                                    hx-get="/api/v1/departments/<%= departmentId%>/courses/new" hx-target="this"
+                                    hx-swap="outerHTML">Create
+                                    Course</button>
+                            </div>
 
                             <table class="table is-narrow is-striped  container">
 

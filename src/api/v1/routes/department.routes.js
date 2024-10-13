@@ -2,6 +2,8 @@ import express, { Router } from "express";
 import {
     createDepartment,
     deleteDepartment,
+    getDepartmentCreateForm,
+    getDepartmentEditForm,
     getDepartments,
     updateDepartment
 } from "../controllers/department.controllers.js";
@@ -10,7 +12,8 @@ import {
     createCourse,
     deleteCourse,
     editCourse,
-    getCourses
+    getCourses,
+    getCreateCourseForm
 } from "../controllers/course.controllers.js";
 import { validate } from "../validators/general.validators.js";
 import { param, body } from "express-validator";
@@ -18,6 +21,7 @@ import {
     attachUserOrSilentFail,
     verifyTokenAndAttachUser
 } from "../middlewares/auth.middlewares.js";
+
 const router = Router();
 // const s = express.Router();
 
@@ -25,6 +29,18 @@ router
     .route("/")
     .get(verifyTokenAndAttachUser, getDepartments)
     .post(body("name").notEmpty().trim(), validate, createDepartment);
+
+router.route("/new").get(verifyTokenAndAttachUser, getDepartmentCreateForm);
+router.route("/:id/edit").get(verifyTokenAndAttachUser, getDepartmentEditForm);
+
+router
+    .route("/:id/courses/new")
+    .get(
+        verifyTokenAndAttachUser,
+        param("id").notEmpty().toInt(),
+        validate,
+        getCreateCourseForm
+    );
 
 router
     .route("/:id")

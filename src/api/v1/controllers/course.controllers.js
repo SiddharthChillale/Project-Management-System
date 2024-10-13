@@ -64,21 +64,17 @@ export async function getCourses(req, res, err) {
         return res.status(500).json(error);
     }
     if (courseId) {
-        return res
-            .status(200)
-            .render("departments/courses/detail.ejs", {
-                course: result[0],
-                user: user ? user : undefined
-            });
-    }
-
-    return res
-        .status(200)
-        .render("departments/courses", {
-            courses: result,
-            departmentId: id,
+        return res.status(200).render("departments/courses/detail.ejs", {
+            course: result[0],
             user: user ? user : undefined
         });
+    }
+
+    return res.status(200).render("departments/courses", {
+        courses: result,
+        departmentId: id,
+        user: user ? user : undefined
+    });
 }
 
 export async function editCourse(req, res, err) {
@@ -127,4 +123,12 @@ export async function deleteCourse(req, res, err) {
     return res
         .status(200)
         .json({ message: "succesful event deletion", response });
+}
+
+export async function getCreateCourseForm(req, res, err) {
+    const { user } = req;
+    const deptId = req.params.id;
+    wlogger.debug(`deptId: ${deptId}`);
+    wlogger.debug(`type deptId: ${typeof deptId}`);
+    return res.render("departments/courses/create", { user, deptId });
 }
