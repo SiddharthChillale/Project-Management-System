@@ -18,15 +18,17 @@
                     <div class="container content my-3">
                         <div class="mr-2" id="right-side">
                             <div>
-                                <%= `${JSON.stringify(profile)}` %>
+                                <%# `${JSON.stringify(profile)}` %>
+                                    <div hx-get="/api/v1/users/profile/<%=profile.id%>" hx-select="#profile-group"
+                                        hx-trigger="load">
 
-                                    <hr>
+                                        <hr>
 
-                                    <p>My Events</p>
-                                    <p>My Projects</p>
+                                        <p>My Events</p>
+                                        <p>My Projects</p>
+                                    </div>
                             </div>
                         </div>
-                    </div>
 
 
                 </section>

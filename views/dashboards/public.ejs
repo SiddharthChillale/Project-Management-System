@@ -20,13 +20,15 @@
                         <div class="mr-2" id="right-side">
 
 
-                            <%= `${JSON.stringify(profile)}` %>
+                            <%# `${JSON.stringify(profile)}` %>
+                                <div hx-get="/api/v1/users/profile/<%=profile.id%>" hx-select="#profile-group"
+                                    hx-trigger="load">
+
+                                </div>
+
+
 
                         </div>
-
-
-
-                    </div>
 
 
                 </section>

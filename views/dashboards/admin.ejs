@@ -20,19 +20,21 @@
 
                         <div class="mr-2" id="right-side">
                             <div>
-                                <%= `${JSON.stringify(profile)}` %>
-                                    <hr>
+                                <%# `${JSON.stringify(profile)}` %>
+                                    <div hx-get="/api/v1/users/profile/<%=profile.id%>" hx-select="#profile-group"
+                                        hx-trigger="load">
+                                        <hr>
 
-                                    <p>No of users in system</p>
-                                    <p>Server status</p>
-                                    <p>Server credentials</p>
-                                    <p>Db status</p>
-                                    <p>Db credentials</p>
-                                    <p>Manage Users</p>
+                                        <p>No of users in system</p>
+                                        <p>Server status</p>
+                                        <p>Server credentials</p>
+                                        <p>Db status</p>
+                                        <p>Db credentials</p>
+                                        <p>Manage Users</p>
 
+                                    </div>
                             </div>
                         </div>
-                    </div>
                 </section>
         </div>
         <%- include('../layouts/footer.ejs'); %>
