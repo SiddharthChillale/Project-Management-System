@@ -31,9 +31,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     if (!token) {
         wlogger.error(`token not found`);
 
-        return res
-            .status(401)
-            .json({ message: "Athentication token not found" });
+        return res.redirect("/api/v1/users/login");
     }
 
     //check if accessToken is in blacklist table
@@ -80,8 +78,8 @@ export async function verifyTokenAndAttachUser(req, res, next) {
 
             res.cookie("accessToken", accessToken, options);
             res.cookie("refreshToken", refreshToken, options);
-            wlogger.debug(`redirected url: ${req.url}`);
-            return res.redirect(req.url);
+            wlogger.debug(`redirected url: ${req.originalUrl}`);
+            return res.redirect(req.originalUrl);
         }
         return res.status(401).json({ message: "Invalid token" });
     }
@@ -187,7 +185,8 @@ export async function attachUserOrSilentFail(req, res, next) {
 
                         res.cookie("accessToken", accessToken, options);
                         res.cookie("refreshToken", refreshToken, options);
-                        return res.redirect(req.url);
+                        wlogger.debug(`redirected url: ${req.originalUrl}`);
+                        return res.redirect(req.originalUrl);
                     }
                 }
             }
