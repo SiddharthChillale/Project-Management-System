@@ -7,21 +7,48 @@
     </span>
     <% if(user){%>
         <%# `${JSON.stringify(user)}` %>
-            <span class="navbar-item is-hoverable">
-                <figure class="image is-24x24 level-item">
-                    <a hx-target="#right-side" hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>"
-                        hx-swap="outerHTML" hx-push-url="true"
-                        href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">
-                        <img id="profile_img" class="is-rounded" src="<%= `${user.profiles[0].profilePic.url}` %>"
-                            alt="Profile Picture">
-                    </a>
-                </figure>
-                <a class="level-item" hx-target="#right-side"
-                    hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>" hx-swap="outerHTML" hx-push-url="true"
-                    href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">
-                    <%= user.profiles[0].userName %>
-                </a>
-            </span>
+            <sl-dropdown class="navbar-item" distance="15">
+                <div slot="trigger" caret>
+                    <div class="level">
+
+                        <figure class="image is-24x24 ">
+                            <!-- <a hx-target="#right-side" hx-get="<%# `/api/v1/users/profile/${user.profiles[0].id}`%>"
+                                hx-swap="outerHTML" hx-push-url="true"
+                                href="<%# `/api/v1/users/profile/${user.profiles[0].id}`%>"> -->
+                            <img id="profile_img" class="is-rounded" src="<%= `${user.profiles[0].profilePic.url}` %>"
+                                alt="Profile Picture">
+                            <!-- </a> -->
+
+                        </figure>
+                        <!-- <span class="navbar-item is-hoverable"> -->
+
+                        <!-- <span> -->
+                        <%= user.profiles[0].userName %>
+                            <!-- </span> -->
+                            <!-- </span> -->
+                    </div>
+                </div>
+                <sl-menu>
+                    <sl-menu-item>
+                        <button class="container " hx-target="#right-side"
+                            hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>" hx-swap="outerHTML"
+                            hx-push-url="true" href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">
+                            Profile
+                        </button>
+                    </sl-menu-item>
+                    <sl-menu-item>
+                        <button class="container" hx-get="/api/v1/users/profile/choose" hx-target="body"
+                            hx-swap="outerHTML">
+                            Switch Profile
+                        </button>
+                    </sl-menu-item>
+                    <sl-menu-item>
+                        <button class="container" hx-post="/api/v1/users/logout" hx-target="body" hx-swap="outerHTML"
+                            hx-push-url="true">Logout</button>
+                    </sl-menu-item>
+                </sl-menu>
+            </sl-dropdown>
+
             <% } else { %>
                 <span class="navbar-right is-size-6 has-text-weight-bold">
                     <button hx-get="/api/v1/users/login" hx-target="body" hx-swap="outerHTML" hx-push-url="true"

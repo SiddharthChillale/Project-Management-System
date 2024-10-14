@@ -1,14 +1,14 @@
 <!-- <div id="right-side"> -->
 <div>
-    <div class="buttons are-small" id="action-group">
+    <div class="buttons are-small level-left" id="action-group">
         <% if(profile.id==user.profiles[0].id) {%>
-            <button class="button is-primary is-light" hx-get="/api/v1/users/profile/choose" hx-target="body"
+            <!-- <button class="button is-primary is-light" hx-get="/api/v1/users/profile/choose" hx-target="body"
                 hx-swap="outerHTML">
                 Switch Profile
-            </button>
+            </button> -->
             <button class="button is-info is-light">Edit</button>
-            <button class="button is-danger is-light" hx-post="/api/v1/users/logout" hx-target="body"
-                hx-swap="outerHTML" hx-push-url="true">Logout</button>
+            <!-- <button class="button is-danger is-light" hx-post="/api/v1/users/logout" hx-target="body"
+                hx-swap="outerHTML" hx-push-url="true">Logout</button> -->
             <sl-divider></sl-divider>
             <%}%>
     </div>
