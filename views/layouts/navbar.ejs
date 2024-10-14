@@ -6,55 +6,47 @@
 
     </span>
     <% if(user){%>
-        <%# `${JSON.stringify(user)}` %>
-            <sl-dropdown class="navbar-item" distance="15">
-                <div slot="trigger" caret>
-                    <div class="level">
+        <sl-dropdown class="navbar-item" distance="15">
+            <sl-button size="small" variant="text" slot="trigger" caret>
+                <div class="level">
 
-                        <figure class="image is-24x24 ">
-                            <!-- <a hx-target="#right-side" hx-get="<%# `/api/v1/users/profile/${user.profiles[0].id}`%>"
-                                hx-swap="outerHTML" hx-push-url="true"
-                                href="<%# `/api/v1/users/profile/${user.profiles[0].id}`%>"> -->
-                            <img id="profile_img" class="is-rounded" src="<%= `${user.profiles[0].profilePic.url}` %>"
-                                alt="Profile Picture">
-                            <!-- </a> -->
+                    <figure class="image is-24x24 ">
 
-                        </figure>
-                        <!-- <span class="navbar-item is-hoverable"> -->
+                        <img id="profile_img" class="is-rounded" src="<%= `${user.profiles[0].profilePic.url}` %>"
+                            alt="Profile Picture">
 
-                        <!-- <span> -->
-                        <%= user.profiles[0].userName %>
-                            <!-- </span> -->
-                            <!-- </span> -->
-                    </div>
+                    </figure>
+
+                    <%= user.profiles[0].userName %>
                 </div>
-                <sl-menu>
-                    <sl-menu-item>
-                        <button class="container " hx-target="#right-side"
-                            hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>" hx-swap="outerHTML"
-                            hx-push-url="true" href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">
-                            Profile
-                        </button>
-                    </sl-menu-item>
-                    <sl-menu-item>
-                        <button class="container" hx-get="/api/v1/users/profile/choose" hx-target="body"
-                            hx-swap="outerHTML">
-                            Switch Profile
-                        </button>
-                    </sl-menu-item>
-                    <sl-menu-item>
-                        <button class="container" hx-post="/api/v1/users/logout" hx-target="body" hx-swap="outerHTML"
-                            hx-push-url="true">Logout</button>
-                    </sl-menu-item>
-                </sl-menu>
-            </sl-dropdown>
+            </sl-button>
+            <sl-menu>
+                <sl-menu-item>
+                    <sl-button size="small" variant="text" class="container " hx-target="#right-side"
+                        hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>" hx-swap="outerHTML"
+                        hx-push-url="true" href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">
+                        Profile
+                    </sl-button>
+                </sl-menu-item>
+                <sl-menu-item>
+                    <sl-button size="small" variant="text" class="container" hx-get="/api/v1/users/profile/choose"
+                        hx-target="body" hx-push-url="true" hx-swap="outerHTML">
+                        Switch Profile
+                    </sl-button>
+                </sl-menu-item>
+                <sl-menu-item>
+                    <sl-button size="small" variant="text" class="container" hx-post="/api/v1/users/logout"
+                        hx-target="body" hx-swap="outerHTML" hx-push-url="true">Logout</sl-button>
+                </sl-menu-item>
+            </sl-menu>
+        </sl-dropdown>
 
-            <% } else { %>
-                <span class="navbar-right is-size-6 has-text-weight-bold">
-                    <button hx-get="/api/v1/users/login" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
-                        class="button is-danger is-light is-small">Login</button>
-                </span>
-                <%}%>
+        <% } else { %>
+            <span class="navbar-right is-size-6 has-text-weight-bold">
+                <sl-button size="small" variant="text" hx-get="/api/v1/users/login" hx-target="body" hx-swap="outerHTML"
+                    hx-push-url="true" class="button is-danger is-light is-small">Login</sl-button>
+            </span>
+            <%}%>
 
 
 </nav>
