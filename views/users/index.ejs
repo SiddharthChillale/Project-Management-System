@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <%- include('../layouts/header.ejs'); %>
-        <link rel="stylesheet" href="/style.css">
+        <!-- <link rel="stylesheet" href="/style.css"> -->
         <title>Users</title>
 </head>
 
@@ -19,12 +19,10 @@
                     <div class="container ">
                         <div class="mr-2" id="right-side">
 
-                            <div class="p-4 has-background-white">
-                                <div class="field is-grouped"></div>
-                                <button class="control button is-success is-light is-small">Manage Users</button>
 
 
-                            </div>
+                            <sl-button size="small">Manage Users</sl-button>
+
                             <table class="table is-narrow is-striped  container">
                                 <thead class="thead ">
                                     <tr>
@@ -42,49 +40,49 @@
                                         <td>
                                             <%= users[ui].email %>
                                         </td>
-                                        <td><button class="button is-small is-primary is-outlined">Regenerate</button>
+                                        <td><sl-button size="small">Regenerate</sl-button>
                                         </td>
                                         <% if (users[ui].profiles.length==0) { %>
-                                            <td class="dropdown">
-                                                <div class="dropdown-trigger">
-                                                    <button class="button is-small is-shadowless " aria-haspopup="true"
-                                                        aria-controls="dropdown-menu" disabled>
+                                            <td>
+                                                <div>
+                                                    <sl-button class=" " size="small" caret disabled>
                                                         <span title="No Profiles for this user">View Profile</span>
-                                                        <span class="icon is-small">
+                                                        <!-- <span class="icon is-small">
                                                             <i class="fas fa-angle-down" aria-hidden="false"></i>
-                                                        </span>
-                                                    </button>
+                                                        </span> -->
+                                                    </sl-button>
                                                 </div>
                                             </td>
 
 
                                             <% } else { %>
 
-                                                <td class="dropdown ">
-                                                    <div class="dropdown-trigger">
-                                                        <button class="button is-info is-light is-small is-shadowless "
-                                                            aria-haspopup="true" aria-controls="dropdown-menu">
-                                                            <span>View Profile</span>
-                                                            <span class="icon is-small">
+                                                <td class="">
+                                                    <div>
+                                                        <sl-dropdown class="">
+                                                            <sl-button class="" size="small" slot="trigger" caret>
+                                                                View Profile
+                                                                <!-- <span class="icon is-small">
                                                                 <i class="fas fa-angle-down" aria-hidden="false"></i>
-                                                            </span>
-                                                        </button>
+                                                            </span> -->
+                                                            </sl-button>
 
-                                                    </div>
-                                                    <div class="dropdown-menu " id="dropdown-menu" role="menu">
-                                                        <div class="dropdown-content is-shadowless py-1"
-                                                            style="outline: 1px solid #d0d7de;">
-                                                            <% for( let pid=0; pid < users[ui].profiles.length; pid++ )
-                                                                { %>
-                                                                <a class="dropdown-item px-3 py-0 is-radiusless is-size-7 is-centered"
-                                                                    hx-target="#right-side"
-                                                                    hx-get="<%= `/api/v1/users/profile/${users[ui].profiles[pid].id}`%>"
-                                                                    hx-swap="outerHTML" hx-push-url="true"
-                                                                    href="<%= `/api/v1/users/profile/${users[ui].profiles[pid].id}`%>">
-                                                                    <%= users[ui].profiles[pid].role %>
-                                                                </a>
-                                                                <% } %>
-                                                        </div>
+
+                                                            <sl-menu class=" " id="" role="">
+
+                                                                <% for( let pid=0; pid < users[ui].profiles.length;
+                                                                    pid++ ) { %>
+                                                                    <sl-menu-item>
+                                                                        <a class="is-size-7 " hx-target="#right-side"
+                                                                            hx-get="<%= `/api/v1/users/profile/${users[ui].profiles[pid].id}`%>"
+                                                                            hx-swap="outerHTML" hx-push-url="true"
+                                                                            href="<%= `/api/v1/users/profile/${users[ui].profiles[pid].id}`%>">
+                                                                            <%= users[ui].profiles[pid].role %>
+                                                                        </a>
+                                                                    </sl-menu-item>
+                                                                    <% } %>
+                                                            </sl-menu>
+                                                        </sl-dropdown>
                                                     </div>
                                                 </td>
                                                 <% } %>
