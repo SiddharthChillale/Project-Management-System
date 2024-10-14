@@ -124,7 +124,6 @@ export async function getEvents(req, res, err) {
     // }
     options = cleanDeep(options);
     const [result, error] = await EventService.findMany(options);
-
     if (error) {
         wlogger.error(`error: ${error}`);
         return res.status(500).json(error);
@@ -278,4 +277,14 @@ export async function getEditForm(req, res, err) {
     event[0].endDate = c;
 
     return res.render("events/edit", { event: event[0], user: user });
+}
+
+export async function searchEvents(req, res, err) {
+    const { search } = req.query;
+    const [response, error] = await EventService.findMany();
+    if (error) {
+        wlogger.error(`error in searchEvents: ${error}`);
+        return res.status(500).json(error);
+    }
+    return res.render("events/search.ejs", { events: response });
 }

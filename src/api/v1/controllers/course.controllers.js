@@ -130,3 +130,17 @@ export async function getCreateCourseForm(req, res, err) {
     const deptId = req.params.id;
     return res.render("departments/courses/create", { user, deptId });
 }
+
+export async function searchCourses(req, res, err) {
+    const { search } = req.query;
+    const options = {
+        where: {},
+        include: {}
+    };
+    const [response, error] = await CourseService.CRUD("R", options);
+    if (error) {
+        wlogger.error(`error in searchCourses: ${error}`);
+        return res.status(500).json(error);
+    }
+    return res.render("departments/courses/search.ejs", { courses: response });
+}

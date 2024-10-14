@@ -71,7 +71,7 @@ router
 router
     .route("/profile/:profile_id")
     .get(
-        attachUserOrSilentFail,
+        verifyTokenAndAttachUser,
         param("profile_id").optional().toInt(),
         validate,
         getUserProfile

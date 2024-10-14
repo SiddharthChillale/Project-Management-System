@@ -41,6 +41,8 @@ router
                 .isObject()
                 .withMessage("request must contain project Object"),
             body("project.teamSize").notEmpty().toInt(),
+            body("project.eventId").optional().toInt(),
+            body("project.courseId").optional().toInt(),
             validate,
             checkForSchema(project_schema)
         ],

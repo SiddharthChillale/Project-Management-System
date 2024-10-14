@@ -13,7 +13,8 @@ import {
     deleteCourse,
     editCourse,
     getCourses,
-    getCreateCourseForm
+    getCreateCourseForm,
+    searchCourses
 } from "../controllers/course.controllers.js";
 import { validate } from "../validators/general.validators.js";
 import { param, body } from "express-validator";
@@ -24,6 +25,8 @@ import {
 
 const router = Router();
 // const s = express.Router();
+
+router.route("/courses/search").get(searchCourses);
 
 router
     .route("/")

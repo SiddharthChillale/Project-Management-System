@@ -37,8 +37,8 @@ export async function dbFindEvents(clause) {
 }
 
 export async function dbDeleteEvent(clause) {
-    const goFindMany = goStyleExceptionWrapper(prisma.event.delete);
-    const [response, error] = await goFindMany(clause);
+    const goDelete = goStyleExceptionWrapper(prisma.event.delete);
+    const [response, error] = await goDelete(clause);
     return [response, error];
 }
 

@@ -15,41 +15,47 @@
                     <fieldset>
 
                         <legend>Links</legend>
-                        <div>these links are visible to everyone</div>
                         <div>
                             <button hx-get="/api/v1/projects/forms/links/0" hx-target="this" hx-swap="outerHTML"
-                                class="button is-small is-primary">
+                                class="button is-small is-info is-light">
                                 Add Link
                             </button>
                         </div>
                     </fieldset>
-                    <!-- <fieldset>
-                        <legend>Private Links</legend>
-                        <span>these links are visible to only people associated to work on the project</span>
-                        <div class="level">
-                            <div class="level-left">
 
-                                <sl-input class="level-item" label="name" type="text"
-                                    name="project[privateAttachments][url][0][name]"
-                                    placeholder="e.g. website 🌐"></sl-input>
-                                <sl-input class="level-item" label="address" type="url"
-                                    name="project[privateAttachments][url][0][address]"
-                                    placeholder="e.g. https://www.website.com"></sl-input>
-                            </div>
-                        </div>
-                    </fieldset> -->
                     <br>
                     <sl-textarea label="Description" name="project[description]" rows="5" resize="auto"></sl-textarea>
+                    <sl-divider></sl-divider>
+
+                    <fieldset>
+                        <legend>Attach to Course</legend>
+                        <div hx-get="/api/v1/departments/courses/search" hx-trigger="intersect once"
+                            hx-swap="outerHTML">
+                            Select Course
+                        </div>
+                    </fieldset>
+
+                    <sl-divider></sl-divider>
+                    <fieldset>
+                        <legend>Attach to Event</legend>
+                        <div hx-get="/api/v1/events/search" hx-trigger="intersect once" hx-swap="outerHTML">
+                            Select Event
+                        </div>
+                    </fieldset>
+
+                    <sl-divider></sl-divider>
+                    <div class="buttons are-small">
+                        <button class="button is-primary is-light" hx-post="/api/v1/projects/"
+                            hx-replace-url="/api/v1/projects/" hx-target="body">
+                            Create
+                        </button>
+                        <button class="button is-danger is-light" hx-get="/api/v1/projects/" hx-target="body">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
-                <div class="buttons are-small">
-                    <button class="button is-primary is-light" hx-post="/api/v1/projects/"
-                        hx-replace-url="/api/v1/projects/" hx-target="body">
-                        Create
-                    </button>
-                    <button class="button is-danger is-light" hx-get="/api/v1/projects/" hx-target="body">
-                        Cancel
-                    </button>
-                </div>
+
+
 
             </form>
         </div>

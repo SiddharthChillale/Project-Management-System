@@ -5,7 +5,8 @@ import {
     editEvent,
     getCreateForm,
     getEditForm,
-    getEvents
+    getEvents,
+    searchEvents
 } from "../controllers/event.controllers.js";
 import { body, param, query } from "express-validator";
 import { validate } from "../validators/general.validators.js";
@@ -16,6 +17,8 @@ import {
 
 const router = Router();
 // const s = express.Router();
+
+router.route("/search").get(searchEvents);
 
 router
     .route("/")

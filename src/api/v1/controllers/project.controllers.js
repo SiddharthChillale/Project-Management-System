@@ -126,8 +126,10 @@ export async function addProject(req, res, err) {
     // should be able to add multiple projects since the URI doesn't specify operation on one particular project
     // TODO: allow insertion of multiple projects.
     let projectDetails = req.body.project;
-    const { id } = req.user.id;
-    const { eventId } = req.body;
+    const { id } = req.user;
+    // const { eventId } = req.body;
+    const eventId = projectDetails.eventId;
+    const courseId = projectDetails.courseId;
     let privateAttachments = { url: [] };
     let publicAttachments = { url: [] };
     for (const link of projectDetails.attachments.url) {
@@ -139,13 +141,19 @@ export async function addProject(req, res, err) {
             }
         }
     }
+    // wlogger.debug(`before projectDetails: ${JSON.stringify(projectDetails)}`);
     delete projectDetails.attachments;
+    delete projectDetails.eventId;
+    delete projectDetails.courseId;
+    // wlogger.debug(`after projectDetails: ${JSON.stringify(projectDetails)}`);
+
     projectDetails = {
         ...projectDetails,
         privateAttachments: privateAttachments,
         publicAttachments: publicAttachments,
         creator: { connect: { id: id } },
-        event: { connect: { id: eventId } }
+        event: { connect: { id: eventId } },
+        course: { connect: { id: courseId } }
     };
     const details = cleanDeep(projectDetails);
     wlogger.debug(`projectDetails: ${JSON.stringify(details)}`);
