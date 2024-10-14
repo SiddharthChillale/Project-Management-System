@@ -1,26 +1,23 @@
-<section class="column p-0 has-background-white" style="max-width: min-content;">
-    <aside class="menu p-4 has-white-background">
+<section class="column has-background-primary-light mx-2 box is-shadowless" style="max-width: min-content;">
+    <div class="menu has-background-inherit">
 
-        <div class="p-3">
+        <!-- <div class="p-3"> -->
+        <ul class="menu-list">
 
-
-
-            <ul class="menu-list">
-
-                <li><a href="/api/v1/projects">Projects</a></li>
-                <% if (user && (user.profiles[0].role=="PROJECT_MANAGER" || user.profiles[0].role=="ADMIN" ) ){ %>
-                    <li><a href="/api/v1/users/dashboard">Dashboard</a></li>
-                    <li><a href="/api/v1/users">Users</a></li>
+            <li><a class="has-background-inherit " href="/api/v1/projects">Projects</a></li>
+            <% if (user && (user.profiles[0].role=="PROJECT_MANAGER" || user.profiles[0].role=="ADMIN" ) ){ %>
+                <li><a class="has-background-inherit " href="/api/v1/users/dashboard">Dashboard</a></li>
+                <li><a class="has-background-inherit " href="/api/v1/users">Users</a></li>
+        </ul>
+        <p class="menu-label">Other</p>
+        <ul class="menu-list">
+            <li><a class="has-background-inherit " href="/api/v1/score-category">Score Categories</a></li>
+            <li><a class="has-background-inherit " href="/api/v1/departments">Departments</a></li>
+            <li><a class="has-background-inherit " href="/api/v1/events">Events</a></li>
+        </ul>
+        <% } else { %>
             </ul>
-            <p class="menu-label">Other</p>
-            <ul class="menu-list">
-                <li><a href="/api/v1/score-category">Score Categories</a></li>
-                <li><a href="/api/v1/departments">Departments</a></li>
-                <li><a href="/api/v1/events">Events</a></li>
-            </ul>
-            <% } else { %>
-                </ul>
-                <% } %>
-        </div>
-    </aside>
+            <% } %>
+                <!-- </div> -->
+    </div>
 </section>

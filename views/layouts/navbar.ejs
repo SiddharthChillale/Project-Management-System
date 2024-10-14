@@ -1,12 +1,13 @@
-<nav class="navbar m-0 mb-2 px-2 py-2 has-background-primary-light level">
-    <span class="navbar-left  is-size-6 has-text-weight-bold">Project Management System</span>
-    <span class="navbar-left">
-        <sl-input placeholder="Search..." size="small" clearable>
+<nav class=" m-0 mb-2 px-2 py-2 has-background-primary-light level" style="height: 2.5rem;">
+    <a class="has-text-inherit is-size-7 has-text-weight-bold" hx-get="/api/v1/users/dashboard" hx-target="body"
+        hx-trigger="click" href="/api/v1/users/dashboard">Project Management
+        System</a>
+    <span class="">
+        <sl-input class="" placeholder="Search..." size="small" clearable>
         </sl-input>
-
     </span>
     <% if(user){%>
-        <sl-dropdown class="navbar-item" distance="15">
+        <sl-dropdown class="" distance="15">
             <sl-button size="small" variant="text" slot="trigger" caret>
                 <div class="level">
 
@@ -22,21 +23,21 @@
             </sl-button>
             <sl-menu>
                 <sl-menu-item>
-                    <sl-button size="small" variant="text" class="container " hx-target="#right-side"
+                    <sl-button size="small" variant="text" class=" " hx-target="#right-side"
                         hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>" hx-swap="outerHTML"
-                        hx-push-url="true" href="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>">
+                        hx-push-url="true">
                         Profile
                     </sl-button>
                 </sl-menu-item>
                 <sl-menu-item>
-                    <sl-button size="small" variant="text" class="container" hx-get="/api/v1/users/profile/choose"
+                    <sl-button size="small" variant="text" class="" hx-get="/api/v1/users/profile/choose"
                         hx-target="body" hx-push-url="true" hx-swap="outerHTML">
                         Switch Profile
                     </sl-button>
                 </sl-menu-item>
                 <sl-menu-item>
-                    <sl-button size="small" variant="text" class="container" hx-post="/api/v1/users/logout"
-                        hx-target="body" hx-swap="outerHTML" hx-push-url="true">Logout</sl-button>
+                    <sl-button size="small" variant="text" class="" hx-post="/api/v1/users/logout" hx-target="body"
+                        hx-swap="outerHTML" hx-push-url="true">Logout</sl-button>
                 </sl-menu-item>
             </sl-menu>
         </sl-dropdown>
@@ -44,7 +45,7 @@
         <% } else { %>
             <span class="navbar-right is-size-6 has-text-weight-bold">
                 <sl-button size="small" variant="text" hx-get="/api/v1/users/login" hx-target="body" hx-swap="outerHTML"
-                    hx-push-url="true" class="button is-danger is-light is-small">Login</sl-button>
+                    hx-push-url="true">Login</sl-button>
             </span>
             <%}%>
 
