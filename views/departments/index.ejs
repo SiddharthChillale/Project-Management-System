@@ -34,18 +34,22 @@
                                 <% for( let di=0; di < departments.length; di++ ) { %>
                                     <tr>
 
-                                        <td><a hx-get="<%= `/api/v1/departments/${departments[di].id}`  %>"
-                                                hx-push-url="true" hx-target="#right-side" hx-swap="outerHTML"
+                                        <td>
+                                            <a hx-get="<%= `/api/v1/departments/${departments[di].id}`  %>"
+                                                hx-push-url="true" hx-target="#right-side"
                                                 href="<%= `/api/v1/departments/${departments[di].id}`  %>">
                                                 <%= departments[di].name %>
-                                            </a></td>
-                                        <td><button class="button is-small is-info is-light">
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <button class="button is-small is-info is-light">
                                                 <a hx-get="<%= `/api/v1/departments/${departments[di].id}/courses/`%>"
-                                                    hx-push-url="true" hx-target="#right-side" hx-swap="outerHTML"
-                                                    hx-select="#course-body"
+                                                    hx-push-url="true" hx-target="#right-side" hx-select="#course-body"
                                                     href="<%= `/api/v1/departments/${departments[di].id}/courses/`%>">View
-                                                    Courses</a>
-                                            </button></td>
+                                                    Courses
+                                                </a>
+                                            </button>
+                                        </td>
                                     </tr>
                                     <% } %>
                             </table>
