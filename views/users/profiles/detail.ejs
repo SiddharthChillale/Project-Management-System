@@ -68,7 +68,7 @@
                             <tr>
                                 <td>
                                     <a hx-get="<%= `/api/v1/events/${profile.createdEvents[ei].id}?includeAdditional=true`  %>"
-                                        hx-target="body" hx-push-url="true"
+                                        hx-target="#right-side" hx-select="#right-side" hx-push-url="true"
                                         href="<%= `/api/v1/events/${profile.createdEvents[ei].id}`%>">
                                         <%= profile.createdEvents[ei].name %>
                                     </a>
