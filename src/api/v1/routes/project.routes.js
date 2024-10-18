@@ -80,7 +80,7 @@ router
 
 router
     .route("/:id/score")
-    .get(verifyTokenAndAttachUser, param("id").toInt(), getRating)
+    .get(param("id").toInt(), getRating)
     .post(
         verifyTokenAndAttachUser,
         param("id").toInt(),
