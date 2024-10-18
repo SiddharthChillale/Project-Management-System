@@ -12,22 +12,22 @@ services:
             - 3002:3000
         depends_on:
             - database
-            # - prisma_studio
         volumes:
             - .:/app
             - app_node_modules:/app/node_modules
-    # prisma_studio:
-    #     build:
-    #         context: /app/src/alt_schema
-    #         dockerfile: /app/src/alt_schema/Dockerfile
-    #     container_name: prisma_studio
-    #     ports:
-    #         - 5557:5555
-    #     command: npx prisma studio
-    #     depends_on:
-    #         - database
-    #     volumes:
-    #         - prisma_studio_vol:/app/src/alt_schema
+    prisma_studio:
+        build:
+            context: ./src/alt_schema
+            dockerfile: Dockerfile
+        container_name: prisma_studio
+        ports:
+            - 5557:5555
+        depends_on:
+            - database
+        environment:
+            SANDBOX_DATABASE_URL: postgresql://prisma:prisma@database:5432/prisma_dev?schema=public
+        # volumes:
+        #     - prisma_studio_vol:/app/src/alt_schema
     database:
         image: postgres:14.3
         container_name: pms_database
