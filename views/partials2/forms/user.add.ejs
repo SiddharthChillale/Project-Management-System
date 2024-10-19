@@ -1,0 +1,29 @@
+<div class="level" id="user-additional-<%=index%>">
+    <div class="level-left" style="width: fit-content;">
+        <sl-input class="level-item" size="small" label="Email" type="email" name="users[<%=index%>][email]"
+            placeholder="e.g. john@dark.com" required></sl-input>
+        <sl-select class="level-item" size="small" placeholder="Select a role" label="Roles"
+            name="users[<%=index%>][roles]" multiple clearable>
+            <sl-option value="DEVELOPER">DEVELOPER</sl-option>
+            <sl-option value="PROJECT_MANAGER">PROJECT MANAGER</sl-option>
+            <sl-option value="REVIEWER">REVIEWER</sl-option>
+            <sl-option value="ADMIN">ADMIN</sl-option>
+            <sl-option value="CLIENT">CLIENT</sl-option>
+        </sl-select>
+        <sl-button pill size="small" variant="primary" hx-on:click="deleteElement(<%=index%>)">X</sl-button>
+    </div>
+</div>
+<sl-button size="small" type="button" hx-get="/api/v1/users/create-users/form/add/<%=index+1%>" hx-trigger="click"
+    hx-target="this" hx-swap="outerHTML" hx-replace-url="/api/v1/users">
+    Add User
+</sl-button>
+<script>
+    function deleteElement(idx) {
+        const element = document.getElementById(`user-additional-${idx}`);
+        if (element) {
+            element.remove(); // Remove the element from the DOM
+        } else {
+            console.log(`Element with id "${elementId}" not found.`);
+        }
+    }
+</script>

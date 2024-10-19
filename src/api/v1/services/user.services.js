@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import assert from "node:assert";
 import { prisma } from "./main.services.js";
 import wlogger from "../../../logger/winston.logger.js";
+import { response } from "express";
 
 async function dbGetUsers(filterClause) {
     const goGetAll = goStyleExceptionWrapper(prisma.user.findMany);
@@ -93,18 +94,20 @@ async function dbCreateUsersForOTToken(dataArray) {
             email: true,
             oneTimeToken: true
         },
-        data: userArray
+        data: userArray,
+        skipDuplicates: true
     });
-
+    wlogger.debug(`response: ${JSON.stringify(response)}`);
     if (error) {
         wlogger.error(`error in bulk creation: ${error}`);
 
         return [response, error];
     }
-    assert(
-        response.length == userArray.length,
-        "output length doesn't match input length "
-    );
+
+    // assert(
+    //     response.length == userArray.length,
+    //     "output length doesn't match input length "
+    // );
 
     return [response, error];
     // map tokens to their ids
@@ -209,6 +212,23 @@ async function dbCreateProfile(email, id, role) {
     return [response, error];
 }
 
+async function dbCreateMultipleProfiles(user) {
+    const goCreateManyProfile = goStyleExceptionWrapper(prisma.user.update);
+    const [response, error] = await goCreateManyProfile({
+        where: {
+            id: user.id
+        },
+        data: {
+            profiles: {
+                createMany: {
+                    data: user.profiles
+                }
+            }
+        }
+    });
+    return [response, error];
+}
+
 async function dbFindFirstProfile(filterClause) {
     const goFindOne = goStyleExceptionWrapper(
         prisma.userProfile.findFirstOrThrow
@@ -261,6 +281,7 @@ export const UserService = {
     getUnique: dbGetUniqueUser,
     create: dbCreateUser,
     createForToken: dbCreateUsersForOTToken,
+    createMultipleProfiles: dbCreateMultipleProfiles,
     updateTokenById: dbUpdateTokenById,
     deleteById: dbDeleteUserById
 };

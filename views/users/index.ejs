@@ -21,7 +21,8 @@
 
 
 
-                            <sl-button size="small">Manage Users</sl-button>
+                            <sl-button size="small" hx-get="/api/v1/users/new" hx-target="#right-side"
+                                hx-push-url="true">Manage Users</sl-button>
 
                             <table class="table is-narrow is-striped  container">
                                 <thead class="thead ">

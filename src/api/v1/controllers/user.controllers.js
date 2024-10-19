@@ -4,7 +4,6 @@ import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
 import { Role, Status } from "@prisma/client";
 import wlogger from "../../../logger/winston.logger.js";
-import { profile } from "node:console";
 import { strict } from "node:assert";
 
 const JWTSecret = "randtoken";
@@ -73,51 +72,108 @@ export async function getUserProfile(req, res, err) {
 }
 
 export async function createUsers(req, res, err) {
-    const dataArray = req.body.dataArray;
-    const role = req.body.role || undefined;
+    /**
+     * users = [ {email, roles=["DEVELOPER", etc]}]
+     * file = bulkUpload.csv
+     *
+     */
+    const reqUsers = req.body.users;
+    wlogger.debug(`users: ${JSON.stringify(reqUsers)}`);
+    wlogger.debug(`req.body: ${JSON.stringify(req.body)}`);
+    let users = [];
+    for (const user of reqUsers) {
+        if (user.email == undefined || user.email == "") {
+            continue;
+        }
+        users.push(user);
+    }
+    if (users.length == 0) {
+        return res.status(400).json({ message: "No user to create" });
+    }
+    const umap = new Map();
 
-    let [response, error] = await UserService.createForToken(dataArray);
-    if (error) {
-        wlogger.error(`bulk-creation error: ${error}`);
-        // return [response, error];
-        return res.status(500).json(error);
+    for (let user of users) {
+        if (!user.roles) {
+            wlogger.debug(`user with no roles: ${JSON.stringify(user)}`);
+            continue;
+        }
+        wlogger.debug(`user with roles: ${JSON.stringify(user)}`);
+        if (!(user.roles instanceof Array)) {
+            user.roles = [user.roles];
+        }
+        umap.set(user.email, user.roles);
+    }
+    // const role = req.body.role || undefined;
+    wlogger.debug(`umap: ${JSON.stringify(umap)}`);
+    let [createResponse, createError] = await UserService.createForToken(users);
+    if (createError) {
+        wlogger.error(`bulk-create-user error: ${createError}`);
+        return res.status(500).json(createError);
     }
 
     let allErrors = [];
     let resArray = [];
+    wlogger.debug(`createResponse: ${JSON.stringify(createResponse)}`);
 
-    if (role) {
-        for (const user of response) {
-            const [res, err] = await ProfileService.create(
-                user.email,
-                user.id,
-                role
-            );
-            if (err) {
-                allErrors.push(err);
-            }
-            resArray.push(res);
+    for (let idx = 0; idx < createResponse.length; idx++) {
+        let user = createResponse[idx];
+        let roles = umap.get(user.email);
+        if (!roles) roles = ["PUBLIC"];
+        let profiles = [];
+        for (let role of roles) {
+            profiles.push({
+                role: role,
+                email: user.email,
+                userName: user.email.split("@")[0]
+            });
         }
-
-        let resError = null;
-        if (allErrors.length > 0) {
-            resError = Error(
-                `profile creation error during bulk-create: ${allErrors}`
-            );
+        user = { ...user, profiles: profiles };
+        wlogger.debug(`user: ${JSON.stringify(user)}`);
+        const [result, error] = await UserService.createMultipleProfiles(user);
+        if (error) {
+            allErrors.push(error);
+            continue;
         }
-        return res.status(200).json({
-            message: "Created Users but Profile Attachment failed.",
-            response: resArray,
-            error: resError
-        });
-        // return [resArray, resError];
+        resArray.push(result);
     }
 
-    return res.status(200).json({
-        message:
-            "User Creation succesfull. If role was provided, roles also created",
-        body: response
-    });
+    wlogger.debug(`resArray: ${JSON.stringify(resArray)}`);
+
+    if (allErrors.length > 0) {
+        wlogger.error(`bulk-profile error: ${allErrors}`);
+        return res.status(500).json({
+            message: "Some Profiles failed to create",
+            errors: allErrors
+        });
+    }
+    // if (role) {
+    //     for (const user of response) {
+    //         const [res, err] = await ProfileService.create(
+    //             user.email,
+    //             user.id,
+    //             role
+    //         );
+    //         if (err) {
+    //             allErrors.push(err);
+    //         }
+    //         resArray.push(res);
+    //     }
+
+    //     let resError = null;
+    //     if (allErrors.length > 0) {
+    //         resError = Error(
+    //             `profile creation error during bulk-create: ${allErrors}`
+    //         );
+    //     }
+    //     return res.status(200).json({
+    //         message: "Created Users but Profile Attachment failed.",
+    //         response: resArray,
+    //         error: resError
+    //     });
+    //     // return [resArray, resError];
+    // }
+
+    return res.status(201).redirect("/api/v1/users");
     // return [response, error];
 }
 
@@ -166,14 +222,6 @@ export async function editUserProfile(req, res, err) {
     return res.status(200).json(status);
 }
 
-// Login, Register, Logout
-export async function loginViewHandler(req, res, err) {
-    return res.status(200).render("common/login.ejs");
-}
-export async function registerViewHandler(req, res, err) {
-    return res.status(200).render("common/register.ejs");
-}
-
 export async function dashboardViewHandler(req, res, err) {
     const { user } = req;
     // if (!user) {
@@ -219,6 +267,13 @@ export async function dashboardViewHandler(req, res, err) {
     return res
         .status(200)
         .render("dashboards/public.ejs", { profile: user.profiles[0] });
+}
+// Login, Register, Logout
+export async function loginViewHandler(req, res, err) {
+    return res.status(200).render("common/login.ejs");
+}
+export async function registerViewHandler(req, res, err) {
+    return res.status(200).render("common/register.ejs");
 }
 
 export async function registerHandler(req, res, err) {
@@ -683,4 +738,17 @@ export async function chooseProfile(req, res, err) {
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
         .redirect("/api/v1/users/dashboard");
+}
+
+export async function getCreateUserPage(req, res, err) {
+    const { user } = req;
+    return res.status(200).render("users/create.ejs", { user: user });
+}
+
+export async function getCreateUsersFormAdditional(req, res, err) {
+    const { index } = req.params;
+
+    return res
+        .status(200)
+        .render("partials2/forms/user.add.ejs", { index: index });
 }

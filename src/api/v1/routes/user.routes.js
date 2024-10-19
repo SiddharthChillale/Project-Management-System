@@ -18,11 +18,13 @@ import {
     chooseProfile,
     loginViewHandler,
     registerViewHandler,
-    dashboardViewHandler
+    dashboardViewHandler,
+    getCreateUserPage,
+    getCreateUsersFormAdditional
 } from "../controllers/user.controllers.js";
 
 import { body, param } from "express-validator";
-import { validate } from "../validators/general.validators.js";
+import validateUsers, { validate } from "../validators/general.validators.js";
 
 const router = express.Router();
 
@@ -51,7 +53,25 @@ router
 router.route("/dashboard").get(verifyTokenAndAttachUser, dashboardViewHandler);
 router.route("/refresh-token").post(refreshAccessToken);
 
-router.route("/create-users").post(verifyTokenAndAttachUser, createUsers);
+router
+    .route("/create-users")
+    .post(
+        verifyTokenAndAttachUser,
+        body("users").isArray().notEmpty(),
+        validateUsers,
+        body("bulkUpload").optional(),
+        validate,
+        createUsers
+    );
+
+router
+    .route("/create-users/form/add/:index")
+    .get(
+        verifyTokenAndAttachUser,
+        param("index").toInt(),
+        validate,
+        getCreateUsersFormAdditional
+    );
 // router.route("/bulk-create").post(verifyTokenAndAttachUser, bulkCreateUsers);
 router.route("/logout").post(verifyTokenAndAttachUser, logoutHandler);
 
@@ -67,6 +87,8 @@ router
 // router
 //     .route("/profile/choose/:profileId")
 //     .get(verifyTokenAndAttachUser, param("profileId").toInt(), chooseProfile);
+
+router.route("/new").get(verifyTokenAndAttachUser, getCreateUserPage);
 
 router
     .route("/profile/:profile_id")
