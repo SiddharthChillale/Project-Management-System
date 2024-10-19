@@ -97,7 +97,7 @@ async function dbCreateUsersForOTToken(dataArray) {
         data: userArray,
         skipDuplicates: true
     });
-    wlogger.debug(`response: ${JSON.stringify(response)}`);
+
     if (error) {
         wlogger.error(`error in bulk creation: ${error}`);
 

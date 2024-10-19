@@ -141,11 +141,11 @@ export async function addProject(req, res, err) {
             }
         }
     }
-    // wlogger.debug(`before projectDetails: ${JSON.stringify(projectDetails)}`);
+    //
     delete projectDetails.attachments;
     delete projectDetails.eventId;
     delete projectDetails.courseId;
-    // wlogger.debug(`after projectDetails: ${JSON.stringify(projectDetails)}`);
+    //
 
     projectDetails = {
         ...projectDetails,
@@ -156,7 +156,6 @@ export async function addProject(req, res, err) {
         course: { connect: { id: courseId } }
     };
     const details = cleanDeep(projectDetails);
-    wlogger.debug(`projectDetails: ${JSON.stringify(details)}`);
 
     // if (eventId) {
     //     projectDetails = {

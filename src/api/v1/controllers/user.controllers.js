@@ -78,8 +78,7 @@ export async function createUsers(req, res, err) {
      *
      */
     const reqUsers = req.body.users;
-    wlogger.debug(`users: ${JSON.stringify(reqUsers)}`);
-    wlogger.debug(`req.body: ${JSON.stringify(req.body)}`);
+
     let users = [];
     for (const user of reqUsers) {
         if (user.email == undefined || user.email == "") {
@@ -94,17 +93,16 @@ export async function createUsers(req, res, err) {
 
     for (let user of users) {
         if (!user.roles) {
-            wlogger.debug(`user with no roles: ${JSON.stringify(user)}`);
             continue;
         }
-        wlogger.debug(`user with roles: ${JSON.stringify(user)}`);
+
         if (!(user.roles instanceof Array)) {
             user.roles = [user.roles];
         }
         umap.set(user.email, user.roles);
     }
     // const role = req.body.role || undefined;
-    wlogger.debug(`umap: ${JSON.stringify(umap)}`);
+
     let [createResponse, createError] = await UserService.createForToken(users);
     if (createError) {
         wlogger.error(`bulk-create-user error: ${createError}`);
@@ -113,7 +111,6 @@ export async function createUsers(req, res, err) {
 
     let allErrors = [];
     let resArray = [];
-    wlogger.debug(`createResponse: ${JSON.stringify(createResponse)}`);
 
     for (let idx = 0; idx < createResponse.length; idx++) {
         let user = createResponse[idx];
@@ -128,7 +125,7 @@ export async function createUsers(req, res, err) {
             });
         }
         user = { ...user, profiles: profiles };
-        wlogger.debug(`user: ${JSON.stringify(user)}`);
+
         const [result, error] = await UserService.createMultipleProfiles(user);
         if (error) {
             allErrors.push(error);
@@ -136,8 +133,6 @@ export async function createUsers(req, res, err) {
         }
         resArray.push(result);
     }
-
-    wlogger.debug(`resArray: ${JSON.stringify(resArray)}`);
 
     if (allErrors.length > 0) {
         wlogger.error(`bulk-profile error: ${allErrors}`);
