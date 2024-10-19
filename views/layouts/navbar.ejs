@@ -10,15 +10,18 @@
         <sl-dropdown class="" distance="15">
             <sl-button size="small" variant="text" slot="trigger" caret>
                 <div class="level">
+                    <% if (user.profiles[0].profilePic) { %>
+                        <figure class="image is-24x24 ">
 
-                    <figure class="image is-24x24 ">
+                            <img id="profile_img" class="is-rounded" src="<%= `${user.profiles[0].profilePic.url}` %>"
+                                alt="Profile Picture">
 
-                        <img id="profile_img" class="is-rounded" src="<%= `${user.profiles[0].profilePic.url}` %>"
-                            alt="Profile Picture">
+                        </figure>
+                        <%} else {%>
+                            <sl-avatar label="User avatar"></sl-avatar>
+                            <% } %>
 
-                    </figure>
-
-                    <%= user.profiles[0].userName %>
+                                <%= user.profiles[0].userName %>
                 </div>
             </sl-button>
             <sl-menu>

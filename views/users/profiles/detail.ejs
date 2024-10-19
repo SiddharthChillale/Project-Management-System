@@ -13,16 +13,20 @@
             <%}%>
     </div>
     <div class="hero block p-4 has-background-white" id="profile-group">
-        <div class="columns">
+        <div class="container level-left">
 
-            <div class="column is-one-third ">
+            <div class="level-item ">
 
                 <figure class="container image is-128x128">
-                    <img class="is-rounded" src="<%= `${profile.profilePic.url}` %>" alt="Profile Picture">
+                    <% if(profile.profilePic) {%>
+                        <img class="is-rounded" src="<%= `${profile.profilePic.url}` %>" alt="Profile Picture">
+                        <%} else {%>
+                            <sl-avatar label="User avatar"></sl-avatar>
+                            <% } %>
                 </figure>
             </div>
 
-            <div class="column">
+            <div class="is-flex-direction-column level-item">
                 <p class="title is-4">
                     <%= profile.userName %>
                 </p>
@@ -36,13 +40,13 @@
 
 
         </div>
-        <div class="content">
-            <div class="level">
-                <span class="level-left">
-                    <h4>Bio</h4>
-                </span>
+        <div class="content is-flex-direction-column block">
+            <!-- <div class="level"> -->
+            <span class="level-left">
+                <h4>Bio</h4>
+            </span>
 
-            </div>
+            <!-- </div> -->
             <p>
 
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
@@ -57,7 +61,7 @@
 
         <div>
             <% if (profile.createdEvents.length !=0) { %>
-                <table>
+                <table class="table is-narrow is-striped container">
                     <thead>
                         <tr>
                             <th>Created Events</th>
@@ -83,7 +87,7 @@
 
         <div>
             <% if (profile.participantEvents.length !=0) { %>
-                <table>
+                <table class="table is-narrow is-striped container">
                     <thead>
                         <tr>
                             <th>Participated Events</th>
@@ -105,7 +109,7 @@
 
         <div>
             <% if (profile.projectAssociations.length !=0) { %>
-                <table>
+                <table class="table is-narrow is-striped container">
                     <thead>
                         <tr>
                             <th>Projects Associated with:</th>
