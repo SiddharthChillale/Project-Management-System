@@ -4,23 +4,12 @@
         </div>
     </div>
     <sl-button form="individual-addition" type="submit" variant="primary" size="small">Submit</sl-button>
-    <!-- <sl-button variant="primary" size="small">Cancel</sl-button> -->
-
 </form>
 <sl-divider></sl-divider>
 <div class="block">OR</div>
 <div class="content block is-flex-direction-column" style="width: fit-content;">
 
-    <sl-details summary="CSV Format" class="block">
 
-
-        <pre>
-            <code>
-email,roles
-john@dark.com,"DEVELOPER;PROJECT_MANAGER"
-jane@dark.com,"DEVELOPER;PROJECT_MANAGER;REVIEWER"</code>
-        </pre>
-    </sl-details>
     <form hx-post="/api/v1/users/create-users" id="bulk-upload">
 
         <div class="box is-shadowless has-background-info-light">
@@ -28,6 +17,24 @@ jane@dark.com,"DEVELOPER;PROJECT_MANAGER;REVIEWER"</code>
             <input type="file" name="bulkUpload" id="bulk-user-upload" accept=".xlsx,.xls,.csv">
 
         </div>
+        <sl-details summary="CSV Format" class="block">
+
+
+            <pre>
+                <code>
+    email,roles
+    john@dark.com,"DEVELOPER;PROJECT_MANAGER"
+    jane@dark.com,"DEVELOPER;PROJECT_MANAGER;REVIEWER"</code>
+            </pre>
+        </sl-details>
         <sl-button type="submit" form="bulk-upload" variant="primary" size="small">Submit</sl-button>
     </form>
+
+
+</div>
+
+<div class="block">
+    <sl-button variant="danger" size="small" hx-get="/api/v1/users" hx-target="body"
+        hx-push-url="true">Cancel</sl-button>
+
 </div>

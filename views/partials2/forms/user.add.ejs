@@ -10,7 +10,8 @@
             <sl-option value="ADMIN">ADMIN</sl-option>
             <sl-option value="CLIENT">CLIENT</sl-option>
         </sl-select>
-        <sl-button pill size="small" variant="primary" hx-on:click="deleteElement(<%=index%>)">X</sl-button>
+        <sl-icon-button name="x-circle" hx-on:click="deleteElement(<%=index%>)">
+        </sl-icon-button>
     </div>
 </div>
 <sl-button size="small" type="button" hx-get="/api/v1/users/create-users/form/add/<%=index+1%>" hx-trigger="click"

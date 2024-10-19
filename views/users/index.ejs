@@ -19,17 +19,15 @@
                     <div class="container ">
                         <div class="mr-2" id="right-side">
 
-
-
                             <sl-button size="small" hx-get="/api/v1/users/new" hx-target="#right-side"
-                                hx-push-url="true">Manage Users</sl-button>
+                                hx-push-url="true">Add Users</sl-button>
 
                             <table class="table is-narrow is-striped  container">
                                 <thead class="thead ">
                                     <tr>
                                         <th>ID</th>
                                         <th>Email</th>
-                                        <th>One-Time Token</th>
+                                        <th>Token</th>
                                         <th>View</th>
                                     </tr>
                                 </thead>
@@ -41,7 +39,8 @@
                                         <td>
                                             <%= users[ui].email %>
                                         </td>
-                                        <td><sl-button size="small">Regenerate</sl-button>
+                                        <td><sl-button size="small"><sl-icon name="arrow-clockwise"
+                                                    label="Regenerate"></sl-icon></sl-button>
                                         </td>
                                         <% if (users[ui].profiles.length==0) { %>
                                             <td>
