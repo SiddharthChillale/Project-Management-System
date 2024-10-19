@@ -328,7 +328,20 @@ export async function loginHandler(req, res, err) {
      * Return a success response.
      */
 
-    const { email, password } = req.body;
+    const { email, password, token } = req.body;
+
+    // if (token) {
+    //     let decodedToken;
+    //     try {
+    //         decodedToken = jwt.verify(token, "randtoken");
+    //         email = decodedToken.email;
+    //         password = token;
+    //     } catch (err) {
+    //         wlogger.error(`error: ${err}`);
+    //         return res.status(400).json(err);
+    //     }
+    // }
+
     const [result, error] = await UserService.getUnique({
         where: { email: email },
         include: {
@@ -388,7 +401,6 @@ export async function loginHandler(req, res, err) {
     delete user.createdAt;
 
     return res
-        .status(200)
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
         .redirect("/api/v1/users/profile/choose");
@@ -428,7 +440,55 @@ export async function logoutHandler(req, res, err) {
     // .json({ message: "Logged out" });
 }
 
+export async function loginViaToken(req, res, err) {
+    const { token } = req.body;
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, "randtoken");
+    } catch (err) {
+        wlogger.error(`OneTimeToken Expired : ${err}`);
+        return res.status(400).json(err);
+    }
+    const [result, error] = await UserService.getUnique({
+        where: { oneTimeToken: token, email: decodedToken.email },
+        include: {
+            profiles: {
+                select: {
+                    id: true,
+                    role: true,
+                    userName: true
+                }
+            }
+        },
+        omit: {
+            password: false,
+            refreshToken: false,
+            oneTimeToken: false
+        }
+    });
+
+    if (error) {
+        wlogger.error(`error: ${error}`);
+        return res.status(400).json(error);
+    }
+    const user = result;
+    const { accessToken, refreshToken } =
+        await generateAccessAndRefreshTokens(user);
+
+    //save refreshToken with the user.
+    await UserService.updateTokenById(user.id, "refreshToken", refreshToken);
+
+    const cookieOptions = {
+        httpOnly: true,
+        secure: false // make this dependant on NODE_ENV. should be false in dev, true in prod.
+    };
+    return res
+        .cookie("accessToken", accessToken, cookieOptions)
+        .cookie("refreshToken", refreshToken, cookieOptions)
+        .redirect("/api/v1/users/profile/choose");
+}
 //Tokenizer
+
 export async function generateAccessToken(user, profile_id = undefined) {
     // const JWTSecret = process.env.JWT_TOKEN;
     // const JWTSecret = "randtoken";
