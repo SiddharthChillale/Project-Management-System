@@ -1,7 +1,7 @@
 <!-- <div id="right-side"> -->
 <div class="grid is-col-min-14 is-gap-1">
 
-    <div class="card cell" id="profile-group">
+    <div class="card cell" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;" id="profile-group">
         <div class="card-content">
 
             <div class="media">
@@ -47,7 +47,7 @@
 
 
     <% if (profile.createdEvents.length !=0) { %>
-        <div class="cell card" id="created-event-group">
+        <div class="cell card " style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;" id="created-event-group">
             <div class="card-content">
                 <div class="card-header">Created Events</div>
                 <div class="media">
@@ -77,7 +77,8 @@
         <% } %>
 
             <% if (profile.participantEvents.length !=0) { %>
-                <div class="cell card " id="participant-event-group">
+                <div class="cell card" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;"
+                    id="participant-event-group">
                     <div class="card-content">
                         <div class="card-header">Participated Events</div>
 
@@ -104,7 +105,8 @@
                 <% } %>
 
                     <% if (profile.projectAssociations.length !=0) { %>
-                        <div class="cell card is-col-span-2" id="project-association-group">
+                        <div class="cell card is-col-span-2" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;"
+                            id="project-association-group">
                             <div class="card-content">
                                 <div class="card-header">Associated Projects</div>
 

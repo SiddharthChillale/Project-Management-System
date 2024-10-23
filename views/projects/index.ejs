@@ -17,19 +17,20 @@
                     <div class="container content">
                         <div class="mr-2">
                             <div id="right-side">
-                                <div class="p-2" id="projects-body">
+                                <div id="projects-body">
 
                                     <% if (user?.profiles?.[0]?.role=="PROJECT_MANAGER" ||
-                                        user?.profiles?.[0]?.role=="ADMIN" ){ %>
-                                        <sl-button class="" size="small" hx-get="/api/v1/projects/new"
-                                            hx-swap="outerHTML" hx-select="#projects-body" hx-target="#projects-body"
+                                        user?.profiles?.[0]?.role=="ADMIN" || user?.profiles?.[0]?.role=="CLIENT" ){ %>
+                                        <sl-button size="small" hx-get="/api/v1/projects/new" hx-swap="outerHTML"
+                                            hx-select="#projects-body" hx-target="#projects-body"
                                             hx-push-url="true">Create
                                             Project</sl-button>
                                         <% } %>
-                                            <div class="grid is-col-min-14 is-gap-1">
+                                            <div class="grid mt-2 is-col-min-14 is-gap-1">
 
                                                 <% for( let pi=0; pi < projects.length; pi ++ ) { %>
-                                                    <div class=" cell p-4 has-background-white ">
+                                                    <div class="cell p-4 has-background-white "
+                                                        style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
                                                         <span class="flex">
                                                             <div class="cell">
                                                                 <a hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"

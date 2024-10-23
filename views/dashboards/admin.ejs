@@ -21,8 +21,7 @@
                         <div class="mr-2" id="right-side">
                             <div>
                                 <%# `${JSON.stringify(profile)}` %>
-                                    <div hx-get="/api/v1/users/profile/<%=profile.id%>" hx-select="#profile-group"
-                                        hx-trigger="load">
+                                    <div hx-get="/api/v1/users/profile/<%=profile.id%>" hx-trigger="load">
                                         <hr>
 
                                         <p>No of users in system</p>

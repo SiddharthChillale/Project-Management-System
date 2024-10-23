@@ -28,7 +28,7 @@
                 <sl-menu-item>
                     <sl-button size="small" variant="text" class=" " hx-target="#right-side"
                         hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>" hx-swap="innerHTML"
-                        hx-push-url="true">
+                        hx-push-url="true" hx-select="#profile-group">
                         Profile
                     </sl-button>
                 </sl-menu-item>
