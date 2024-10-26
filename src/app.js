@@ -6,6 +6,7 @@ import routes from "./api/v1/routes/index.routes.js";
 import cookieParser from "cookie-parser";
 import ejs from "ejs";
 import cors from "cors";
+import wlogger from "./logger/winston.logger.js";
 
 const app = express();
 // const __rootdir = path.join(import.meta.dirname, "../");
@@ -13,10 +14,20 @@ const app = express();
 // inform express how to deal with static files
 app.use(express.static("public"));
 // inform express how to deal with filesystem
+wlogger.info(`Express server started in mode - ${process.env.NODE_ENV}`);
+const morganMiddleware = morgan(
+    ":method :url :status :res[content-length] - :response-time ms",
+    {
+        stream: {
+            // Configure Morgan to use our custom logger with the http severity
+            write: (message) => wlogger.http(message.trim())
+        }
+    }
+);
 
 // middleware: set logging
 if (process.env.NODE_ENV !== "test") {
-    app.use(morgan("dev"));
+    app.use(morganMiddleware);
 }
 
 app.set("view engine", "ejs");

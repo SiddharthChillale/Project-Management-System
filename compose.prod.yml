@@ -1,0 +1,11 @@
+services:
+    server:
+        restart: always
+        env_file:
+            - .env.production
+        command: ["start"]
+
+    reverse_proxy:
+        restart: on-failure
+        ports:
+            - 80:80

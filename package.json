@@ -4,10 +4,11 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
+    "start": "node --env-file=.env.production src/index.js",
     "test": "jest --watchAll --verbose",
     "test-debug": "jest -i -w=1 --verbose",
-    "dev": "nodemon --env-file=.env src/index.js",
-    "debug": "node --env-file=.env src/index.js",
+    "dev": "nodemon --env-file=.env.dev src/index.js",
+    "debug": "node --env-file=.env.dev src/index.js",
     "build-fake-db": "node test/sandbox/db-builder.sandbox.js"
   },
   "keywords": [],
@@ -58,6 +59,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "pm2": "^5.4.2",
     "winston": "^3.14.2"
   }
 }

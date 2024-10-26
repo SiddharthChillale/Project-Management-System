@@ -1,0 +1,56 @@
+services:
+    server:
+        container_name: pms_server
+        build:
+            context: .
+            dockerfile: Dockerfile
+        depends_on:
+            - database
+
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "5m" # Each log file has a maximum size of 5 MB
+                max-file: "2" # Up to 2 rotated files are retained per container
+
+    prisma_studio:
+        restart: on-failure:2
+        build:
+            context: ./src/alt_schema
+            dockerfile: Dockerfile
+        container_name: prisma_studio
+        depends_on:
+            - database
+
+    database:
+        image: postgres:14.3
+        container_name: pms_database
+        environment:
+            - POSTGRES_USER=prisma
+            - POSTGRES_PASSWORD=prisma
+            - POSTGRES_DB=prisma_dev
+        secrets:
+            - postgres_secrets
+
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+
+    reverse_proxy:
+        build:
+            context: ./.nginx
+            dockerfile: Dockerfile
+        container_name: pms_reverse_proxy
+        restart: on-failure
+        depends_on:
+            - server
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "5m" # Each log file has a maximum size of 5 MB
+                max-file: "2" # Up to 2 rotated files are retained per container
+secrets:
+    postgres_secrets:
+        file: ./.docker/postgres/.env
+
+volumes:
+    pgdata:
