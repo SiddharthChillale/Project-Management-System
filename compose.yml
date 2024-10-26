@@ -12,7 +12,8 @@ services:
             options:
                 max-size: "5m" # Each log file has a maximum size of 5 MB
                 max-file: "2" # Up to 2 rotated files are retained per container
-
+        volumes:
+            - app_node_modules:/app/node_modules
     prisma_studio:
         restart: on-failure:2
         build:
@@ -54,3 +55,4 @@ secrets:
 
 volumes:
     pgdata:
+    app_node_modules:
