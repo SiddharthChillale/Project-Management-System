@@ -132,12 +132,14 @@ export async function addProject(req, res, err) {
     const courseId = projectDetails.courseId;
     let privateAttachments = { url: [] };
     let publicAttachments = { url: [] };
-    for (const link of projectDetails.attachments.url) {
-        if (link.name && link.address) {
-            if (link.visibility == "private") {
-                privateAttachments.url.push(link);
-            } else {
-                publicAttachments.url.push(link);
+    if (projectDetails.attachments) {
+        for (const link of projectDetails.attachments.url) {
+            if (link.name && link.address) {
+                if (link.visibility == "private") {
+                    privateAttachments.url.push(link);
+                } else {
+                    publicAttachments.url.push(link);
+                }
             }
         }
     }
