@@ -2,7 +2,7 @@
     <a class="has-text-inherit is-size-7 has-text-weight-bold" hx-get="/api/v1/users/dashboard" hx-target="body"
         hx-trigger="click" href="/api/v1/users/dashboard">Project Management
         System</a>
-    <span class="">
+    <span class="" id="search-bar" style="display:none;">
         <sl-input class="" placeholder="Search..." size="small" clearable>
         </sl-input>
     </span>
@@ -46,10 +46,12 @@
         </sl-dropdown>
 
         <% } else { %>
-            <span class="navbar-right is-size-6 has-text-weight-bold">
-                <sl-button size="small" variant="text" hx-get="/api/v1/users/login" hx-target="body" hx-swap="outerHTML"
-                    hx-push-url="true">Login</sl-button>
-            </span>
+
+            <sl-button class="navbar-right" size="small" variant="default" hx-get="/api/v1/users/login" hx-target="body"
+                hx-swap="outerHTML" hx-push-url="true">
+                Login
+            </sl-button>
+
             <%}%>
 
 
