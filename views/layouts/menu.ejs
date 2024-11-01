@@ -1,47 +1,49 @@
-<section class="column has-background-primary-light mx-2 p-4"
-        style="max-width: min-content; box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
-        <div class="menu has-background-inherit">
+<sl-menu class="column has-background-primary-light mx-2 p-4" style="max-width: min-content;">
+        <div class=" has-background-inherit">
 
                 <!-- <div class="p-3"> -->
-                <ul class="menu-list">
-                        <% if (user && (user.profiles[0].role!="PUBLIC" ) ){ %>
-                                <li>
-                                        <a class="has-background-inherit " hx-get="/api/v1/users/dashboard"
-                                                hx-select="#right-side" hx-target="#right-side" hx-swap="outerHTML"
-                                                hx-push-url="true" href="/api/v1/users/dashboard">Dashboard
-                                        </a>
-                                </li>
-                                <% } %>
-                                        <li><a class="has-background-inherit " hx-get="/api/v1/projects"
-                                                        hx-select="#right-side" hx-target="#right-side"
-                                                        hx-swap="outerHTML" hx-push-url="true"
-                                                        href="/api/v1/projects">Projects</a>
-                                        </li>
-
-                                        <% if (user && (user.profiles[0].role=="PROJECT_MANAGER" ||
-                                                user.profiles[0].role=="ADMIN" ) ){ %>
-                                                <li><a class="has-background-inherit " hx-get="/api/v1/users"
-                                                                hx-select="#right-side" hx-target="#right-side"
-                                                                hx-swap="outerHTML" hx-push-url="true"
-                                                                href="/api/v1/users">Users</a>
-                                                </li>
-                </ul>
-                <p class="menu-label">Other</p>
-                <ul class="menu-list">
-                        <li><a class="has-background-inherit " hx-get="/api/v1/score-category" hx-select="#right-side"
-                                        hx-target="#right-side" hx-swap="outerHTML" hx-push-url="true"
-                                        href="/api/v1/score-category">Score
-                                        Categories</a></li>
-                        <li><a class="has-background-inherit " hx-get="/api/v1/departments" hx-select="#right-side"
-                                        hx-target="#right-side" hx-swap="outerHTML" hx-push-url="true"
-                                        href="/api/v1/departments">Departments</a></li>
-                        <li><a class="has-background-inherit " hx-get="/api/v1/events" hx-select="#right-side"
-                                        hx-target="#right-side" hx-swap="outerHTML" hx-push-url="true"
-                                        href="/api/v1/events">Events</a></li>
-                </ul>
-                <% } else { %>
-                        </ul>
+                <!-- <ul class="menu-list"> -->
+                <% if (user && (user.profiles[0].role!="PUBLIC" ) ){ %>
+                        <sl-menu-item>
+                                <a class="has-background-inherit has-text-dark" hx-get="/api/v1/users/dashboard"
+                                        hx-select="#right-side" hx-target="#right-side" hx-swap="outerHTML"
+                                        hx-push-url="true" href="/api/v1/users/dashboard">Dashboard
+                                </a>
+                        </sl-menu-item>
                         <% } %>
-                                <!-- </div> -->
+                                <sl-menu-item><a class="has-background-inherit has-text-dark" hx-get="/api/v1/projects"
+                                                hx-select="#right-side" hx-target="#right-side" hx-swap="outerHTML"
+                                                hx-push-url="true" href="/api/v1/projects">Projects</a>
+                                </sl-menu-item>
+
+                                <% if (user && (user.profiles[0].role=="PROJECT_MANAGER" ||
+                                        user.profiles[0].role=="ADMIN" ) ){ %>
+                                        <sl-menu-item><a class="has-background-inherit has-text-dark"
+                                                        hx-get="/api/v1/users" hx-select="#right-side"
+                                                        hx-target="#right-side" hx-swap="outerHTML" hx-push-url="true"
+                                                        href="/api/v1/users">Users</a>
+                                        </sl-menu-item>
+                                        <!-- </ul> -->
+                                        <!-- <p class="menu-label">Other</p> -->
+                                        <sl-divider></sl-divider>
+                                        <!-- <ul class="menu-list"> -->
+                                        <sl-menu-item><a class="has-background-inherit has-text-dark"
+                                                        hx-get="/api/v1/score-category" hx-select="#right-side"
+                                                        hx-target="#right-side" hx-swap="outerHTML" hx-push-url="true"
+                                                        href="/api/v1/score-category">Score
+                                                        Categories</a></sl-menu-item>
+                                        <sl-menu-item><a class="has-background-inherit has-text-dark"
+                                                        hx-get="/api/v1/departments" hx-select="#right-side"
+                                                        hx-target="#right-side" hx-swap="outerHTML" hx-push-url="true"
+                                                        href="/api/v1/departments">Departments</a></sl-menu-item>
+                                        <sl-menu-item><a class="has-background-inherit has-text-dark"
+                                                        hx-get="/api/v1/events" hx-select="#right-side"
+                                                        hx-target="#right-side" hx-swap="outerHTML" hx-push-url="true"
+                                                        href="/api/v1/events">Events</a></sl-menu-item>
+                                        <!-- </ul> -->
+                                        <% } else { %>
+                                                <!-- </ul> -->
+                                                <% } %>
+                                                        <!-- </div> -->
         </div>
-</section>
+</sl-menu>
