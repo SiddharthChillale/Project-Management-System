@@ -58,6 +58,11 @@
                             <% }) %>
 
                 </div>
+                <div class="is-size-7 is-italic has-text-weight-light ">
+                    What other people think
+                </div>
+                <div hx-get="/api/v1/projects/<%=project.id %>/score?" hx-trigger="load"></div>
+
             </div>
         </div>
         <div class="grid">
@@ -85,7 +90,7 @@
                         <% } %>
 
                             <div class="is-size-7 is-italic has-text-weight-light">Event</div>
-                            <div hx-get="/api/v1/projects/<%=project.id %>/score?" hx-trigger="load"></div>
+
 
             </div>
             <div class="cell">

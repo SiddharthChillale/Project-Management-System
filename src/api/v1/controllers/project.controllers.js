@@ -4,6 +4,7 @@ import ProjectService from "../services/project.services.js";
 import {
     dbCreateRating,
     dbFindRating,
+    dbGetRating,
     dbUpdateRating
 } from "../services/rating.services.js";
 import { cleanDeep } from "../utils/helper.utils.js";
@@ -208,18 +209,15 @@ export async function deleteProject(req, res, err) {
 export async function getRating(req, res, err) {
     //doesn't make sense to get individual rating.
     // Get a rating for a project through getting the project
-    const { projectId } = req.params.id;
-    const [response, error] = await dbFindRating(projectId);
+    const projectId = req.params.id;
+    const [response, error] = await dbGetRating(projectId);
     if (error) {
         wlogger.error(`error in getRating: ${error}`);
         return res.status(500).json(error);
     }
-    let finalScore = 0;
-    for (const rating of response) {
-        finalScore += rating.score;
-    }
-    finalScore = finalScore / response.length;
-    return res.render("partials2/ratings.ejs", { rating: finalScore });
+    const ratings = response;
+    wlogger.debug(`ratings: ${JSON.stringify(ratings)}`);
+    return res.render("partials2/ratings.ejs", { ratings: ratings });
 }
 
 export async function addRating(req, res, err) {
