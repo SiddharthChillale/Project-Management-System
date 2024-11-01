@@ -10,7 +10,7 @@
 
 <body>
     <main class="section hero is-fullheight">
-        <section class="container">
+        <section class="container block">
             <div class=" container " style="max-width: max-content; border: 1px solid #d7d7d7;">
                 <div class=" has-text-weight-bold is-size-3 pb-3 pt-2 px-5 has-background-primary-light">Welcome to
                     Project Manager</div>
@@ -82,6 +82,13 @@
                 </div>
             </div>
         </section>
+
+        <!-- Demo Users -->
+        <div class="container" style="width: fit-content; margin: auto;">
+            <sl-button hx-get="/api/v1/users/demo?take=3" hx-swap="outerHTML">Try Demo
+                Users</sl-button>
+        </div>
+
 
     </main>
 </body>

@@ -21,17 +21,20 @@ import {
     dashboardViewHandler,
     getCreateUserPage,
     getCreateUsersFormAdditional,
-    loginViaToken
+    loginViaToken,
+    getDemoUsers
 } from "../controllers/user.controllers.js";
 
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 import validateUsers, { validate } from "../validators/general.validators.js";
 
 const router = express.Router();
 
 //only accessible to all profiles with role=ADMIN or PM, hence require the verifyTokenAndAttachUser
 router.route("/").get(verifyTokenAndAttachUser, getUsers);
-
+router
+    .route("/demo")
+    .get(query("take").optional().toInt(), validate, getDemoUsers);
 router.route("/login/token").post(loginViaToken);
 
 router

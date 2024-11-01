@@ -11,9 +11,9 @@ const JWTSecret = "randtoken";
 // Users
 export async function getUsers(req, res, err) {
     const { user } = req;
-    let { page, sort, order } = req.query;
+    let { page, sort, order, take } = req.query;
     page = page ? page - 1 : 0;
-    const take = 15;
+    take = take ? take : 15;
     const skip = take * page;
     sort = sort ? sort : "createdAt";
     order = order ? order : "desc";
@@ -822,4 +822,21 @@ export async function getCreateUsersFormAdditional(req, res, err) {
     return res
         .status(200)
         .render("partials2/forms/user.add.ejs", { index: index });
+}
+export async function getDemoUsers(req, res, err) {
+    let { take } = req.query;
+    take = take ? take : 3;
+
+    const [response, total, error] = await UserService.get({
+        select: {
+            email: true,
+            password: true
+        },
+        take: take
+    });
+    if (error) {
+        wlogger.error(`error: ${error}`);
+        return res.status(500).json(error);
+    }
+    return res.status(200).render("users/list.ejs", { users: response });
 }
