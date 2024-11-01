@@ -1,3 +1,4 @@
+import { name } from "ejs";
 import wlogger from "../../../logger/winston.logger.js";
 import ProjectService from "../services/project.services.js";
 import {
@@ -16,7 +17,12 @@ export async function getProjects(req, res, err) {
     page = page ? page - 1 : 0;
     const take = 10;
     const skip = take * page;
-
+    sort = sort ? sort : "createdAt";
+    order = order ? order : "desc";
+    let orderBy = [];
+    let orderByObj = {};
+    orderByObj[sort] = order;
+    orderBy.push(orderByObj);
     let options = {
         include: {
             ratings: true,
@@ -34,7 +40,8 @@ export async function getProjects(req, res, err) {
             }
         },
         skip: skip,
-        take: take
+        take: take,
+        orderBy: orderBy
     };
     if (id) {
         options = { ...options, where: { id: id } };

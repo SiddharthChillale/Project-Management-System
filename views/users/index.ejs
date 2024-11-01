@@ -19,8 +19,23 @@
                     <div class="container ">
                         <div class="mr-2" id="right-side">
 
-                            <sl-button size="small" hx-get="/api/v1/users/new" hx-target="#right-side"
-                                hx-push-url="true">Add Users</sl-button>
+                            <div class="level">
+                                <sl-button size="small" class="level-left" hx-get="/api/v1/users/new"
+                                    hx-target="#right-side" hx-push-url="true">Add Users</sl-button>
+                                <sl-button-group class="level-right">
+                                    <sl-button size="small" hx-get="/api/v1/users?page=<%=curPage%>&sort=name&order=asc"
+                                        hx-target="body" hx-push-url="true">A-Z</sl-button>
+                                    <sl-button size="small"
+                                        hx-get="/api/v1/users?page=<%=curPage%>&sort=name&order=desc" hx-target="body"
+                                        hx-push-url="true">Z-A</sl-button>
+                                    <sl-button size="small"
+                                        hx-get="/api/v1/users?page=<%=curPage%>&sort=createdAt&order=desc"
+                                        hx-target="body" hx-push-url="true">Newest</sl-button>
+                                    <sl-button size="small"
+                                        hx-get="/api/v1/users?page=<%=curPage%>&sort=createdAt&order=asc"
+                                        hx-target="body" hx-push-url="true">Oldest</sl-button>
+                                </sl-button-group>
+                            </div>
 
                             <table class="table is-narrow is-striped  container">
                                 <thead class="thead ">

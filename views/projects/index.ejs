@@ -17,91 +17,109 @@
                     <div class="container content">
                         <div class="mr-2">
                             <div id="right-side">
-                                <div id="projects-body">
-
+                                <div class="level">
                                     <% if (user?.profiles?.[0]?.role=="PROJECT_MANAGER" ||
                                         user?.profiles?.[0]?.role=="ADMIN" || user?.profiles?.[0]?.role=="CLIENT" ){ %>
-                                        <sl-button size="small" hx-get="/api/v1/projects/new" hx-swap="outerHTML"
-                                            hx-select="#projects-body" hx-target="#projects-body"
+                                        <sl-button size="small" class="level-left" hx-get="/api/v1/projects/new"
+                                            hx-swap="outerHTML" hx-select="#projects-body" hx-target="#projects-body"
                                             hx-push-url="true">Create
                                             Project</sl-button>
                                         <% } %>
-                                            <div class="grid mt-2 is-col-min-14 is-gap-1">
 
-                                                <% for( let pi=0; pi < projects.length; pi ++ ) { %>
-                                                    <div class="cell p-4 has-background-white "
-                                                        style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
-                                                        <span class="flex">
-                                                            <div class="cell">
-                                                                <a hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
-                                                                    hx-swap="outerHTML" hx-target="#projects-body"
-                                                                    hx-push-url="true" hx-select="#projects-body"
-                                                                    class="title is-5 has-text-primary"
-                                                                    href="<%= `/api/v1/projects/${projects[pi].id}`%>">
-                                                                    <%= projects[pi].name %>
-                                                                </a>
-                                                            </div>
-                                                            <div class="cell mt-2 ">
-                                                                <span class="subtitle has-text-primary-dark is-6">Seats
-                                                                    available:
-                                                                    <%= projects[pi].teamSize -
-                                                                        projects[pi]._count.projectAssociations %>/
-                                                                        <%= projects[pi].teamSize%>
-                                                                </span>
-                                                            </div>
-                                                            <div class="mt-3 cell content"
-                                                                style="max-height: 8ex; overflow: hidden;">
-                                                                <%= projects[pi].description %>
-                                                            </div>
-                                                            <button class="cell button is-info is-light is-small">
-                                                                <a hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
-                                                                    hx-swap="outerHTML" hx-target="#projects-body"
-                                                                    hx-push-url="true" hx-select="#projects-body"
-                                                                    href="<%= `/api/v1/projects/${projects[pi].id}`%>">
-                                                                    Read More
-                                                                </a>
-                                                            </button>
+                                            <sl-button-group class="level-right">
+                                                <sl-button size="small"
+                                                    hx-get="/api/v1/projects?page=<%=curPage%>&sort=name&order=asc"
+                                                    hx-target="body" hx-push-url="true">A-Z</sl-button>
+                                                <sl-button size="small"
+                                                    hx-get="/api/v1/projects?page=<%=curPage%>&sort=name&order=desc"
+                                                    hx-target="body" hx-push-url="true">Z-A</sl-button>
+                                                <sl-button size="small"
+                                                    hx-get="/api/v1/projects?page=<%=curPage%>&sort=createdAt&order=desc"
+                                                    hx-target="body" hx-push-url="true">Newest</sl-button>
+                                                <sl-button size="small"
+                                                    hx-get="/api/v1/projects?page=<%=curPage%>&sort=createdAt&order=asc"
+                                                    hx-target="body" hx-push-url="true">Oldest</sl-button>
+                                            </sl-button-group>
+                                </div>
+                                <div id="projects-body">
 
-                                                            <% if (user && user.profiles[0].role=="DEVELOPER" ){ %>
-                                                                <button class="cell button is-warning is-small"
-                                                                    hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
-                                                                    hx-swap="outerHTML" hx-target="#projects-body"
-                                                                    hx-push-url="true" hx-select="#projects-body">
-                                                                    Enroll
-                                                                </button>
-                                                                <% } %>
+                                    <div class="grid mt-2 is-col-min-14 is-gap-1">
 
 
-
-                                                        </span>
-
+                                        <% for( let pi=0; pi < projects.length; pi ++ ) { %>
+                                            <div class="cell p-4 has-background-white "
+                                                style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
+                                                <span class="flex">
+                                                    <div class="cell">
+                                                        <a hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
+                                                            hx-swap="outerHTML" hx-target="#projects-body"
+                                                            hx-push-url="true" hx-select="#projects-body"
+                                                            class="title is-5 has-text-primary"
+                                                            href="<%= `/api/v1/projects/${projects[pi].id}`%>">
+                                                            <%= projects[pi].name %>
+                                                        </a>
                                                     </div>
-                                                    <% } %>
-                                            </div>
-                                            <div class="  m-0 p-2" role="navigation" aria-label="pagination">
-                                                <sl-button-group class="level-center">
-                                                    <% for( let i=1; i <=total; i++ ) { %>
-                                                        <sl-button size="small" hx-get="/api/v1/projects?page=<%= i%>"
-                                                            hx-target="body" hx-push-url="true" <% if (curPage==i) { %>
-                                                            variant="primary" class="my-0"
-                                                            <% } else { %>
-                                                                class="my-0"
-                                                                <% } %>
-                                                                    aria-label="Goto page <%= i%>">
-                                                                        <%= i%>
-                                                        </sl-button>
+                                                    <div class="cell mt-2 ">
+                                                        <span class="subtitle has-text-primary-dark is-6">Seats
+                                                            available:
+                                                            <%= projects[pi].teamSize -
+                                                                projects[pi]._count.projectAssociations %>/
+                                                                <%= projects[pi].teamSize%>
+                                                        </span>
+                                                    </div>
+                                                    <div class="mt-3 cell content"
+                                                        style="max-height: 8ex; overflow: hidden;">
+                                                        <%= projects[pi].description %>
+                                                    </div>
+                                                    <button class="cell button is-info is-light is-small">
+                                                        <a hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
+                                                            hx-swap="outerHTML" hx-target="#projects-body"
+                                                            hx-push-url="true" hx-select="#projects-body"
+                                                            href="<%= `/api/v1/projects/${projects[pi].id}`%>">
+                                                            Read More
+                                                        </a>
+                                                    </button>
+
+                                                    <% if (user && user.profiles[0].role=="DEVELOPER" ){ %>
+                                                        <button class="cell button is-warning is-small"
+                                                            hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
+                                                            hx-swap="outerHTML" hx-target="#projects-body"
+                                                            hx-push-url="true" hx-select="#projects-body">
+                                                            Enroll
+                                                        </button>
                                                         <% } %>
-                                                            <sl-button size="small"
-                                                                hx-get="/api/v1/projects?page=<%= curPage-1 < 1 ? 1 : curPage-1%>"
-                                                                hx-target="body" hx-push-url="true" class="my-0"
-                                                                title="This is the first page">Previous</sl-button>
-                                                            <sl-button size="small"
-                                                                hx-get="/api/v1/projects?page=<%= curPage+1%>"
-                                                                hx-target="body" hx-push-url="true" class="my-0">Next
-                                                                page</sl-button>
-                                                </sl-button-group>
+
+
+
+                                                </span>
 
                                             </div>
+                                            <% } %>
+                                    </div>
+                                    <div class="  m-0 p-2" role="navigation" aria-label="pagination">
+                                        <sl-button-group class="level-center">
+                                            <% for( let i=1; i <=total; i++ ) { %>
+                                                <sl-button size="small" hx-get="/api/v1/projects?page=<%= i%>"
+                                                    hx-target="body" hx-push-url="true" <% if (curPage==i) { %>
+                                                    variant="primary" class="my-0"
+                                                    <% } else { %>
+                                                        class="my-0"
+                                                        <% } %>
+                                                            aria-label="Goto page <%= i%>">
+                                                                <%= i%>
+                                                </sl-button>
+                                                <% } %>
+                                                    <sl-button size="small"
+                                                        hx-get="/api/v1/projects?page=<%= curPage-1 < 1 ? 1 : curPage-1%>"
+                                                        hx-target="body" hx-push-url="true" class="my-0"
+                                                        title="This is the first page">Previous</sl-button>
+                                                    <sl-button size="small"
+                                                        hx-get="/api/v1/projects?page=<%= curPage+1%>" hx-target="body"
+                                                        hx-push-url="true" class="my-0">Next
+                                                        page</sl-button>
+                                        </sl-button-group>
+
+                                    </div>
                                 </div>
                             </div>
 

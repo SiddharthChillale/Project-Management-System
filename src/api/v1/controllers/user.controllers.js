@@ -15,12 +15,19 @@ export async function getUsers(req, res, err) {
     page = page ? page - 1 : 0;
     const take = 15;
     const skip = take * page;
+    sort = sort ? sort : "createdAt";
+    order = order ? order : "desc";
+    let orderBy = [];
+    let orderByObj = {};
+    orderByObj[sort] = order;
+    orderBy.push(orderByObj);
     const [profiles, total, error] = await UserService.get({
         include: {
             profiles: true
         },
         skip: skip,
-        take: take
+        take: take,
+        orderBy: orderBy
     });
     if (error) {
         wlogger.error(error);
