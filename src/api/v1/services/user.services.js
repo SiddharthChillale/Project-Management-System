@@ -10,7 +10,10 @@ import { response } from "express";
 async function dbGetUsers(filterClause) {
     const goGetAll = goStyleExceptionWrapper(prisma.user.findMany);
     const [result, error] = await goGetAll(filterClause);
-    return [result, error];
+    const goCount = goStyleExceptionWrapper(prisma.user.count);
+    const [total, errorTotal] = await goCount();
+
+    return [result, total, error];
 }
 
 async function dbGetUniqueUser(filterClause) {

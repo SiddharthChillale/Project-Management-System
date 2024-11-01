@@ -11,10 +11,16 @@ const JWTSecret = "randtoken";
 // Users
 export async function getUsers(req, res, err) {
     const { user } = req;
-    const [profiles, error] = await UserService.get({
+    let { page, sort, order } = req.query;
+    page = page ? page - 1 : 0;
+    const take = 15;
+    const skip = take * page;
+    const [profiles, total, error] = await UserService.get({
         include: {
             profiles: true
-        }
+        },
+        skip: skip,
+        take: take
     });
     if (error) {
         wlogger.error(error);
@@ -22,9 +28,12 @@ export async function getUsers(req, res, err) {
         return res.status(500).json(error);
     }
 
-    return res
-        .status(200)
-        .render("users", { users: profiles, user: user ? user : undefined });
+    return res.status(200).render("users", {
+        users: profiles,
+        user: user ? user : undefined,
+        curPage: page + 1,
+        total: Math.ceil(total / take)
+    });
 }
 
 export async function getUserProfile(req, res, err) {
@@ -574,7 +583,7 @@ export async function refreshAccessToken(req, res, err) {
     }
 
     const profile_id = decoded.profile_id;
-    const [user, error] = await UserService.get({
+    const [user, total, error] = await UserService.get({
         where: { id: decoded.id },
         omit: { refreshToken: false }
     });

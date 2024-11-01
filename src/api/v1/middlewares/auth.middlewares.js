@@ -84,7 +84,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
         return res.status(401).json({ message: "Invalid token" });
     }
 
-    const [user, error] = await UserService.get({
+    const [user, total, error] = await UserService.get({
         where: { id: decoded.id },
         include: {
             profiles: {

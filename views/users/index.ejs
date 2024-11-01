@@ -47,9 +47,7 @@
                                                 <div>
                                                     <sl-button class=" " size="small" caret disabled>
                                                         <span title="No Profiles for this user">View Profile</span>
-                                                        <!-- <span class="icon is-small">
-                                                            <i class="fas fa-angle-down" aria-hidden="false"></i>
-                                                        </span> -->
+
                                                     </sl-button>
                                                 </div>
                                             </td>
@@ -89,6 +87,29 @@
                                     </tr>
                                     <% } %>
                             </table>
+                            <div class="m-0 p-2" role="navigation" aria-label="pagination">
+                                <sl-button-group class="level-center">
+                                    <% for( let i=1; i <=total; i++ ) { %>
+                                        <sl-button size="small" hx-get="/api/v1/users?page=<%= i%>" hx-target="body"
+                                            hx-push-url="true" <% if (curPage==i) { %>
+                                            variant="primary" class="my-0"
+                                            <% } else { %>
+                                                class="my-0"
+                                                <% } %>
+                                                    aria-label="Goto page <%= i%>">
+                                                        <%= i%>
+                                        </sl-button>
+                                        <% } %>
+                                            <sl-button size="small"
+                                                hx-get="/api/v1/users?page=<%= curPage-1 < 1 ? 1 : curPage-1%>"
+                                                hx-target="body" hx-push-url="true" class="my-0"
+                                                title="This is the first page">Previous</sl-button>
+                                            <sl-button size="small" hx-get="/api/v1/users?page=<%= curPage+1%>"
+                                                hx-target="body" hx-push-url="true" class="my-0">Next
+                                                page</sl-button>
+                                </sl-button-group>
+
+                            </div>
                         </div>
 
                     </div>
