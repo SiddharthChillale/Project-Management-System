@@ -4,7 +4,10 @@ import { prisma } from "./main.services.js";
 async function dbGetAllProjects(clause) {
     const goFindAll = goStyleExceptionWrapper(prisma.project.findMany);
     const [response, error] = await goFindAll(clause);
-    return [response, error];
+    const goCount = goStyleExceptionWrapper(prisma.project.count);
+    const [total, errorTotal] = await goCount();
+
+    return [response, total, error];
 }
 
 // async function dbGetOneProject(data) {

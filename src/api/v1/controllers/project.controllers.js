@@ -12,7 +12,7 @@ export async function getProjects(req, res, err) {
     // let ids = ;
     let id = parseInt(req.params.id);
 
-    let { page } = req.query;
+    let { page, sort, order } = req.query;
     page = page ? page - 1 : 0;
     const take = 10;
     const skip = take * page;
@@ -43,7 +43,8 @@ export async function getProjects(req, res, err) {
 
     const clause = cleanDeep(options);
 
-    const [result, error] = await ProjectService.getAll(clause);
+    const [result, total, error] = await ProjectService.getAll(clause);
+
     let body = result;
     if (error) {
         wlogger.error(`error: ${error}`);
@@ -53,23 +54,6 @@ export async function getProjects(req, res, err) {
 
         return res.status(500).json(error);
     }
-
-    // for (let project of body) {
-    //     if (
-    //         project.event &&
-    //         project.event != null &&
-    //         project.event != undefined
-    //     ) {
-    //         project.event.startDate = convertToReadableDate(
-    //             project.event.startDate
-    //         );
-    //         project.event.endDate = convertToReadableDate(
-    //             project.event.endDate
-    //         );
-    //     }
-    //     project.createdAt = convertToReadableDate(project.createdAt);
-    //     project.updatedAt = convertToReadableDate(project.updatedAt);
-    // }
 
     let templateName = "details/public.ejs";
     let path = "projects/item.ejs";
@@ -99,7 +83,12 @@ export async function getProjects(req, res, err) {
         obj = { ...obj, project: body[0] };
     } else {
         path = "projects";
-        obj = { ...obj, projects: body };
+        obj = {
+            ...obj,
+            projects: body,
+            total: Math.ceil(total / take),
+            curPage: page + 1
+        };
     }
     obj = { ...obj, user: user };
 

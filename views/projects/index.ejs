@@ -77,31 +77,30 @@
 
                                                     </div>
                                                     <% } %>
-                                                        <div class="pagination m-0 p-2" role="navigation"
-                                                            aria-label="pagination">
-                                                            <a class="pagination-previous is-shadowless is-disabled my-0"
-                                                                title="This is the first page">Previous</a>
-                                                            <a href="#" class="pagination-next my-0 is-shadowless">Next
-                                                                page</a>
-                                                            <ul class="pagination-list m-0 is-shadowless">
-                                                                <li>
-                                                                    <button
-                                                                        class="pagination-link is-current is-shadowless button is-info is-light"
-                                                                        aria-label="Page 1"
-                                                                        aria-current="page">1</button>
-                                                                </li>
-                                                                <li>
-                                                                    <button
-                                                                        class="pagination-link is-shadowless button is-info is-light"
-                                                                        aria-label="Goto page 2">2</button>
-                                                                </li>
-                                                                <li>
-                                                                    <button
-                                                                        class="pagination-link is-shadowless button is-info is-light"
-                                                                        aria-label="Goto page 3">3</button>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
+                                            </div>
+                                            <div class="  m-0 p-2" role="navigation" aria-label="pagination">
+                                                <sl-button-group class="level-center">
+                                                    <% for( let i=1; i <=total; i++ ) { %>
+                                                        <sl-button size="small" hx-get="/api/v1/projects?page=<%= i%>"
+                                                            hx-target="body" hx-push-url="true" <% if (curPage==i) { %>
+                                                            variant="primary" class="my-0"
+                                                            <% } else { %>
+                                                                class="my-0"
+                                                                <% } %>
+                                                                    aria-label="Goto page <%= i%>">
+                                                                        <%= i%>
+                                                        </sl-button>
+                                                        <% } %>
+                                                            <sl-button size="small"
+                                                                hx-get="/api/v1/projects?page=<%= curPage-1 < 1 ? 1 : curPage-1%>"
+                                                                hx-target="body" hx-push-url="true" class="my-0"
+                                                                title="This is the first page">Previous</sl-button>
+                                                            <sl-button size="small"
+                                                                hx-get="/api/v1/projects?page=<%= curPage+1%>"
+                                                                hx-target="body" hx-push-url="true" class="my-0">Next
+                                                                page</sl-button>
+                                                </sl-button-group>
+
                                             </div>
                                 </div>
                             </div>
