@@ -2,10 +2,12 @@
     <!-- <sl-input type="text" size="small" placeholder="Search for an Event" id="search-input"></sl-input> -->
     <br>
     <sl-select id="events-search-result" name="project[eventId]" size="small" clearable>
-        <% for( let ei=0; ei < events.length; ei++ ) { %>
-            <sl-option value="<%= events[ei].id %>">
-                <%= events[ei].name %>
-            </sl-option>
-            <%}%>
+        <div id="list-events">
+            <% for( let ei=0; ei < events.length; ei++ ) { %>
+                <sl-option value="<%= events[ei].id %>">
+                    <%= events[ei].name %>
+                </sl-option>
+                <%}%>
+        </div>
     </sl-select>
 </div>

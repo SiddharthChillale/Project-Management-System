@@ -66,13 +66,15 @@
             </div>
         </div>
         <div class="grid">
-            <div class="cell">
+            <div class="cell p-4" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
+
 
                 <% if (project.event) { %>
                     <a class="is-size-4 has-text-weight-bold"
                         href="<%= `/api/v1/events/${project.event.id}?includeAdditional=true`%>">
                         <%= project.event.name %>
                     </a>
+                    <div class="is-size-7 is-italic has-text-weight-light">Event</div>
 
                     <div>
                         From:
@@ -89,7 +91,6 @@
                         <span class="is-size-7 is-italic is-capitalized">Not in any Event</span>
                         <% } %>
 
-                            <div class="is-size-7 is-italic has-text-weight-light">Event</div>
 
 
             </div>

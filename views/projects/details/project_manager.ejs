@@ -27,6 +27,7 @@
             <div class="level">
                 <%= project.description %>
             </div>
+            <div hx-get="/api/v1/projects/<%=project.id %>/score?" hx-trigger="load"></div>
 
             <br />
             <div class="level-left">
@@ -45,14 +46,13 @@
                 <div class="level">
 
                     <div>Public Links:</div>
-                    <%# JSON.stringify(project) %>
-                        <% project.publicAttachments.url?.forEach(link=> { %>
-                            <li class="level-item">
-                                <a href="<%= link.address %>" target="_blank" class="block">
-                                    <%= link.name %>
-                                </a>
-                            </li>
-                            <% }) %>
+                    <% project.publicAttachments.url?.forEach(link=> { %>
+                        <li class="level-item">
+                            <a href="<%= link.address %>" target="_blank" class="block">
+                                <%= link.name %>
+                            </a>
+                        </li>
+                        <% }) %>
 
                 </div>
 
@@ -72,7 +72,8 @@
             </div>
         </div>
         <div class="grid">
-            <div class="cell">
+            <div class="cell p-4" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
+
 
                 <% if (project.event) { %>
                     <a class="is-size-4 has-text-weight-bold"
@@ -99,10 +100,10 @@
 
                             <div class="is-size-7 is-italic has-text-weight-light">Event</div>
 
-                            <div hx-get="/api/v1/projects/<%=project.id %>/score?" hx-trigger="load"></div>
 
             </div>
-            <div class="cell">
+            <div class="cell p-4" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
+
                 <% if (project.course) { %>
                     <div>
 
@@ -131,8 +132,12 @@
     <div class="p-4" style="border-top: 1px solid #151515;">
 
         <div class="field is-grouped ">
-            <button class="control button is-info is-light is-small">Edit</button>
-            <button class="control button is-danger is-light is-small">Delete </button>
+            <button class="control button is-info is-light is-small" hx-get="/api/v1/projects/<%=project.id%>/edit"
+                hx-target="#right-side">Edit</button>
+            <button class="control button is-danger is-light is-small"
+                hx-confirm="Are you sure you want to delete this project?" hx-delete="/api/v1/projects/<%=project.id%>"
+                hx-target="#right-side" hx-select="#right-side" hx-swap="outerHTML"
+                hx-replace-url="/api/v1/projects">Delete</button>
         </div>
     </div>
 </div>

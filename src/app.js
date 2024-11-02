@@ -44,6 +44,7 @@ var corsOptions = {
 // middleware: handle request headers + CORS
 app.use(
     helmet({
+        crossOriginOpenerPolicy: false,
         contentSecurityPolicy: {
             directives: {
                 "default-src": ["'self'"],

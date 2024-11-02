@@ -1,7 +1,7 @@
 import ProjectService from "../services/project.services.js";
 
 export async function checkProjectExistenceById(req, res, next) {
-    const [response, error] = await ProjectService.getAll({
+    const [response, total, error] = await ProjectService.getAll({
         id: req.params.id
     });
     if (error) {
@@ -13,6 +13,6 @@ export async function checkProjectExistenceById(req, res, next) {
         res.status(500).json(error);
         return;
     }
-    req.body.project = response;
+    // req.body.project = response;
     next();
 }

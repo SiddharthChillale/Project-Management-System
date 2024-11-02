@@ -1,11 +1,13 @@
-<div></div>
-<!-- <sl-input type="text" size="small" placeholder="Search for an Event" id="search-input"></sl-input> -->
-<br>
-<sl-select id="course-search-result" name="project[courseId]" size="small" clearable>
-    <% for( let ci=0; ci < courses.length; ci++ ) { %>
-        <sl-option size="small" value="<%= courses[ci].id %>">
-            <%= courses[ci].name %>
-        </sl-option>
-        <%}%>
-</sl-select>
+<div>
+
+    <br>
+    <sl-select id="course-search-result" name="project[courseId]" size="small" clearable>
+        <div id="list-courses">
+            <% for( let ci=0; ci < courses.length; ci++ ) { %>
+                <sl-option size="small" value="<%= courses[ci].id %>">
+                    <%= courses[ci].name %>
+                </sl-option>
+                <%}%>
+        </div>
+    </sl-select>
 </div>

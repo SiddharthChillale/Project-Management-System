@@ -1,0 +1,110 @@
+<section class="p-4" id="projects-body">
+    <div class="container">
+        <div class="" id="edit-project">
+            <form>
+                <div class="field">
+
+                    <sl-input size="small" type="text" name="project[name]" label="Project Name"
+                        placeholder="e.g. Project-1" value="<%=project.name%>" required></sl-input>
+                    <sl-input size="small" type="number" name="project[teamSize]" label="Team Size" placeholder="e.g. 5"
+                        value="<%=project.teamSize%>" required></sl-input>
+                    <br>
+
+                    <fieldset>
+
+                        <legend>Links</legend>
+                        <div>
+                            <% project.publicAttachments.url?.forEach(link=> { %>
+
+                                <div class="level">
+                                    <div class="level-left">
+
+                                        <sl-radio-group class="level-item" label="visibilty" size="small"
+                                            name="project[attachments][url][<%=link.id%>][visibility]"
+                                            value="<%=link.visibility%>">
+                                            <sl-radio value="public">Public</sl-radio>
+                                            <sl-radio value="private">Private</sl-radio>
+                                        </sl-radio-group>
+
+                                        <sl-input size="small" class="level-item" label="name" type="text"
+                                            name="project[attachments][url][<%=link.id%>][name]"
+                                            placeholder="e.g. website 🌐" value="<%=link.name%>"></sl-input>
+                                        <sl-input size="small" class="level-item" label="address" type="url"
+                                            name="project[attachments][url][<%=link.name%>][address]"
+                                            placeholder="e.g. https://www.website.com"
+                                            value="<%=link.address%>"></sl-input>
+                                    </div>
+                                </div>
+                                <% } );%>
+                        </div>
+                        <div>
+                            <button hx-get="/api/v1/projects/forms/links/0" hx-target="this" hx-swap="outerHTML"
+                                class="button is-small is-info is-light mt-2">
+                                Add Link
+                            </button>
+                        </div>
+                    </fieldset>
+
+                    <br>
+                    <sl-textarea label="Description" name="project[description]" rows="5" resize="auto"
+                        value="<%=project.description%>"></sl-textarea>
+                    <sl-divider></sl-divider>
+
+                    <fieldset>
+                        <legend>Course</legend>
+                        <div>
+                            <br>
+                            <sl-select id="course-search-result" value="<%=project.courseId%>" name="project[courseId]"
+                                size="small" clearable>
+                                <div hx-get="/api/v1/departments/courses/search" hx-select="#list-courses"
+                                    hx-trigger="load" hx-swap="outerHTML">
+                                </div>
+                            </sl-select>
+                        </div>
+                    </fieldset>
+
+                    <sl-divider></sl-divider>
+                    <fieldset>
+                        <legend>Event</legend>
+                        <div>
+                            <br>
+                            <sl-select id="events-search-result" name="project[eventId]" size="small" clearable>
+                                <div hx-get="/api/v1/events/search" hx-select="#list-events" hx-trigger="load"
+                                    hx-swap="outerHTML">
+
+                                </div>
+                            </sl-select>
+                        </div>
+                    </fieldset>
+
+                    <sl-divider></sl-divider>
+                    <div class="buttons are-small">
+                        <button class="button is-primary is-light" hx-put="/api/v1/projects/<%=project.id%>"
+                            hx-replace-url="/api/v1/projects/" hx-target="#right-side" hx-select="#right-side"
+                            hx-swap="outerHTML">
+                            Save
+                        </button>
+                        <button class="button is-danger is-light" hx-get="/api/v1/projects/<%= project.id%>"
+                            hx-target="#right-side" hx-select="#right-side" hx-swap="outerHTML">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("htmx:afterSwap", function (evt) {
+        const updatedElement = evt.detail.elt;
+        if (updatedElement.id == "list-events") {
+            let eventSelect = document.getElementById("events-search-result");
+            eventSelect.value = "<%=project.eventId%>";
+        }
+        if (updatedElement.id == "list-courses") {
+            let courseSelect = document.getElementById("course-search-result");
+            courseSelect.value = "<%=project.courseId%>";
+        }
+    });
+</script>

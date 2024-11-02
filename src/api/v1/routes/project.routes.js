@@ -10,7 +10,8 @@ import {
     deleteRating,
     getCreateProjectPage,
     getRating,
-    getProjectLinksForm
+    getProjectLinksForm,
+    getEditProjectForm
 } from "../controllers/project.controllers.js";
 import { checkProjectExistenceById } from "../middlewares/projectValidation.middlewares.js";
 import checkForSchema from "../middlewares/schemaValidation.middlewares.js";
@@ -50,6 +51,14 @@ router
     );
 router.route("/new").get(verifyTokenAndAttachUser, getCreateProjectPage);
 router
+    .route("/:id/edit")
+    .get(
+        param("id").toInt(),
+        validate,
+        verifyTokenAndAttachUser,
+        getEditProjectForm
+    );
+router
     .route("/:id")
     .get(
         attachUserOrSilentFail,
@@ -63,7 +72,6 @@ router
             param("id").notEmpty().toInt(),
             body("project").isObject(),
             validate,
-            checkForSchema(project_schema),
             checkProjectExistenceById
         ],
         editProject
@@ -72,8 +80,8 @@ router
         [
             verifyTokenAndAttachUser,
             param("id").notEmpty().toInt(),
-            validate,
-            checkProjectExistenceById
+            validate
+            // checkProjectExistenceById
         ],
         deleteProject
     );

@@ -53,12 +53,12 @@ async function dbUpdateProject(data) {
     return [response, error];
 }
 
-async function dbDeleteProject(data) {
+async function dbDeleteProject(projectId) {
     const goDelete = goStyleExceptionWrapper(prisma.project.delete);
 
     const [response, error] = await goDelete({
         where: {
-            id: data.id
+            id: projectId
         }
     });
     return [response, error];

@@ -196,13 +196,20 @@ export async function editProject(req, res, err) {
 }
 
 export async function deleteProject(req, res, err) {
-    const pid = req.params.id;
-    const [status, error] = await ProjectService.deleteOne({ id: pid });
+    const projectId = req.params.id;
+    wlogger.debug(`delete projectId: ${projectId}`);
+    const [status, error] = await ProjectService.deleteOne(projectId);
     if (error) {
-        res.status(400).json(error);
+        if (error.cause?.code == "ProjectDoesNotExist") {
+            res.status(404).json(error);
+            return;
+        }
+
+        wlogger.error(`error deleting project: ${error}`);
+        res.status(500).json(error);
         return;
     }
-    res.status(200).json(status);
+    res.redirect(303, "/api/v1/projects");
     return;
 }
 
@@ -268,5 +275,21 @@ export async function getProjectLinksForm(req, res, err) {
     const { index } = req.params;
     return res.status(200).render("partials2/forms/project.links.ejs", {
         index: index
+    });
+}
+
+export async function getEditProjectForm(req, res, err) {
+    const projectId = req.params.id;
+    const [project, total, error] = await ProjectService.getAll({
+        where: {
+            id: projectId
+        }
+    });
+    if (error) {
+        wlogger.error(`error in getEditProjectForm: ${error}`);
+        return res.status(500).json(error);
+    }
+    return res.status(200).render("projects/edit.ejs", {
+        project: project[0]
     });
 }

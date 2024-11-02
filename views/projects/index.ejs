@@ -21,8 +21,7 @@
                                     <% if (user?.profiles?.[0]?.role=="PROJECT_MANAGER" ||
                                         user?.profiles?.[0]?.role=="ADMIN" || user?.profiles?.[0]?.role=="CLIENT" ){ %>
                                         <sl-button size="small" class="level-left" hx-get="/api/v1/projects/new"
-                                            hx-swap="outerHTML" hx-select="#projects-body" hx-target="#projects-body"
-                                            hx-push-url="true">Create
+                                            hx-select="#projects-body" hx-target="#right-side" hx-push-url="true">Create
                                             Project</sl-button>
                                         <% } %>
 
@@ -52,8 +51,8 @@
                                                 <span class="flex">
                                                     <div class="cell">
                                                         <a hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
-                                                            hx-swap="outerHTML" hx-target="#projects-body"
-                                                            hx-push-url="true" hx-select="#projects-body"
+                                                            hx-target="#right-side" hx-push-url="true"
+                                                            hx-select="#projects-body"
                                                             class="title is-5 has-text-primary"
                                                             href="<%= `/api/v1/projects/${projects[pi].id}`%>">
                                                             <%= projects[pi].name %>
@@ -73,8 +72,8 @@
                                                     </div>
                                                     <button class="cell button is-info is-light is-small">
                                                         <a hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
-                                                            hx-swap="outerHTML" hx-target="#projects-body"
-                                                            hx-push-url="true" hx-select="#projects-body"
+                                                            hx-target="#right-side" hx-push-url="true"
+                                                            hx-select="#projects-body"
                                                             href="<%= `/api/v1/projects/${projects[pi].id}`%>">
                                                             Read More
                                                         </a>
@@ -83,8 +82,8 @@
                                                     <% if (user && user.profiles[0].role=="DEVELOPER" ){ %>
                                                         <button class="cell button is-warning is-small"
                                                             hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
-                                                            hx-swap="outerHTML" hx-target="#projects-body"
-                                                            hx-push-url="true" hx-select="#projects-body">
+                                                            hx-target="#right-side" hx-push-url="true"
+                                                            hx-select="#projects-body">
                                                             Enroll
                                                         </button>
                                                         <% } %>
