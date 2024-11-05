@@ -9,11 +9,12 @@ import userRouter from "./user.routes.js";
 import eventRouter from "./event.routes.js";
 import departmentRouter from "./department.routes.js";
 import scoreCatRouter from "./scoreCategory.routes.js";
+import { attachUserOrSilentFail } from "../middlewares/auth.middlewares.js";
 
 const router = express.Router();
 
-router.get("/", rootHandler);
-router.get("/api/v1/", rootHandler);
+router.get("/", attachUserOrSilentFail, rootHandler);
+router.get("/api/v1/", attachUserOrSilentFail, rootHandler);
 router.get("/api/v1/sandbox", sandboxHandler);
 // all other routes
 router.use("/api/v1/projects", projectRouter);

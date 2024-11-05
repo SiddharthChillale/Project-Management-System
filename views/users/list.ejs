@@ -1,14 +1,20 @@
 <table class="table is-narrow is-striped  container">
     <caption>Only for Demo Purposes</caption>
     <thead>
+        <!-- <td></td> -->
         <td>Email</td>
         <td>Password</td>
     </thead>
     <tbody>
         <% for( let ui=0; ui < users.length; ui ++ ) { %>
             <tr>
+                <!-- <td>
+                    <sl-copy-button from="user-email-<%#ui%>"></sl-copy-button>
+                </td> -->
                 <td>
-                    <%= users[ui].email %>
+                    <div id="user-email-<%=ui%>">
+                        <%= users[ui].email %>
+                    </div>
                 </td>
                 <td>
                     root

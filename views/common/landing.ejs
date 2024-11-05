@@ -9,40 +9,106 @@
 </head>
 
 <body>
-    <div class="hero is-fullheight-with-navbar">
+    <div class="hero is-fullheight-with-navbar has-background-white-bis">
         <div class="hero-head">
-            <nav class="navbar has-background-primary-light">
-                <div class="container">
+            <nav class="navbar has-background-primary-light" role="navigation" aria-label="main navigation">
 
-                    <div class="navbar-menu">
-                        <div class="navbar-start">
-                            <span class="navbar-item has-text-weight-bold is-size-5">Project Management System</span>
-                        </div>
-                        <div class="navbar-end">
+                <!-- <div class="container"> -->
 
-                            <a hx-get="/api/v1/projects" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
-                                class="navbar-item">Projects</a>
-                            <a hx-get="/api/v1/users/login" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
-                                class="navbar-item">Login</a>
-                            <a hx-get="/api/v1/users/register" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
-                                class="navbar-item">Register</a>
-                        </div>
+                <div class="navbar-brand">
+                    <span class="navbar-item has-text-weight-bold is-size-5">Project Management System</span>
+                    <sl-icon-button style="font-size: 2rem;" name="hamburger" class="navbar-burger"
+                        data-target="navMenu" aria-label="menu" aria-expanded="false">
+
+                    </sl-icon-button>
+                </div>
+                <div class="navbar-menu" id="navMenu">
+                    <!-- <div class="navbar-start">
+                        <span class="navbar-item has-text-weight-bold is-size-5">Project Management System</span>
+                    </div> -->
+                    <div class="navbar-end">
+
+                        <a aria-hidden="true" hx-get="/api/v1/projects" hx-target="body" hx-swap="outerHTML"
+                            hx-push-url="true" class="navbar-item">Projects</a>
+                        <a aria-hidden="true" hx-get="/api/v1/users/login" hx-target="body" hx-swap="outerHTML"
+                            hx-push-url="true" class="navbar-item">Login</a>
+                        <a aria-hidden="true" hx-get="/api/v1/users/register" hx-target="body" hx-swap="outerHTML"
+                            hx-push-url="true" class="navbar-item">Register</a>
                     </div>
                 </div>
+                <!-- </div> -->
             </nav>
         </div>
-        <div class="hero-body">
-            <section class="section container has-text-centered">
+        <section class="is-flex-direction-column container section">
+            <div class="title has-text-centered">
                 Welcome to Project Management System
+            </div>
+            <div class="container">
+                <div class="is-flex is-justify-content-center is-align-content-center is-align-items-center">
+                    <sl-button variant="success" outline hx-get="/api/v1/users/login" hx-target="body"
+                        hx-swap="outerHTML" hx-push-url="true">Login</sl-button>
+                </div>
+            </div>
+            <div style="width: fit-content;">
+                <sl-carousel autoplay loop pagination navigation class="scroll-hint" pagination
+                    style="--scroll-hint: 10%;">
+                    <sl-carousel-item>
+                        <img src="/assets/images/one.png" alt="one">
+                    </sl-carousel-item>
+                    <sl-carousel-item>
+                        <img src="/assets/images/two.png" alt="one">
+                    </sl-carousel-item>
+                    <sl-carousel-item>
+                        <img src="/assets/images/three.png" alt="one">
+                    </sl-carousel-item>
+                    <sl-carousel-item>
+                        <img src="/assets/images/four.png" alt="one">
+                    </sl-carousel-item>
+                    <sl-carousel-item>
+                        <img src="/assets/images/five.png" alt="one">
+                    </sl-carousel-item>
+
+                </sl-carousel>
+            </div>
+
+            <section class="footer">
+                <p class="content ">
+                    Project Management System is a robust MVC application designed to streamline the assignment and
+                    management of projects within development teams. It enables project managers to efficiently oversee
+                    the relationships between team members and customers who submit projects. The system provides
+                    comprehensive tools for project tracking, resource allocation, and team collaboration, allowing
+                    managers to maintain full control over project progress, deliverables, and customer interactions.
+                </p>
+                <p class="content has-text-weight-light is-italic">
+                    Project Management System is a web application built using HTMX, Express, Ejs, and PostgreSQL
+                </p>
             </section>
-            <section class="section container">
-                <figure>
-                    <img src="https://source.unsplash.com/random/1280x720" alt="">
-                </figure>
-            </section>
-        </div>
+        </section>
     </div>
 
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+        // Add a click event on each of them
+        $navbarBurgers.forEach(el => {
+            el.addEventListener('click', () => {
+
+                // Get the target from the "data-target" attribute
+                const target = el.dataset.target;
+                const $target = document.getElementById(target);
+
+                // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                el.classList.toggle('is-active');
+                $target.classList.toggle('is-active');
+
+            });
+        });
+
+    });
+</script>
 
 </html>
