@@ -16,58 +16,62 @@
             <div class="modal is-active" id="choose-profile">
 
                 <div class="modal-background"></div>
-                <div class="modal-content ">
-                    <div class="modal-card">
-                        <header class="modal-card-head is-shadowless is-radiusless py-2">
-                            <p class="modal-card-title has-text-centered has-text-weight-bold">Choose Profile
-                            </p>
-                        </header>
-                        <section class="modal-card-body">
-                            <% if (profiles.length==0) { %>
-                                <div class="has-text-centered is-size-7">Sorry, but you have no Profiles yet.</div>
-                                <div class="has-text-centered is-size-7">Please wait to be assigned a Profile by
-                                    your Project Manager or Admin.</div>
-                                <div class="has-text-centered is-size-7">
-                                    Meanwhile, you can view projects here
-                                </div>
-                                <button hx-get="/api/v1/projects" hx-target="body" hx-swap="outerHTML"
-                                    hx-push-url="true" class="button is-light is-info is-small">View
-                                    Projects</button>
+                <div class="modal-content is-clipped p-5">
+                    <div class="py-2">
+                        <p class="modal-card-title has-text-centered has-text-weight-bold has-text-white">Choose
+                            Profile
+                        </p>
+                    </div>
+                    <div class="">
+                        <% if (profiles.length==0) { %>
+                            <div class="has-text-centered is-size-7">Sorry, but you have no Profiles yet.</div>
+                            <div class="has-text-centered is-size-7">Please wait to be assigned a Profile by
+                                your Project Manager or Admin.</div>
+                            <div class="has-text-centered is-size-7">
+                                Meanwhile, you can view projects here
+                            </div>
+                            <button hx-get="/api/v1/projects" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
+                                class="button is-light is-info is-small">View
+                                Projects</button>
 
-                                <% } else { %>
+                            <% } else { %>
 
-                                    <div class="level">
-                                        <% for( let pi=0; pi < profiles.length; pi++ ) { %>
+                                <div class="grid">
+                                    <% for( let pi=0; pi < profiles.length; pi++ ) { %>
 
-                                            <div class="level-item is-flex is-flex-direction-column">
+                                        <sl-button variant="text" hx-trigger="click"
+                                            hx-post="/api/v1/users/profile/choose/"
+                                            hx-vals='{"profile_Id": "<%= profiles[pi].id %>"}' hx-target="body"
+                                            hx-replace-url="/api/v1/users/dashboard" class="box cell "
+                                            style="max-height: min-content;">
+                                            <div class="is-flex is-flex-direction-column is-align-items-center">
 
-                                                <figure class="image is-64x64 ">
-                                                    <a hx-trigger="click"
+
+                                                <figure class=" image is-64x64 ">
+                                                    <!-- <a hx-trigger="click"
                                                         hx-post="<%= `/api/v1/users/profile/choose/`  %>"
                                                         hx-vals='{"profile_Id": "<%= profiles[pi].id %>"}'
                                                         hx-replace-url="/api/v1/users/dashboard" hx-target="body"
-                                                        href="<%= `/api/v1/users/profile/choose/`  %>">
-                                                        <img id="profile_img" class="is-rounded"
-                                                            src="<%= `${profiles[pi].profilePic.url}` %>">
-                                                    </a>
+                                                        href="<%= `/api/v1/users/profile/choose/`  %>"> -->
+                                                    <img id="profile_img" class="is-rounded"
+                                                        src="<%= `${profiles[pi].profilePic.url}` %>">
+                                                    <!-- </a> -->
                                                 </figure>
 
-                                                <div class=" is-size-8 has-text-weight-light is-italic ">
+                                                <div class=" has-text-weight-light is-italic ">
 
-                                                    <button hx-trigger="click" hx-post="/api/v1/users/profile/choose/"
-                                                        hx-vals='{"profile_Id": "<%= profiles[pi].id %>"}'
-                                                        hx-target="body" hx-replace-url="/api/v1/users/dashboard">
-                                                        <%= profiles[pi].role %>
-                                                    </button>
+                                                    <!-- <sl-button variant="text" > -->
+                                                    <%= profiles[pi].role %>
+                                                        <!-- </sl-button> -->
                                                 </div>
                                             </div>
-                                            <% } %>
-                                    </div>
-                                    <% } %>
-                                        <br />
-                        </section>
-
+                                        </sl-button>
+                                        <% } %>
+                                </div>
+                                <% } %>
+                                    <br />
                     </div>
+
                 </div>
                 <button class="modal-close is-large" onclick="window.history.back();" aria-label="close"></button>
             </div>
