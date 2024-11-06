@@ -4,7 +4,9 @@ services:
             context: ./.nginx
             dockerfile: Dockerfile
         container_name: pms_reverse_proxy
-        restart: on-failure
+        restart: unless-stopped
+        ports:
+            - 80:80
         depends_on:
             - server
         logging:

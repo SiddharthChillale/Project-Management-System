@@ -1,12 +1,13 @@
 services:
     server:
         image: muchimuchi/project-management-system:latest
-        restart: always
+        restart: unless-stopped
         env_file:
             - .env.production
         command: ["start"]
 
-    reverse_proxy:
-        restart: on-failure
-        ports:
-            - 80:80
+    database:
+        restart: unless-stopped
+
+    prisma_studio:
+        restart: unless-stopped
