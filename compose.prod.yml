@@ -5,9 +5,13 @@ services:
         env_file:
             - .env.production
         command: ["start"]
+        ports:
+            - 3002:3000
 
     database:
         restart: unless-stopped
 
     prisma_studio:
         restart: unless-stopped
+        ports:
+            - 5557:5555
