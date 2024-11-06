@@ -1,9 +1,11 @@
 <nav class=" m-0 px-2 py-2 has-background-primary-light level is-mobile" style="height: 2.5rem;" role="navigation"
     aria-label="main navigation">
-    <span class="level-left">
-        <a class=" has-text-inherit is-size-7 has-text-weight-bold" hx-get="/api/v1/users/dashboard" hx-target="body"
-            hx-trigger="click" href="/">Project Management
-            System</a>
+    <span class="is-mobile is-flex">
+        <sl-icon-button class="is-hidden-desktop" name="hamburger" onclick="toggleNav()"></sl-icon-button>
+        <span class="pt-1"><a class=" has-text-inherit is-size-7 has-text-weight-bold" hx-get="/api/v1/users/dashboard"
+                hx-target="body" hx-trigger="click" href="/">Project Management
+                System</a></span>
+
         <!-- <sl-icon-button style="font-size: 2rem;" name="hamburger" class="navbar-burger" data-target="navMenu"
             aria-label="menu" aria-expanded="false">
 
@@ -18,7 +20,7 @@
                 </span> -->
         <span>
             <% if(user){%>
-                <sl-dropdown class="" distance="15">
+                <sl-dropdown class="pt-1" distance="15">
                     <sl-button size="small" variant="text" slot="trigger" caret>
                         <div class="level is-mobile">
                             <% if (user.profiles[0].profilePic) { %>

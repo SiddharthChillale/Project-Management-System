@@ -1,8 +1,11 @@
-<aside class="menu column has-background-primary-light p-4 is-hidden-mobile is-narrow-mobile is-fullheight"
-        style="max-width: min-content;">
+<div id="menu-background" class="" onclick="toggleNav()"></div>
+<aside id="side-menu"
+        class="menu column has-background-primary-light p-4 is-hidden-mobile is-narrow-mobile is-fullheight"
+        style="max-width: min-content; ">
+
+
         <div class=" has-background-inherit">
 
-                <!-- <div class="p-3"> -->
                 <ul class="menu-list">
                         <% if (user && (user.profiles[0].role!="PUBLIC" ) ){ %>
                                 <li>
@@ -43,13 +46,23 @@
                                                                 hx-get="/api/v1/events" hx-select="#right-side"
                                                                 hx-target="#right-side" hx-swap="outerHTML"
                                                                 hx-push-url="true" href="/api/v1/events">Events</a></li>
-                                                <!-- </ul> -->
+
                                                 <% } else { %>
-                                                        <!-- </ul> -->
                                                         <% } %>
                 </ul>
         </div>
 </aside>
 <script>
-
+        function toggleNav() {
+                let sideMenu = document.getElementById("side-menu");
+                let bgndMenu = document.getElementById("menu-background");
+                sideMenu.classList.toggle("is-hidden-mobile");
+                sideMenu.classList.toggle("sidenav");
+                bgndMenu.classList.toggle("background-menu");
+        }
+        document.addEventListener('click', function (event) {
+                if (event.target.tagName === 'A' && window.innerWidth < 1024) {
+                        toggleNav();
+                }
+        });
 </script>
