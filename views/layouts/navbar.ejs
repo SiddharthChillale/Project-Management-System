@@ -1,11 +1,12 @@
-<nav class=" m-0 mb-2 px-2 py-2 has-background-primary-light level" style="height: 2.5rem;">
-    <a class="has-text-inherit is-size-7 has-text-weight-bold" hx-get="/api/v1/users/dashboard" hx-target="body"
-        hx-trigger="click" href="/api/v1/users/dashboard">Project Management
+<nav class="nav m-0 px-2 py-2 has-background-primary-light level" style="height: 2.5rem;">
+    <a class="nav-brand has-text-inherit is-size-7 has-text-weight-bold" hx-get="/api/v1/users/dashboard"
+        hx-target="body" hx-trigger="click" href="/api/v1/users/dashboard">Project Management
         System</a>
-    <span class="" id="search-bar" style="display:none;">
+    <span class="nav-item" id="search-bar" style="display:none;">
         <sl-input class="" placeholder="Search..." size="small" clearable>
         </sl-input>
     </span>
+    <span class="nav-item"></span>
     <% if(user){%>
         <sl-dropdown class="" distance="15">
             <sl-button size="small" variant="text" slot="trigger" caret>
