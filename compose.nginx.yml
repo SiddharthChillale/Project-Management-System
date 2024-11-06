@@ -1,0 +1,14 @@
+services:
+    reverse_proxy:
+        build:
+            context: ./.nginx
+            dockerfile: Dockerfile
+        container_name: pms_reverse_proxy
+        restart: on-failure
+        depends_on:
+            - server
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "5m" # Each log file has a maximum size of 5 MB
+                max-file: "2" # Up to 2 rotated files are retained per container
