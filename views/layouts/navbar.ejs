@@ -1,59 +1,76 @@
-<nav class="nav m-0 px-2 py-2 has-background-primary-light level" style="height: 2.5rem;">
-    <a class="nav-brand has-text-inherit is-size-7 has-text-weight-bold" hx-get="/api/v1/users/dashboard"
-        hx-target="body" hx-trigger="click" href="/api/v1/users/dashboard">Project Management
-        System</a>
-    <span class="nav-item" id="search-bar" style="display:none;">
-        <sl-input class="" placeholder="Search..." size="small" clearable>
-        </sl-input>
+<nav class=" m-0 px-2 py-2 has-background-primary-light level is-mobile" style="height: 2.5rem;" role="navigation"
+    aria-label="main navigation">
+    <span class="level-left">
+        <a class=" has-text-inherit is-size-7 has-text-weight-bold" hx-get="/api/v1/users/dashboard" hx-target="body"
+            hx-trigger="click" href="/">Project Management
+            System</a>
+        <!-- <sl-icon-button style="font-size: 2rem;" name="hamburger" class="navbar-burger" data-target="navMenu"
+            aria-label="menu" aria-expanded="false">
+
+        </sl-icon-button> -->
     </span>
-    <span class="nav-item"></span>
-    <% if(user){%>
-        <sl-dropdown class="" distance="15">
-            <sl-button size="small" variant="text" slot="trigger" caret>
-                <div class="level">
-                    <% if (user.profiles[0].profilePic) { %>
-                        <figure class="image is-24x24 ">
 
-                            <img id="profile_img" class="is-rounded" src="<%= `${user.profiles[0].profilePic.url}` %>"
-                                alt="Profile Picture">
 
-                        </figure>
-                        <%} else {%>
-                            <sl-avatar label="User avatar"></sl-avatar>
-                            <% } %>
+    <span class="level-right">
+        <!-- <span id="search-bar" style="display:none;">
+                    <sl-input class="" placeholder="Search..." size="small" clearable>
+                    </sl-input>
+                </span> -->
+        <span>
+            <% if(user){%>
+                <sl-dropdown class="" distance="15">
+                    <sl-button size="small" variant="text" slot="trigger" caret>
+                        <div class="level is-mobile">
+                            <% if (user.profiles[0].profilePic) { %>
+                                <figure class="image is-24x24 ">
 
-                                <%= user.profiles[0].userName %>
-                </div>
-            </sl-button>
-            <sl-menu>
-                <sl-menu-item>
-                    <sl-button size="small" variant="text" class=" " hx-target="#right-side"
-                        hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>" hx-swap="innerHTML"
-                        hx-push-url="true" hx-select="#profile-group">
-                        Profile
+                                    <img id="profile_img" class="is-rounded"
+                                        src="<%= `${user.profiles[0].profilePic.url}` %>" alt="Profile Picture">
+
+                                </figure>
+                                <%} else {%>
+                                    <sl-avatar label="User avatar"></sl-avatar>
+                                    <% } %>
+
+                                        <div class="is-hidden-mobile" id="userName">
+                                            <%= user.profiles[0].userName %>
+                                        </div>
+                        </div>
                     </sl-button>
-                </sl-menu-item>
-                <sl-menu-item>
-                    <sl-button size="small" variant="text" class="" hx-get="/api/v1/users/profile/choose"
-                        hx-target="body" hx-push-url="true" hx-swap="outerHTML">
-                        Switch Profile
+                    <sl-menu>
+                        <sl-menu-item class="is-hidden-desktop is-size-7">
+                            <%= user.profiles[0].userName %>
+                        </sl-menu-item>
+                        <sl-menu-item>
+                            <sl-button size="small" variant="text" class=" " hx-target="#right-side"
+                                hx-get="<%= `/api/v1/users/profile/${user.profiles[0].id}`%>" hx-swap="innerHTML"
+                                hx-push-url="true" hx-select="#profile-group">
+                                Profile
+                            </sl-button>
+                        </sl-menu-item>
+                        <sl-menu-item>
+                            <sl-button size="small" variant="text" class="" hx-get="/api/v1/users/profile/choose"
+                                hx-target="body" hx-push-url="true" hx-swap="outerHTML">
+                                Switch Profile
+                            </sl-button>
+                        </sl-menu-item>
+                        <sl-menu-item>
+                            <sl-button size="small" variant="text" class="" hx-post="/api/v1/users/logout"
+                                hx-target="body" hx-swap="outerHTML" hx-push-url="true">Logout</sl-button>
+                        </sl-menu-item>
+                    </sl-menu>
+                </sl-dropdown>
+
+                <% } else { %>
+
+                    <sl-button size="small" variant="default" hx-get="/api/v1/users/login" hx-target="body"
+                        hx-swap="outerHTML" hx-push-url="true">
+                        Login
                     </sl-button>
-                </sl-menu-item>
-                <sl-menu-item>
-                    <sl-button size="small" variant="text" class="" hx-post="/api/v1/users/logout" hx-target="body"
-                        hx-swap="outerHTML" hx-push-url="true">Logout</sl-button>
-                </sl-menu-item>
-            </sl-menu>
-        </sl-dropdown>
 
-        <% } else { %>
-
-            <sl-button class="navbar-right" size="small" variant="default" hx-get="/api/v1/users/login" hx-target="body"
-                hx-swap="outerHTML" hx-push-url="true">
-                Login
-            </sl-button>
-
-            <%}%>
+                    <%}%>
+        </span>
+    </span>
 
 
 </nav>

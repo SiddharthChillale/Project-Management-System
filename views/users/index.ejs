@@ -12,14 +12,14 @@
 <body class="has-background-white ">
 
     <%- include ('../layouts/navbar.ejs'); %>
-        <div class="columns my-3 px-3">
+        <div class="columns m-0">
             <%- include ('../layouts/menu.ejs', user?user:undefined); %>
 
-                <section class="is-medium column p-0 ">
+                <section class="is-medium column ">
                     <div class="container ">
                         <div class="mr-2" id="right-side">
 
-                            <div class="level">
+                            <div class="level is-mobile">
                                 <sl-button size="small" class="level-left" hx-get="/api/v1/users/new"
                                     hx-target="#right-side" hx-push-url="true">Add Users</sl-button>
                                 <sl-button-group class="level-right">

@@ -11,13 +11,13 @@
 <body class="has-background-white">
     <%- include ('../layouts/navbar.ejs'); %>
 
-        <div class="columns my-3 px-3">
+        <div class="columns m-0">
             <%- include ('../layouts/menu.ejs', user?user:undefined); %>
-                <section class="is-medium column p-0 ">
+                <section class="is-medium column ">
                     <div class="container content">
                         <div class="mr-2">
                             <div id="right-side">
-                                <div class="level">
+                                <div class="level is-mobile">
                                     <% if (user?.profiles?.[0]?.role=="PROJECT_MANAGER" ||
                                         user?.profiles?.[0]?.role=="ADMIN" || user?.profiles?.[0]?.role=="CLIENT" ){ %>
                                         <sl-button size="small" class="level-left" hx-get="/api/v1/projects/new"
