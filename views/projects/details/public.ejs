@@ -12,12 +12,13 @@
 
         <br />
 
-        <div class="level">
+        <div class="content">
+
             <%= project.description %>
         </div>
 
         <br />
-        <div class="level-left">
+        <div class="level-left block">
             <div>
                 <p class="subtitle is-7">
                     Last Updated: <sl-relative-time date="<%= project.updatedAt %>"></sl-relative-time>
@@ -34,24 +35,24 @@
 
         <br>
 
-        <div>
-            <div class="level">
+        <div class="grid">
+            <div class="is-flex-direction-column">
 
-                <div>Public Links:</div>
-                <%# JSON.stringify(project) %>
-                    <% project.publicAttachments?.url?.forEach(link=> { %>
-                        <li class="level-item">
-                            <a href="<%= link.address %>" target="_blank" class="block">
-                                <%= link.name %>
-                            </a>
-                        </li>
-                        <% }) %>
+                <div>Links:</div>
+                <% project.publicAttachments?.url?.forEach(link=> { %>
+                    <li class="">
+                        <a href="<%= link.address %>" target="_blank" class="block">
+                            <%= link.name %>
+                        </a>
+                    </li>
+                    <% }) %>
 
             </div>
         </div>
     </div>
     <div class="grid">
         <div class="cell p-4" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
+            <div class="is-size-7 is-italic has-text-weight-light">Features in</div>
 
             <% if (project.event) { %>
                 <a class="is-size-4 has-text-weight-bold"
@@ -76,7 +77,6 @@
                     <span class="is-size-7 is-italic is-capitalized">Not in any Event</span>
                     <% } %>
 
-                        <div class="is-size-7 is-italic has-text-weight-light">Event</div>
 
 
         </div>

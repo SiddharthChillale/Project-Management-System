@@ -13,12 +13,13 @@
 
             <br />
 
-            <div class="level">
+            <div class="content">
+
                 <%= project.description %>
             </div>
 
             <br />
-            <div class="level-left">
+            <div class="level-left block">
                 <div>
                     <p class="subtitle is-7">
                         Last Updated: <sl-relative-time date="<%= project.updatedAt %>"></sl-relative-time>
@@ -35,28 +36,25 @@
 
             <br>
 
-            <div>
-                <div class="level">
+            <div class="grid">
+                <div class="is-flex-direction-column">
 
                     <div>Public Links:</div>
-                    <%# JSON.stringify(project) %>
-                        <% project.publicAttachments?.url?.forEach(link=> { %>
-                            <li class="level-item">
-                                <a href="<%= link.address %>" target="_blank" class="block">
-                                    <%= link.name %>
-                                </a>
-                            </li>
-                            <% }) %>
+                    <% project.publicAttachments?.url?.forEach(link=> { %>
+                        <li class="">
+                            <a href="<%= link.address %>" target="_blank" class="block">
+                                <%= link.name %>
+                            </a>
+                        </li>
+                        <% }) %>
 
                 </div>
-
-                <sl-divider></sl-divider>
 
                 <div class="level">
                     <div class="level-left">Private Links:</div>
                     <% project.privateAttachments?.url?.forEach(link=> { %>
 
-                        <li class="level-item">
+                        <li class="">
                             <a href="<%= link.address %>" target="_blank" class="block">
                                 <%= link.name %>
                             </a>
@@ -67,6 +65,7 @@
         </div>
         <div class="grid">
             <div class="cell p-4" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
+                <div class="is-size-7 is-italic has-text-weight-light">Features in</div>
 
 
                 <% if (project.event) { %>
@@ -74,7 +73,6 @@
                         href="<%= `/api/v1/events/${project.event.id}?includeAdditional=true`%>">
                         <%= project.event.name %>
                     </a>
-                    <div class="is-size-7 is-italic has-text-weight-light">Event</div>
 
                     <div>
                         From:
