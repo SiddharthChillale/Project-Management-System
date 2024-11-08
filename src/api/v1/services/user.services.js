@@ -24,7 +24,7 @@ async function dbGetUniqueUser(filterClause) {
 
 //meant for self-registering users, returns id created
 async function dbCreateUser(email, password, role = undefined) {
-    const salt = "salt";
+    const salt = process.env.SALT;
     const hashedPassword = crypto
         .scryptSync(password, salt, 12)
         .toString("base64");

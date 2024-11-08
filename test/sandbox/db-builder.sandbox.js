@@ -28,11 +28,151 @@ import crypto from "node:crypto";
 
 // TODO: how to make sure there are no duplicate entries in the tables?
 
+const scoringCategories = [
+    "Innovation",
+    "Usability",
+    "Design",
+    "Functionality",
+    "Scalability",
+    "Performance",
+    "Security",
+    "Documentation",
+    "Collaboration",
+    "Impact"
+];
+
+const technicalEvents = [
+    "Hackathon",
+    "Techfest",
+    "DevCon",
+    "CodeSprint",
+    "DataDive",
+    "GameJam",
+    "InnoFest",
+    "CyberCon",
+    "AIExpo",
+    "QuantumLeap"
+];
+
+const universityCourses = [
+    "Algorithms",
+    "Biochemistry",
+    "Astrophysics",
+    "Microeconomics",
+    "Philosophy",
+    "Calculus",
+    "Neuroscience",
+    "Anthropology",
+    "Statistics",
+    "MachineLearning"
+];
+
+const universityDepartments = [
+    "Engineering",
+    "Biology",
+    "Physics",
+    "Economics",
+    "Psychology",
+    "Mathematics",
+    "Sociology",
+    "Chemistry",
+    "Linguistics",
+    "ComputerScience"
+];
+
+const pdescriptors = [
+    "SmartHome",
+    "AI",
+    "Virtual",
+    "Blockchain",
+    "Weather",
+    "IoT",
+    "PersonalFinance",
+    "MachineLearning",
+    "RealTime",
+    "FaceRecognition",
+    "Ecommerce",
+    "Inventory",
+    "DataVisualizer",
+    "CyberSecurity",
+    "VoiceControlled",
+    "AugmentedReality",
+    "Fitness",
+    "Sentiment",
+    "Smart",
+    "Traffic",
+    "Resume",
+    "LanguageLearning",
+    "Video Streaming",
+    "Personalized",
+    "Recipe",
+    "Portfolio",
+    "Event"
+];
+
+const psubjects = [
+    "Automation",
+    "Assistant",
+    "Creator",
+    "Ledger",
+    "Predictor",
+    "Device Tracker",
+    "Manager",
+    "Model",
+    "Translator",
+    "System",
+    "Platform",
+    "Tool",
+    "Scanner",
+    "Drone",
+    "Game",
+    "App",
+    "Analyzer",
+    "Irrigation",
+    "Predictor",
+    "Parser",
+    "App",
+    "Service",
+    "Newsfeed",
+    "Recommender",
+    "Website",
+    "Planner"
+];
+
+const ptechnologies = [
+    "Assistant",
+    "App",
+    "Platform",
+    "Tracker",
+    "Manager",
+    "Analyzer",
+    "Predictor",
+    "Tool",
+    "Scanner",
+    "Drone",
+    "Game",
+    "Translator",
+    "Planner",
+    "Service",
+    "Recommender",
+    "Website",
+    "Dashboard",
+    "Bot",
+    "Detector",
+    "System",
+    "Database",
+    "Studio",
+    "Framework",
+    "Hub",
+    "Portal",
+    "Network"
+];
+
 async function dumUser() {
     const email = faker.internet.email();
     const oneTimeToken = await generateOneTimeToken(email);
     const password = "root";
-    const salt = "salt";
+    const salt = process.env.SALT;
     const hashedPassword = crypto
         .scryptSync(password, salt, 12)
         .toString("base64");
@@ -71,7 +211,7 @@ async function dumUserTable(numUsers) {
 }
 function dumScoreCategory() {
     return {
-        name: faker.food.adjective()
+        name: faker.helpers.arrayElement(scoringCategories)
     };
 }
 async function dumScoreCategoryTable(numScoreCategories) {
@@ -106,7 +246,10 @@ function dumDepartment() {
     // }
 
     return {
-        name: `dept-${faker.location.buildingNumber()}${faker.location.city()}`
+        name:
+            faker.helpers.arrayElement(universityDepartments) +
+            " " +
+            faker.number.int({ min: 1, max: 5 })
     };
 }
 async function dumDepartmentTable(numDepartments) {
@@ -151,7 +294,7 @@ async function primaryTables(params) {
 //////////////////////////////////////////secondary/////////////////////////////////////////
 function dumCourse(departmentId) {
     return {
-        name: `course-${faker.music.genre()}`,
+        name: faker.helpers.arrayElement(universityCourses),
         code: faker.number.int({ min: 100, max: 900 }).toString(),
         semester: faker.helpers.arrayElement([
             "FALL",
@@ -252,7 +395,7 @@ async function dumUserProfileTable(users, numUserProfiles) {
 
 function dumEvent(profileId) {
     return {
-        name: faker.commerce.productName(),
+        name: faker.helpers.arrayElement(technicalEvents),
         startDate: faker.date.soon({ days: 1 }),
         endDate: faker.date.soon({ days: 10 }),
         creatorProfileId: profileId
@@ -302,7 +445,12 @@ async function dumEventTable(profiles, numOfEvents) {
 
 function dumProject(profileId) {
     return {
-        name: faker.commerce.productName(),
+        name:
+            faker.helpers.arrayElement(pdescriptors) +
+            " " +
+            faker.helpers.arrayElement(psubjects) +
+            " " +
+            faker.helpers.arrayElement(ptechnologies),
         description:
             faker.commerce.productDescription() +
             " <p> " +
