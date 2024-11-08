@@ -6,7 +6,7 @@ import { Role, Status } from "@prisma/client";
 import wlogger from "../../../logger/winston.logger.js";
 import { strict } from "node:assert";
 
-const JWTSecret = "randtoken";
+const JWTSecret = process.env.JWT_TOKEN;
 
 // Users
 export async function getUsers(req, res, err) {
@@ -498,12 +498,8 @@ export async function loginViaToken(req, res, err) {
         .cookie("refreshToken", refreshToken, cookieOptions)
         .redirect("/api/v1/users/profile/choose");
 }
-//Tokenizer
 
 export async function generateAccessToken(user, profile_id = undefined) {
-    // const JWTSecret = process.env.JWT_TOKEN;
-    // const JWTSecret = "randtoken";
-
     if (!profile_id) {
         return jwt.sign({ id: user.id, email: user.email }, JWTSecret, {
             expiresIn: "20m"
@@ -518,9 +514,6 @@ export async function generateAccessToken(user, profile_id = undefined) {
     );
 }
 export async function generateRefreshToken(user, profile_id = undefined) {
-    // const JWTSecret = process.env.JWT_TOKEN;
-    // const JWTSecret = "randtoken";
-
     if (!profile_id) {
         return jwt.sign({ id: user.id }, JWTSecret, {
             expiresIn: "1hr"

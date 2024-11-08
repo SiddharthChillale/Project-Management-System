@@ -4,7 +4,8 @@ import { ProfileService, UserService } from "../services/user.services.js";
 import jwt from "jsonwebtoken";
 import wlogger from "../../../logger/winston.logger.js";
 import { generateAccessAndRefreshTokens } from "../controllers/user.controllers.js";
-const JWTSecret = "randtoken";
+
+const JWTSecret = process.env.JWT_TOKEN;
 
 export async function verifyTokenAndAttachUser(req, res, next) {
     /**

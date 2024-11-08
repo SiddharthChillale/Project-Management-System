@@ -63,8 +63,7 @@ async function dbCreateUser(email, password, role = undefined) {
 }
 
 export async function generateOneTimeToken(email) {
-    // const JWTSecret = process.env.JWT_TOKEN;
-    const JWTSecret = "randtoken";
+    const JWTSecret = process.env.JWT_TOKEN;
     let ott;
     try {
         ott = jwt.sign({ email: email }, JWTSecret, {
