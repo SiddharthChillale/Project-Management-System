@@ -46,7 +46,7 @@
                 <div class="level">
 
                     <div>Public Links:</div>
-                    <% project.publicAttachments.url?.forEach(link=> { %>
+                    <% project.publicAttachments?.url?.forEach(link=> { %>
                         <li class="level-item">
                             <a href="<%= link.address %>" target="_blank" class="block">
                                 <%= link.name %>
