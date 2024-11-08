@@ -8,6 +8,7 @@ import {
     dbUpdateRating
 } from "../services/rating.services.js";
 import { cleanDeep } from "../utils/helper.utils.js";
+import { Role } from "@prisma/client";
 
 export async function getProjects(req, res, err) {
     const { user } = req;
@@ -36,7 +37,11 @@ export async function getProjects(req, res, err) {
             },
             _count: {
                 select: {
-                    projectAssociations: true
+                    projectAssociations: {
+                        where: {
+                            userRole: Role.DEVELOPER
+                        }
+                    }
                 }
             }
         },
@@ -150,18 +155,23 @@ export async function addProject(req, res, err) {
         ...projectDetails,
         privateAttachments: privateAttachments,
         publicAttachments: publicAttachments,
-        creator: { connect: { id: id } },
-        event: { connect: { id: eventId } },
-        course: { connect: { id: courseId } }
+        creator: { connect: { id: id } }
     };
+
+    if (eventId) {
+        projectDetails = {
+            ...projectDetails,
+            event: { connect: { id: eventId } }
+        };
+    }
+    if (courseId) {
+        projectDetails = {
+            ...projectDetails,
+            event: { connect: { id: courseId } }
+        };
+    }
     const details = cleanDeep(projectDetails);
 
-    // if (eventId) {
-    //     projectDetails = {
-    //         ...projectDetails,
-    //         event: { connect: { id: eventId } }
-    //     };
-    // }
     const [result, error] = await ProjectService.addOne(details);
     if (error) {
         wlogger.error(`error creating project: ${error}`);
