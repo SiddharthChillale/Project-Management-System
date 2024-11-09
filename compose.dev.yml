@@ -25,13 +25,3 @@ services:
     database:
         ports:
             - 5436:5432
-
-    reverse_proxy:
-        restart: on-failure
-        ports:
-            - 80:80
-        develop:
-            watch:
-                - path: .nginx/
-                  target: /etc/nginx/conf.d
-                  action: sync+restart

@@ -9,6 +9,11 @@ services:
             - 80:80
         depends_on:
             - server
+        develop:
+            watch:
+                - path: .nginx/
+                  target: /etc/nginx/conf.d
+                  action: sync+restart
         logging:
             driver: "json-file"
             options:
