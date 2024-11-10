@@ -4,12 +4,23 @@ import morgan from "morgan";
 import helmet from "helmet";
 import routes from "./api/v1/routes/index.routes.js";
 import cookieParser from "cookie-parser";
-import ejs from "ejs";
-import cors from "cors";
 import wlogger from "./logger/winston.logger.js";
+import rateLimit from "express-rate-limit";
 
 const app = express();
+app.set("trust proxy", 1);
 // const __rootdir = path.join(import.meta.dirname, "../");
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+    standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+    legacyHeaders: false // Disable the `X-RateLimit-*` headers.
+    // store: ... , // Redis, Memcached, etc. See below.
+});
+
+// Apply the rate limiting middleware to all requests.
+app.use(limiter);
 
 // inform express how to deal with static files
 app.use(express.static("public"));

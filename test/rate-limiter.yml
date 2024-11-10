@@ -1,0 +1,9 @@
+config:
+  target: "http://pms/api/v1"  # Change to your app's base URL
+  phases:
+    - duration: 60  # 1-minute test
+      arrivalRate: 200  # 200 requests per second
+scenarios:
+  - flow:
+      - get:
+          url: "/projects"  # Change to an endpoint with rate limiting
