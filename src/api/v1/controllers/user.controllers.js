@@ -818,14 +818,16 @@ export async function getCreateUsersFormAdditional(req, res, err) {
 }
 export async function getDemoUsers(req, res, err) {
     let { take } = req.query;
-    take = take ? take : 3;
-
+    // take = take ? take : 3;
+    const [count, _] = await UserService.count();
+    const skip = Math.floor(Math.random() * count);
     const [response, total, error] = await UserService.get({
         select: {
             email: true,
             password: true
         },
-        take: take
+        skip: skip,
+        take: 1
     });
     if (error) {
         wlogger.error(`error: ${error}`);

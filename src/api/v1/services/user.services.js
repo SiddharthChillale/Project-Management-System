@@ -273,6 +273,13 @@ async function dbDeleteProfileById(profile_id) {
     });
     return [response, error];
 }
+
+async function dbCountUsers(clause){
+    const goCount = goStyleExceptionWrapper(prisma.user.count);
+    const [result, error] = await goCount(clause);
+    return [result, error];
+}
+
 /**
  * get one user
  * get a profile of one user
@@ -285,7 +292,8 @@ export const UserService = {
     createForToken: dbCreateUsersForOTToken,
     createMultipleProfiles: dbCreateMultipleProfiles,
     updateTokenById: dbUpdateTokenById,
-    deleteById: dbDeleteUserById
+    deleteById: dbDeleteUserById,
+    count: dbCountUsers
 };
 
 export const ProfileService = {

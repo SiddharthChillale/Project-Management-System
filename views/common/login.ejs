@@ -81,14 +81,17 @@
                 <div class="has-text-weight-light is-italic py-2 px-5">New here? <a
                         href="/api/v1/users/register">Register now</a>
                 </div>
+                <div class="container p-2" style="width: fit-content; margin: auto;">
+                    <sl-button hx-get="/api/v1/users/demo" hx-target="#random-user" class="container">I'm
+                        Feeling
+                        Lucky</sl-button>
+                    <div id="random-user" class="p-2"></div>
+                </div>
             </div>
         </section>
 
         <!-- Demo Users -->
-        <div class="container" style="width: fit-content; margin: auto;">
-            <sl-button hx-get="/api/v1/users/demo?take=10" hx-swap="outerHTML">Try Demo
-                Users</sl-button>
-        </div>
+
 
 
     </main>
