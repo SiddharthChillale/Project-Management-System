@@ -1,15 +1,18 @@
-<div class="level">
-    <% for(let ri=0; ri<ratings.length; ri++){ %>
-        <div class="level-item">
-            <div class="level-left">
-                <%=ratings[ri].name%>
-            </div>
-            <sl-rating label="Rating" class="level-item" precision="0.5" readonly value="<%=ratings[ri].score%>">
-            </sl-rating>
-            <div class="level-item">
-                <%=ratings[ri].score%> / 5
-            </div>
-        </div>
-        <% } %>
+<div class="level-left">
 
+    <div class="is-flex-direction-column">
+        <% for(let ri=0; ri<ratings.length; ri++){ %>
+            <div class="level-item mb-2 is-gap-1">
+                <div class="level-left">
+                    <%=ratings[ri].name%>
+                </div>
+                <sl-rating label="Rating" class="level-item" precision="0.5" readonly value="<%=ratings[ri].score%>">
+                </sl-rating>
+                <div class="level-item">
+                    <%=ratings[ri].score%> / 5
+                </div>
+            </div>
+            <% } %>
+
+    </div>
 </div>

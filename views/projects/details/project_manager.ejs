@@ -27,7 +27,7 @@
             <div class="content">
                 <%= project.description %>
             </div>
-            <div hx-get="/api/v1/projects/<%=project.id %>/score?" hx-trigger="load"></div>
+            <div hx-get="/api/v1/projects/<%=project.id %>/score?" hx-trigger="load" hx-swap="outerHTML"></div>
 
             <br />
             <div class="level-left block">
