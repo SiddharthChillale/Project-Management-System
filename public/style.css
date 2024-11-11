@@ -24,34 +24,56 @@
     top: 0;
     left: 0;
 }
-/* 
-.sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
+
+:root{
+    --bulma-primary: hsla(var(--bulma-primary-h), var(--bulma-primary-s), var(--bulma-primary-l), 1);
+    --bulma-primary-base: hsla(var(--bulma-primary-h), var(--bulma-primary-s), var(--bulma-primary-l), 1);
+    --bulma-primary-rgb: 218, 51, 149;
+    --bulma-primary-h: 325deg;
+    --bulma-primary-s: 69%;
+    --bulma-primary-l: 53%;
+    --bulma-primary-00-l: 1%;
+    --bulma-primary-05-l: 6%;
+    --bulma-primary-10-l: 11%;
+    --bulma-primary-15-l: 16%;
+    --bulma-primary-20-l: 21%;
+
+    --bulma-info: hsla(var(--bulma-info-h), var(--bulma-info-s), var(--bulma-info-l), 1);
+    --bulma-info-base: hsla(var(--bulma-info-h), var(--bulma-info-s), var(--bulma-info-l), 1);
+    --bulma-info-rgb: 234, 184, 136;
+    --bulma-info-h: 29deg;
+    --bulma-info-s: 70%;
+    --bulma-info-l: 73%;
+    --bulma-info-00-l: 1%;
+    --bulma-info-05-l: 6%;
+    --bulma-info-10-l: 11%;
+    --bulma-info-15-l: 16%;
+    --bulma-info-20-l: 21%;
+
+    --bulma-link: hsla(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l), 1);
+    --bulma-link-base: hsla(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l), 1);
+    --bulma-link-rgb: 227, 215, 103;
+    --bulma-link-h: 54deg;
+    --bulma-link-s: 69%;
+    --bulma-link-l: 65%;
+    --bulma-link-00-l: 1%;
+    --bulma-link-05-l: 6%;
+    --bulma-link-10-l: 11%;
+    --bulma-link-15-l: 16%;
+    --bulma-link-20-l: 21%;
+
+    --bulma-text-rgb: 28, 5, 18;
+    --bulma-text-h: 326deg;
+    --bulma-text-s: 70%;
+    --bulma-text-l: 6%
+
+    --bulma-scheme-h: 143deg;
+    --bulma-scheme-s: 72%;
+    --bulma-light-main-l: 7%;
 }
 
-.sidenav a:hover {
-    color: #f1f1f1;
-} */
-/*
-.sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-
-@media screen and (max-height: 450px) {
-    .sidenav {
-            padding-top: 15px;
+@media (max-width: 1023px) {
+    #brand-name {
+        padding-top: 0.25rem;
     }
-
-    .sidenav a {
-            font-size: 18px;
-    }
-} */ 
+  }

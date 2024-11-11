@@ -1,9 +1,9 @@
-<nav class=" m-0 px-2 py-2 has-background-primary-light level is-mobile" style="height: 2.5rem;" role="navigation"
-    aria-label="main navigation">
+<nav class=" m-0 px-5 py-2 level is-mobile" style="height: 2.5rem; box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;"
+    role="navigation" aria-label="main navigation">
     <span class="is-mobile is-flex">
         <sl-icon-button class="is-hidden-desktop" name="hamburger" onclick="toggleNav()"></sl-icon-button>
-        <span class="pt-1"><a class=" has-text-inherit is-size-7 has-text-weight-bold" hx-get="/api/v1/users/dashboard"
-                hx-target="body" hx-trigger="click" href="/">Project Management
+        <span id="brand-name"><a class=" has-text-inherit is-size-7 has-text-weight-bold"
+                hx-get="/api/v1/users/dashboard" hx-target="body" hx-trigger="click" href="/">Project Management
                 System</a></span>
 
         <!-- <sl-icon-button style="font-size: 2rem;" name="hamburger" class="navbar-burger" data-target="navMenu"
