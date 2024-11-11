@@ -25,10 +25,11 @@
                                 <sl-button size="small" class="level-left" hx-get="/api/v1/users/new"
                                     hx-target="#right-side" hx-push-url="true">Add Users</sl-button>
                                 <sl-button-group class="level-right">
-                                    <sl-button size="small" hx-get="/api/v1/users?page=<%=curPage%>&sort=name&order=asc"
-                                        hx-target="body" hx-push-url="true">A-Z</sl-button>
                                     <sl-button size="small"
-                                        hx-get="/api/v1/users?page=<%=curPage%>&sort=name&order=desc" hx-target="body"
+                                        hx-get="/api/v1/users?page=<%=curPage%>&sort=email&order=asc" hx-target="body"
+                                        hx-push-url="true">A-Z</sl-button>
+                                    <sl-button size="small"
+                                        hx-get="/api/v1/users?page=<%=curPage%>&sort=email&order=desc" hx-target="body"
                                         hx-push-url="true">Z-A</sl-button>
                                     <sl-button size="small"
                                         hx-get="/api/v1/users?page=<%=curPage%>&sort=createdAt&order=desc"
@@ -77,9 +78,7 @@
                                                         <sl-dropdown class="">
                                                             <sl-button class="" size="small" slot="trigger" caret>
                                                                 View Profile
-                                                                <!-- <span class="icon is-small">
-                                                                <i class="fas fa-angle-down" aria-hidden="false"></i>
-                                                            </span> -->
+
                                                             </sl-button>
 
 
