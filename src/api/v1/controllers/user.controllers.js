@@ -344,7 +344,7 @@ export async function loginHandler(req, res, err) {
     // if (token) {
     //     let decodedToken;
     //     try {
-    //         decodedToken = jwt.verify(token, "randtoken");
+    //         decodedToken = jwt.verify(token, JWTSecret);
     //         email = decodedToken.email;
     //         password = token;
     //     } catch (err) {
@@ -455,7 +455,7 @@ export async function loginViaToken(req, res, err) {
     const { token } = req.body;
     let decodedToken;
     try {
-        decodedToken = jwt.verify(token, "randtoken");
+        decodedToken = jwt.verify(token, JWTSecret);
     } catch (err) {
         wlogger.error(`OneTimeToken Expired : ${err}`);
         return res.status(400).json(err);
@@ -573,7 +573,7 @@ export async function refreshAccessToken(req, res, err) {
 
     let decoded = undefined;
     try {
-        decoded = jwt.verify(token, "randtoken");
+        decoded = jwt.verify(token, JWTSecret);
     } catch (err) {
         wlogger.error(`error: ${err}`);
         return res

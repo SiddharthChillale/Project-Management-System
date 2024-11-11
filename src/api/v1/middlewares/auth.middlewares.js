@@ -38,7 +38,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
     //check if accessToken is in blacklist table
     let decoded;
     try {
-        decoded = jwt.verify(token, "randtoken");
+        decoded = jwt.verify(token, JWTSecret);
     } catch (error) {
         //Token expired
         wlogger.error(`error: ${error}`);
@@ -61,7 +61,7 @@ export async function verifyTokenAndAttachUser(req, res, next) {
 
             let decoded = undefined;
             try {
-                decoded = jwt.verify(token, "randtoken");
+                decoded = jwt.verify(token, JWTSecret);
             } catch (err) {
                 wlogger.error(`error: ${err}`);
                 return res
@@ -138,7 +138,7 @@ export async function attachUserOrSilentFail(req, res, next) {
     if (token) {
         let decoded;
         try {
-            decoded = jwt.verify(token, "randtoken");
+            decoded = jwt.verify(token, JWTSecret);
         } catch (error) {
             wlogger.error("Error in verifying token", error);
             if (error.name === "TokenExpiredError") {
@@ -162,7 +162,7 @@ export async function attachUserOrSilentFail(req, res, next) {
                 if (token) {
                     let decoded = undefined;
                     try {
-                        decoded = jwt.verify(token, "randtoken");
+                        decoded = jwt.verify(token, JWTSecret);
                     } catch (err) {
                         wlogger.error(`error: ${err}`);
                         // return res
