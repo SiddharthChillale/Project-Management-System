@@ -125,11 +125,8 @@ function convertToReadableDate(ISOdate) {
 }
 
 export async function addProject(req, res, err) {
-    // should be able to add multiple projects since the URI doesn't specify operation on one particular project
-    // TODO: allow insertion of multiple projects.
     let projectDetails = req.body.project;
-    const { id } = req.user;
-    // const { eventId } = req.body;
+    const id = req.user.profiles[0].id;
     const eventId = projectDetails.eventId;
     const courseId = projectDetails.courseId;
     let privateAttachments = { url: [] };
@@ -145,11 +142,10 @@ export async function addProject(req, res, err) {
             }
         }
     }
-    //
+
     delete projectDetails.attachments;
     delete projectDetails.eventId;
     delete projectDetails.courseId;
-    //
 
     projectDetails = {
         ...projectDetails,
