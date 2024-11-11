@@ -6,13 +6,14 @@
 
                 <div class="field">
 
-                    <sl-input small="small" type="text" name="project[name]" label="Project Name"
-                        placeholder="e.g. Project-1" required></sl-input>
-                    <sl-input small="small" type="number" name="project[teamSize]" label="Team Size"
-                        placeholder="e.g. 5" required></sl-input>
-                    <br>
+                    <div class="grid ">
+                        <sl-input class="cell is-col-span-3" size="small" type="text" name="project[name]"
+                            label="Project Name" placeholder="e.g. Project-1" required></sl-input>
+                        <sl-input class="cell" size="small" type="number" name="project[teamSize]" label="Team Size"
+                            placeholder="e.g. 5" required></sl-input>
+                    </div>
 
-                    <fieldset>
+                    <fieldset class="block">
 
                         <legend>Links</legend>
                         <div>
@@ -23,25 +24,25 @@
                         </div>
                     </fieldset>
 
-                    <br>
                     <sl-textarea label="Description" name="project[description]" rows="5" resize="auto"></sl-textarea>
                     <sl-divider></sl-divider>
 
-                    <fieldset>
-                        <legend>Attach to Course</legend>
-                        <div hx-get="/api/v1/departments/courses/search" hx-trigger="intersect once"
-                            hx-swap="outerHTML">
-                            Select Course
-                        </div>
-                    </fieldset>
+                    <div class="grid ">
+                        <fieldset class="cell">
+                            <legend>Attach to Course</legend>
+                            <div hx-get="/api/v1/departments/courses/search" hx-trigger="intersect once"
+                                hx-swap="outerHTML">
+                                Select Course
+                            </div>
+                        </fieldset>
 
-                    <sl-divider></sl-divider>
-                    <fieldset>
-                        <legend>Attach to Event</legend>
-                        <div hx-get="/api/v1/events/search" hx-trigger="intersect once" hx-swap="outerHTML">
-                            Select Event
-                        </div>
-                    </fieldset>
+                        <fieldset class="cell">
+                            <legend>Attach to Event</legend>
+                            <div hx-get="/api/v1/events/search" hx-trigger="intersect once" hx-swap="outerHTML">
+                                Select Event
+                            </div>
+                        </fieldset>
+                    </div>
 
                     <sl-divider></sl-divider>
                     <div class="buttons are-small">
