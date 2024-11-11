@@ -8,7 +8,7 @@
         <title>Projects</title>
 </head>
 
-<body class="has-background-white">
+<body>
     <%- include ('../layouts/navbar.ejs'); %>
 
         <div class="columns m-0 p-2" id="main-box">
@@ -17,7 +17,7 @@
                     <div class="container content">
                         <div class="mr-2">
                             <div id="right-side">
-                                <div class="level is-mobile">
+                                <div class="level is-mobile mb-2">
                                     <% if (user?.profiles?.[0]?.role=="PROJECT_MANAGER" ||
                                         user?.profiles?.[0]?.role=="ADMIN" || user?.profiles?.[0]?.role=="CLIENT" ){ %>
                                         <sl-button size="small" class="level-left" hx-get="/api/v1/projects/new"
@@ -42,24 +42,22 @@
                                 </div>
                                 <div id="projects-body">
 
-                                    <div class="grid mt-2 is-col-min-14 is-gap-1">
+                                    <div class="grid is-col-min-14 is-gap-1">
 
 
                                         <% for( let pi=0; pi < projects.length; pi ++ ) { %>
-                                            <div class="cell p-4 has-background-white box"
-                                                style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;">
+                                            <div class="cell p-4 round-box">
                                                 <span class="flex">
                                                     <div class="cell">
                                                         <a hx-get="<%= `/api/v1/projects/${projects[pi].id}`%>"
                                                             hx-target="#right-side" hx-push-url="true"
-                                                            hx-select="#projects-body"
-                                                            class="title is-5 has-text-primary"
+                                                            hx-select="#projects-body" class="title is-5 "
                                                             href="<%= `/api/v1/projects/${projects[pi].id}`%>">
                                                             <%= projects[pi].name %>
                                                         </a>
                                                     </div>
                                                     <div class="cell mt-2 ">
-                                                        <span class="subtitle has-text-primary-dark is-6">Seats
+                                                        <span class="subtitle is-6">Seats
                                                             available:
                                                             <%= projects[pi].teamSize -
                                                                 projects[pi]._count.projectAssociations %>/

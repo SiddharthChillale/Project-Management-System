@@ -4,11 +4,12 @@
 
 .sidenav {
     height: 100%;
+    width: 50%;
+    font-size: x-large;
     position: fixed;
     z-index: 10;
     top: 0;
     left: 0;
-    background-color: #111;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
@@ -26,55 +27,38 @@
 }
 
 :root{
-    --bulma-primary: hsla(var(--bulma-primary-h), var(--bulma-primary-s), var(--bulma-primary-l), 1);
-    --bulma-primary-base: hsla(var(--bulma-primary-h), var(--bulma-primary-s), var(--bulma-primary-l), 1);
-    --bulma-primary-rgb: 56, 224, 126;
-    --bulma-primary-h: 145deg;
-    --bulma-primary-s: 73%;
-    --bulma-primary-l: 55%;
-    --bulma-primary-00-l: 1%;
-    --bulma-primary-05-l: 6%;
-    --bulma-primary-10-l: 11%;
-    --bulma-primary-15-l: 16%;
-    --bulma-primary-20-l: 21%;
+    
+    --bulma-primary-rgb: 190, 78, 139;
+    --bulma-primary-h: 327deg;
+    --bulma-primary-s: 46%;
+    --bulma-primary-l: 53%;
 
-    --bulma-info: hsla(var(--bulma-info-h), var(--bulma-info-s), var(--bulma-info-l), 1);
-    --bulma-info-base: hsla(var(--bulma-info-h), var(--bulma-info-s), var(--bulma-info-l), 1);
-    --bulma-info-rgb: 201, 137, 236;
-    --bulma-info-h: 279deg;
-    --bulma-info-s: 72%;
-    --bulma-info-l: 73%;
-    --bulma-info-00-l: 1%;
-    --bulma-info-05-l: 6%;
-    --bulma-info-10-l: 11%;
-    --bulma-info-15-l: 16%;
-    --bulma-info-20-l: 21%;
+    --bulma-info-rgb: 200, 217, 152;
+    --bulma-info-h: 76deg;
+    --bulma-info-s: 46%;
+    --bulma-info-l: 72%;
 
-    --bulma-link: hsla(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l), 1);
-    --bulma-link-base: hsla(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l), 1);
-    --bulma-link-rgb: 229, 93, 172;
-    --bulma-link-h: 325deg;
-    --bulma-link-s: 72%;
-    --bulma-link-l: 63%;
-    --bulma-link-00-l: 1%;
-    --bulma-link-05-l: 6%;
-    --bulma-link-10-l: 11%;
-    --bulma-link-15-l: 16%;
-    --bulma-link-20-l: 21%;
+    --bulma-link-rgb: 117, 202, 111;
+    --bulma-link-h: 116deg;
+    --bulma-link-s: 46%;
+    --bulma-link-l: 61%;
 
-    --bulma-text-rgb: 5, 31, 15;
+    --bulma-text-rgb: 26, 10, 19;
     --bulma-text-h: 143deg;
     --bulma-text-s: 72%;
     --bulma-text-l: 7%
 
-    --bulma-scheme-h: 143deg;
-    --bulma-scheme-s: 72%;
-    --bulma-light-main-l: 7%;
+    --bulma-scheme-h: 334deg;
+    --bulma-scheme-s: 47%;
+    --bulma-light-main-l: 97%;
 }
 
 #navigation-bar{
     padding-left: 1.5em;
     padding-right: 1.5em;
+}
+#side-menu{
+    padding-top: 0.25em;
 }
 
 @media (max-width: 1023px) {
@@ -85,5 +69,12 @@
         padding-left: 0.5em;
         padding-right:0.5em;
     }
+    #side-menu{
+        padding-top: 2.5em;
+    }
   }
 
+  .round-box {
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    border-radius: 0.5rem;
+}
