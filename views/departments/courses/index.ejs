@@ -10,9 +10,11 @@
 </head>
 
 <body>
-    <%- include ('../../layouts/navbar.ejs'); %>
-
-        <div class="columns m-0 p-2" id="main-box">
+    <div>
+        <%- include ('../layouts/navbar.ejs'); %>
+    </div>
+    <div id="outer-box">
+        <div class="columns m-0" id="main-box">
             <%- include ('../../layouts/menu.ejs'); %>
                 <section class="is-medium column ">
                     <div class="container content ">
@@ -64,6 +66,7 @@
                 </section>
         </div>
         <%- include('../../layouts/footer.ejs'); %>
+    </div>
 </body>
 
 </html>

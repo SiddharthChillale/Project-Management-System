@@ -69,19 +69,39 @@
 #navigation-bar{
     padding-left: 1.5em;
     padding-right: 1.5em;
+    height: 2.5rem; box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 2;
 }
 
 #main-box{
     min-height: 90vh;
+    
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+#outer-box{
+    position: relative;
+    top: 2.5rem;
 }
 
 @media (max-width: 1023px) {
     #brand-name {
         padding-top: 0.25rem;
     }
+    #profile-picture{
+        padding-top: 0.25rem;
+    }
     #navigation-bar{
+        height: 2.5rem; box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
         padding-left: 0.5em;
         padding-right:0.5em;
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        z-index: 2;
     }
     #side-menu{
         padding-top: 2.5em;
