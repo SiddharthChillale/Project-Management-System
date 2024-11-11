@@ -3,13 +3,13 @@
     <div class="p-3">
         <div class="content">
 
-            <sl-input label="Score Category Name" type="text" name="name" id="name"></sl-input>
+            <sl-input size="small" label="Score Category Name" type="text" name="name" id="name"></sl-input>
             <br>
             <div class="buttons are-small">
-                <button class="button is-primary is-light" hx-post="/api/v1/score-category/" hx-swap="none">
+                <button class="button is-info" hx-post="/api/v1/score-category/" hx-swap="none">
                     Create
                 </button>
-                <button class="button is-danger is-light " hx-get="/api/v1/score-category/" hx-target="body"
+                <button class="button is-primary is-light " hx-get="/api/v1/score-category/" hx-target="body"
                     hx-swap="outerHTML">Cancel</button>
             </div>
 

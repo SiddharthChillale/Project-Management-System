@@ -5,18 +5,20 @@
         <div class="title is-7">Create a new Event</div>
 
         <div class="is-flex is-flex-direction-column">
-            <sl-input label="Event Name" name="name" required></sl-input>
+            <sl-input size="small" label="Event Name" name="name" required></sl-input>
 
             <br>
-            <sl-input type="datetime-local" label="Start Date" placeholder="Date" name="startDate" required></sl-input>
+            <sl-input size="small" type="datetime-local" label="Start Date" placeholder="Date" name="startDate"
+                required></sl-input>
             <br>
-            <sl-input type="datetime-local" label="End Date" placeholder="Date" name="endDate" required></sl-input>
+            <sl-input size="small" type="datetime-local" label="End Date" placeholder="Date" name="endDate"
+                required></sl-input>
         </div>
         <br>
         <div class="buttons are-small">
-            <button class="button is-light is-primary" hx-post="/api/v1/events/" hx-target="body"
+            <button class="button is-info" hx-post="/api/v1/events/" hx-target="body"
                 hx-replace-url="/api/v1/events/">Create</button>
-            <button class="button is-light is-danger" hx-get="/api/v1/events/" hx-target="body">Cancel</button>
+            <button class="button is-light is-primary" hx-get="/api/v1/events/" hx-target="body">Cancel</button>
         </div>
 
     </form>

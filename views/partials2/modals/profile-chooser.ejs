@@ -42,28 +42,39 @@
                                         <sl-button variant="text" hx-trigger="click"
                                             hx-post="/api/v1/users/profile/choose/"
                                             hx-vals='{"profile_Id": "<%= profiles[pi].id %>"}' hx-target="body"
-                                            hx-replace-url="/api/v1/users/dashboard" class="box cell "
-                                            style="max-height: min-content;">
-                                            <div class="is-flex is-flex-direction-column is-align-items-center">
+                                            hx-replace-url="/api/v1/users/dashboard"
+                                            class="box cell has-background-primary-light"
+                                            style="max-height: min-content; ">
+                                            <div class="is-flex is-flex-direction-column is-align-items-center ">
 
 
-                                                <figure class=" image is-64x64 ">
-                                                    <!-- <a hx-trigger="click"
-                                                        hx-post="<%= `/api/v1/users/profile/choose/`  %>"
-                                                        hx-vals='{"profile_Id": "<%= profiles[pi].id %>"}'
+                                                <!-- <figure class=" image is-64x64 ">
+                                                     <a hx-trigger="click"
+                                                        hx-post="<%# `/api/v1/users/profile/choose/`  %>"
+                                                        hx-vals='{"profile_Id": "<%# profiles[pi].id %>"}'
                                                         hx-replace-url="/api/v1/users/dashboard" hx-target="body"
-                                                        href="<%= `/api/v1/users/profile/choose/`  %>"> -->
+                                                        href="<%# `/api/v1/users/profile/choose/`  %>"> 
                                                     <img id="profile_img" class="is-rounded"
-                                                        src="<%= `${profiles[pi].profilePic.url}` %>">
-                                                    <!-- </a> -->
-                                                </figure>
+                                                        src="<%# `${profiles[pi].profilePic.url}` %>">
+                                                </figure> -->
+                                                <% if (profiles[pi].profilePic) { %>
+                                                    <figure class="image is-64x64 ">
 
-                                                <div class=" has-text-weight-light is-italic ">
+                                                        <img id="profile_img" class="is-rounded"
+                                                            src="<%= `${profiles[pi].profilePic.url}` %>"
+                                                            alt="Profile Picture">
 
-                                                    <!-- <sl-button variant="text" > -->
-                                                    <%= profiles[pi].role %>
-                                                        <!-- </sl-button> -->
-                                                </div>
+                                                    </figure>
+                                                    <%} else {%>
+                                                        <sl-avatar label="User avatar"></sl-avatar>
+                                                        <% } %>
+
+                                                            <div class=" is-italic ">
+
+                                                                <!-- <sl-button variant="text" > -->
+                                                                <%= profiles[pi].role %>
+                                                                    <!-- </sl-button> -->
+                                                            </div>
                                             </div>
                                         </sl-button>
                                         <% } %>

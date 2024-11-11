@@ -6,10 +6,10 @@
 
                 <div class="field">
 
-                    <sl-input type="text" name="project[name]" label="Project Name" placeholder="e.g. Project-1"
-                        required></sl-input>
-                    <sl-input type="number" name="project[teamSize]" label="Team Size" placeholder="e.g. 5"
-                        required></sl-input>
+                    <sl-input small="small" type="text" name="project[name]" label="Project Name"
+                        placeholder="e.g. Project-1" required></sl-input>
+                    <sl-input small="small" type="number" name="project[teamSize]" label="Team Size"
+                        placeholder="e.g. 5" required></sl-input>
                     <br>
 
                     <fieldset>
@@ -45,11 +45,12 @@
 
                     <sl-divider></sl-divider>
                     <div class="buttons are-small">
-                        <button class="button is-primary is-light" hx-post="/api/v1/projects/"
-                            hx-replace-url="/api/v1/projects/" hx-target="body">
+                        <button class="button is-info " hx-post="/api/v1/projects/" hx-replace-url="/api/v1/projects/"
+                            hx-target="body">
                             Create
                         </button>
-                        <button class="button is-danger is-light" hx-get="/api/v1/projects/" hx-target="body">
+                        <button class="button is-danger is-primary is-light" hx-get="/api/v1/projects/"
+                            hx-target="body">
                             Cancel
                         </button>
                     </div>

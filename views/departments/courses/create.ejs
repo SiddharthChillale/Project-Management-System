@@ -1,14 +1,16 @@
 <form class="m-1 ml-3" style="max-width: fit-content;" id="create-course-form">
-    <sl-input label="Course Name" placeholder="e.g. Machine Learning" type="text" name="name"
+    <sl-input size="small" label="Course Name" placeholder="e.g. Machine Learning" type="text" name="name"
         id="course-name"></sl-input>
-    <sl-input label="Course Code" placeholder="e.g. 241" type="text" name="code" id="course-code"></sl-input>
-    <sl-input label="Semester" placeholder="e.g. FALL" type="text" name="semester" id="semester"></sl-input>
-    <sl-input label="Year" placeholder="e.g. 2024" type="text" name="year" id="year"></sl-input>
+    <sl-input size="small" label="Course Code" placeholder="e.g. 241" type="text" name="code"
+        id="course-code"></sl-input>
+    <sl-input size="small" label="Semester" placeholder="e.g. FALL" type="text" name="semester"
+        id="semester"></sl-input>
+    <sl-input size="small" label="Year" placeholder="e.g. 2024" type="text" name="year" id="year"></sl-input>
     <br>
     <div class="buttons are-small">
-        <button class="button is-primary is-light" hx-post="/api/v1/departments/<%= deptId%>/courses/">Create
+        <button class="button is-info " hx-post="/api/v1/departments/<%= deptId%>/courses/">Create
             New</button>
-        <button class="button is-danger is-light" hx-swap="delete" hx-trigger="/"
+        <button class="button is-primary is-light" hx-swap="delete" hx-trigger="/"
             hx-target="#create-course-form">Cancel</button>
     </div>
     <sl-divider></sl-divider>

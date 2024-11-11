@@ -51,14 +51,28 @@
     --bulma-scheme-h: 334deg;
     --bulma-scheme-s: 47%;
     --bulma-light-main-l: 97%;
+
+
+    --sl-color-primary-50:  var(--sl-color-lime-50);
+    --sl-color-primary-100: var(--sl-color-lime-100);
+    --sl-color-primary-200: var(--sl-color-lime-200);
+    --sl-color-primary-300: var(--sl-color-lime-300);
+    --sl-color-primary-400: var(--sl-color-lime-400);
+    --sl-color-primary-500: var(--sl-color-lime-500);
+    --sl-color-primary-600: var(--sl-color-lime-600);
+    --sl-color-primary-700: var(--sl-color-lime-700);
+    --sl-color-primary-800: var(--sl-color-lime-800);
+    --sl-color-primary-900: var(--sl-color-lime-900);
+    --sl-color-primary-950: var(--sl-color-lime-950);
 }
 
 #navigation-bar{
     padding-left: 1.5em;
     padding-right: 1.5em;
 }
-#side-menu{
-    padding-top: 0.25em;
+
+#main-box{
+    min-height: 90vh;
 }
 
 @media (max-width: 1023px) {
@@ -78,3 +92,4 @@
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
     border-radius: 0.5rem;
 }
+
