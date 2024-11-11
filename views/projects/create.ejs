@@ -6,28 +6,40 @@
 
                 <div class="field">
 
-                    <div class="grid ">
-                        <sl-input class="cell is-col-span-3" size="small" type="text" name="project[name]"
-                            label="Project Name" placeholder="e.g. Project-1" required></sl-input>
-                        <sl-input class="cell" size="small" type="number" name="project[teamSize]" label="Team Size"
-                            placeholder="e.g. 5" required></sl-input>
+                    <div class="block round-box p-2">
+
+                        <fieldset>
+                            <legend>Project Details</legend>
+                            <div class="grid ">
+                                <sl-input class="cell is-col-span-3" size="small" type="text" name="project[name]"
+                                    label="Project Name" placeholder="e.g. Project-1" required></sl-input>
+                                <sl-input class="cell" size="small" type="number" name="project[teamSize]"
+                                    label="Team Size" placeholder="e.g. 5" required></sl-input>
+                            </div>
+                        </fieldset>
                     </div>
 
-                    <fieldset class="block">
+                    <div class="block round-box p-2">
 
-                        <legend>Links</legend>
-                        <div>
-                            <button hx-get="/api/v1/projects/forms/links/0" hx-target="this" hx-swap="outerHTML"
-                                class="button is-small is-info is-light">
-                                Add Link
-                            </button>
-                        </div>
-                    </fieldset>
+                        <fieldset>
 
-                    <sl-textarea label="Description" name="project[description]" rows="5" resize="auto"></sl-textarea>
-                    <sl-divider></sl-divider>
+                            <legend>Links</legend>
+                            <div>
+                                <button hx-get="/api/v1/projects/forms/links/0" hx-target="this" hx-swap="outerHTML"
+                                    class="button is-small is-info is-light">
+                                    Add Link
+                                </button>
+                            </div>
+                        </fieldset>
+                    </div>
 
-                    <div class="grid ">
+                    <div class="block round-box p-2">
+                        <sl-textarea label="Description" name="project[description]" rows="5"
+                            resize="auto"></sl-textarea>
+                    </div>
+
+
+                    <div class="grid round-box p-2">
                         <fieldset class="cell">
                             <legend>Attach to Course</legend>
                             <div hx-get="/api/v1/departments/courses/search" hx-trigger="intersect once"

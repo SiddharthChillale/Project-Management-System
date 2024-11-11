@@ -1,16 +1,15 @@
-<div class="level">
-    <div class="level-left">
-        <!-- <sl-checkbox class="level-item" value="true"
-                name="project[attachments][url][<%#index%>][private]">Private</sl-checkbox> -->
-        <sl-radio-group class="level-item" label="visibilty" size="small"
+<div class="round-box p-2 block">
+    <div class="level-left is-mobile is-gap-3">
+
+        <sl-radio-group class="level-item" label="Visibilty" size="small"
             name="project[attachments][url][<%=index%>][visibility]" value="public">
             <sl-radio value="public">Public</sl-radio>
             <sl-radio value="private">Private</sl-radio>
         </sl-radio-group>
 
-        <sl-input size="small" class="level-item" label="name" type="text"
+        <sl-input size="small" class="level-item" label="Name" type="text"
             name="project[attachments][url][<%=index%>][name]" placeholder="e.g. website 🌐"></sl-input>
-        <sl-input size="small" class="level-item" label="address" type="url"
+        <sl-input size="small" class="level-item" label="Address" type="url"
             name="project[attachments][url][<%=index%>][address]" placeholder="e.g. https://www.website.com"></sl-input>
     </div>
 </div>
