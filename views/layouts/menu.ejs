@@ -25,27 +25,29 @@
                                                                 hx-target="#right-side" hx-swap="outerHTML"
                                                                 hx-push-url="true" href="/api/v1/users">Users</a>
                                                 </li>
-                                                <!-- </ul> -->
-                                                <!-- <p class="menu-label">Other</p> -->
-                                                <!-- <sl-divider></sl-divider> -->
-                                                <!-- <ul class="menu-list"> -->
-                                                <li><a class="is-radiusless has-background-inherit has-text-dark"
-                                                                hx-get="/api/v1/score-category" hx-select="#right-side"
-                                                                hx-target="#right-side" hx-swap="outerHTML"
-                                                                hx-push-url="true" href="/api/v1/score-category">Score
-                                                                Categories</a></li>
-                                                <li><a class="is-radiusless has-background-inherit has-text-dark"
-                                                                hx-get="/api/v1/departments" hx-select="#right-side"
-                                                                hx-target="#right-side" hx-swap="outerHTML"
-                                                                hx-push-url="true"
-                                                                href="/api/v1/departments">Departments</a></li>
                                                 <li><a class="is-radiusless has-background-inherit has-text-dark"
                                                                 hx-get="/api/v1/events" hx-select="#right-side"
                                                                 hx-target="#right-side" hx-swap="outerHTML"
                                                                 hx-push-url="true" href="/api/v1/events">Events</a></li>
+                                                <% } %>
 
-                                                <% } else { %>
-                                                        <% } %>
+                                                        <% if (user && ( user.profiles[0].role=="ADMIN" ) ){ %>
+                                                                <li><a class="is-radiusless has-background-inherit has-text-dark"
+                                                                                hx-get="/api/v1/score-category"
+                                                                                hx-select="#right-side"
+                                                                                hx-target="#right-side"
+                                                                                hx-swap="outerHTML" hx-push-url="true"
+                                                                                href="/api/v1/score-category">Score
+                                                                                Categories</a></li>
+                                                                <li><a class="is-radiusless has-background-inherit has-text-dark"
+                                                                                hx-get="/api/v1/departments"
+                                                                                hx-select="#right-side"
+                                                                                hx-target="#right-side"
+                                                                                hx-swap="outerHTML" hx-push-url="true"
+                                                                                href="/api/v1/departments">Departments</a>
+                                                                </li>
+
+                                                                <% } %>
                 </ul>
         </div>
 </aside>
