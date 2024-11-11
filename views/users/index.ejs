@@ -47,17 +47,17 @@
                                 </thead>
                                 <% for( let ui=0; ui < users.length; ui ++ ) { %>
                                     <tr>
-                                        <td>
+                                        <td class="is-align-content-center ">
                                             <%= users[ui].id %>
                                         </td>
-                                        <td>
+                                        <td class="is-align-content-center ">
                                             <%= users[ui].email %>
                                         </td>
-                                        <td><sl-button size="small"><sl-icon name="arrow-clockwise"
-                                                    label="Regenerate"></sl-icon></sl-button>
+                                        <td class="is-align-content-center "><sl-button size="small"><sl-icon
+                                                    name="arrow-clockwise" label="Regenerate"></sl-icon></sl-button>
                                         </td>
                                         <% if (users[ui].profiles.length==0) { %>
-                                            <td>
+                                            <td class="is-align-content-center ">
                                                 <div>
                                                     <sl-button class=" " size="small" caret disabled>
                                                         <span title="No Profiles for this user">View Profile</span>
@@ -69,7 +69,7 @@
 
                                             <% } else { %>
 
-                                                <td class="">
+                                                <td class="is-align-content-center ">
                                                     <div>
                                                         <sl-dropdown class="">
                                                             <sl-button class="" size="small" slot="trigger" caret>

@@ -18,12 +18,12 @@
                     <div class="container">
 
                         <div class="mr-2" id="right-side">
-                            <div class="field is-grouped">
-                                <sl-button size="small" hx-get="/api/v1/events/new" hx-target="#right-side"
-                                    hx-push-url="true">Create Event</sl-button>
 
-                            </div>
-                            <table class="table is-narrow is-striped  container">
+                            <sl-button size="small" hx-get="/api/v1/events/new" hx-target="#right-side"
+                                hx-push-url="true">Create Event</sl-button>
+
+
+                            <table class="mt-2 table round-box is-narrow is-striped  container">
 
                                 <thead class="thead ">
                                     <th>Name</th>
@@ -33,7 +33,7 @@
                                 <% for( let evi=0; evi < events.length; evi++ ) { %>
                                     <tr>
 
-                                        <td>
+                                        <td class="is-align-content-center ">
                                             <a hx-get="<%= `/api/v1/events/${events[evi].id}?includeAdditional=true`  %>"
                                                 hx-target="#right-side" hx-push-url="true" hx-swap="outerHTML"
                                                 hx-select="#right-side"
@@ -41,11 +41,11 @@
                                                 <%= events[evi].name %>
                                             </a>
                                         </td>
-                                        <td>
+                                        <td class="is-align-content-center ">
                                             <sl-format-date date="<%=events[evi].startDate%>" month="long" day="numeric"
                                                 year="numeric"></sl-format-date>
                                         </td>
-                                        <td>
+                                        <td class="is-align-content-center ">
                                             <sl-format-date date="<%=events[evi].endDate%>" month="long" day="numeric"
                                                 year="numeric"></sl-format-date>
                                         </td>

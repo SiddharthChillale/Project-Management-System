@@ -24,7 +24,7 @@
                                 hx-swap="outerHTML">Create Department</sl-button>
 
 
-                            <table class="mt-2 table is-narrow is-striped  container">
+                            <table class="mt-2 round-box table is-narrow is-striped  container">
 
                                 <thead class="thead ">
                                     <th>Name</th>
@@ -34,14 +34,14 @@
                                 <% for( let di=0; di < departments.length; di++ ) { %>
                                     <tr>
 
-                                        <td>
+                                        <td class="is-align-content-center ">
                                             <a hx-get="<%= `/api/v1/departments/${departments[di].id}`  %>"
                                                 hx-push-url="true" hx-target="#right-side"
                                                 href="<%= `/api/v1/departments/${departments[di].id}`  %>">
                                                 <%= departments[di].name %>
                                             </a>
                                         </td>
-                                        <td>
+                                        <td class="is-align-content-center ">
                                             <button class="button is-small is-info is-light">
                                                 <a hx-get="<%= `/api/v1/departments/${departments[di].id}/courses/`%>"
                                                     hx-push-url="true" hx-target="#right-side" hx-select="#course-body"

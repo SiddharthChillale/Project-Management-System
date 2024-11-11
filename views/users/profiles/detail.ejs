@@ -15,11 +15,15 @@
                     </figure>
                 </div>
                 <div class="media-content">
-                    <div class="title is-5">
+                    <div class="is-size-5 is-align-content-center">
                         <%= profile.userName %>
                     </div>
-                    <div class="subtitle is-7" id="user-email">
-                        <%= profile.email %> <sl-copy-button from="user-email"></sl-copy-button>
+                    <div class="is-flex is-gap-1">
+                        <span class="is-size-7 is-align-content-center" id="useremail">
+                            <%= profile.email %>
+                        </span>
+                        <sl-copy-button copy-label="Click to copy" success-label="Copied!"
+                            error-label="Whoops, your browser doesn't support this!" from="useremail"></sl-copy-button>
                     </div>
                     <div class="subtitle is-7 is-italic">Role: <%= profile.role %>
                     </div>
@@ -147,3 +151,8 @@
                         <% } %>
 
 </div>
+<script>
+    document.addEventListener('sl-error', function (event) {
+        console.log(event.detail);
+    });
+</script>

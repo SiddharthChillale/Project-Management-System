@@ -25,7 +25,7 @@
                                     Course</button>
 
 
-                                <table class="table is-narrow is-striped  container">
+                                <table class="table round-box is-narrow is-striped  container">
 
                                     <thead class="thead ">
                                         <th>Course Name</th>
@@ -36,18 +36,19 @@
                                     </thead>
                                     <% for( let ci=0; ci < courses.length; ci++ ) { %>
                                         <tr>
-                                            <td><a hx-get="<%= `/api/v1/departments/${departmentId}/courses/${courses[ci].id}`  %>"
+                                            <td class="is-align-content-center "><a
+                                                    hx-get="<%= `/api/v1/departments/${departmentId}/courses/${courses[ci].id}`  %>"
                                                     hx-push-url="true" hx-target="table" hx-swap="outerHTML"
                                                     href="<%= `/api/v1/departments/${departmentId}/courses/${courses[ci].id}`  %>">
                                                     <%= courses[ci].name %>
                                                 </a></td>
-                                            <td>
+                                            <td class="is-align-content-center ">
                                                 <%= courses[ci].code %>
                                             </td>
-                                            <td>
+                                            <td class="is-align-content-center ">
                                                 <%= courses[ci].semester %>
                                             </td>
-                                            <td>
+                                            <td class="is-align-content-center ">
                                                 <%= courses[ci].year %>
                                             </td>
 

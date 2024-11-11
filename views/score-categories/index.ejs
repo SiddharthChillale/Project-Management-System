@@ -22,37 +22,36 @@
                                 hx-swap="outerHTML">
                                 Create category
                             </sl-button>
-                            <div class="p-3 section ">
 
 
-                                <table class="table is-narrow is-striped">
+                            <table class="mt-2 table round-box is-narrow is-striped container">
 
-                                    <thead class="thead ">
-                                        <th class="">Name</th>
-                                        <th class="">Action</th>
-                                    </thead>
-                                    <tbody id="score-categories-table">
-                                        <% for( let ci=0; ci < scoreCats.length; ci++ ) { %>
-                                            <tr>
-                                                <td class="is-size-6">
-                                                    <%= scoreCats[ci].name %>
-                                                </td>
-                                                <td class="buttons are-small">
+                                <thead class="thead ">
+                                    <th class="">Name</th>
+                                    <th class="">Action</th>
+                                </thead>
+                                <tbody id="score-categories-table">
+                                    <% for( let ci=0; ci < scoreCats.length; ci++ ) { %>
+                                        <tr>
+                                            <td class="is-size-6 is-align-content-center">
+                                                <%= scoreCats[ci].name %>
+                                            </td>
+                                            <td class="buttons are-small is-align-content-center">
 
-                                                    <button class="button is-secondary is-light"
-                                                        hx-get="/api/v1/score-category/<%=scoreCats[ci].id%>/edit"
-                                                        hx-target="this" hx-swap="outerHTML">Edit</button>
-                                                    <button hx-delete="/api/v1/score-category/<%= scoreCats[ci].id %>"
-                                                        hx-swap="delete"
-                                                        hx-confirm="Delete category: <%= scoreCats[ci].name %> ?"
-                                                        class="button is-danger is-light">Delete</button>
-                                                </td>
+                                                <button class="button is-secondary is-light"
+                                                    hx-get="/api/v1/score-category/<%=scoreCats[ci].id%>/edit"
+                                                    hx-target="this" hx-swap="outerHTML">Edit</button>
+                                                <button hx-delete="/api/v1/score-category/<%= scoreCats[ci].id %>"
+                                                    hx-swap="delete"
+                                                    hx-confirm="Delete category: <%= scoreCats[ci].name %> ?"
+                                                    class="button is-danger is-light">Delete</button>
+                                            </td>
 
-                                            </tr>
-                                            <% } %>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+
                         </div>
 
 
