@@ -28,10 +28,10 @@
 :root{
     --bulma-primary: hsla(var(--bulma-primary-h), var(--bulma-primary-s), var(--bulma-primary-l), 1);
     --bulma-primary-base: hsla(var(--bulma-primary-h), var(--bulma-primary-s), var(--bulma-primary-l), 1);
-    --bulma-primary-rgb: 218, 51, 149;
-    --bulma-primary-h: 325deg;
-    --bulma-primary-s: 69%;
-    --bulma-primary-l: 53%;
+    --bulma-primary-rgb: 56, 224, 126;
+    --bulma-primary-h: 145deg;
+    --bulma-primary-s: 73%;
+    --bulma-primary-l: 55%;
     --bulma-primary-00-l: 1%;
     --bulma-primary-05-l: 6%;
     --bulma-primary-10-l: 11%;
@@ -40,9 +40,9 @@
 
     --bulma-info: hsla(var(--bulma-info-h), var(--bulma-info-s), var(--bulma-info-l), 1);
     --bulma-info-base: hsla(var(--bulma-info-h), var(--bulma-info-s), var(--bulma-info-l), 1);
-    --bulma-info-rgb: 234, 184, 136;
-    --bulma-info-h: 29deg;
-    --bulma-info-s: 70%;
+    --bulma-info-rgb: 201, 137, 236;
+    --bulma-info-h: 279deg;
+    --bulma-info-s: 72%;
     --bulma-info-l: 73%;
     --bulma-info-00-l: 1%;
     --bulma-info-05-l: 6%;
@@ -52,28 +52,38 @@
 
     --bulma-link: hsla(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l), 1);
     --bulma-link-base: hsla(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l), 1);
-    --bulma-link-rgb: 227, 215, 103;
-    --bulma-link-h: 54deg;
-    --bulma-link-s: 69%;
-    --bulma-link-l: 65%;
+    --bulma-link-rgb: 229, 93, 172;
+    --bulma-link-h: 325deg;
+    --bulma-link-s: 72%;
+    --bulma-link-l: 63%;
     --bulma-link-00-l: 1%;
     --bulma-link-05-l: 6%;
     --bulma-link-10-l: 11%;
     --bulma-link-15-l: 16%;
     --bulma-link-20-l: 21%;
 
-    --bulma-text-rgb: 28, 5, 18;
-    --bulma-text-h: 326deg;
-    --bulma-text-s: 70%;
-    --bulma-text-l: 6%
+    --bulma-text-rgb: 5, 31, 15;
+    --bulma-text-h: 143deg;
+    --bulma-text-s: 72%;
+    --bulma-text-l: 7%
 
     --bulma-scheme-h: 143deg;
     --bulma-scheme-s: 72%;
     --bulma-light-main-l: 7%;
 }
 
+#navigation-bar{
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+
 @media (max-width: 1023px) {
     #brand-name {
         padding-top: 0.25rem;
     }
+    #navigation-bar{
+        padding-left: 0.5em;
+        padding-right:0.5em;
+    }
   }
+
