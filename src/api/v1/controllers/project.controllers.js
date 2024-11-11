@@ -129,6 +129,7 @@ export async function addProject(req, res, err) {
     const id = req.user.profiles[0].id;
     const eventId = projectDetails.eventId;
     const courseId = projectDetails.courseId;
+    wlogger.debug(`eventId: ${eventId}`);
     let privateAttachments = { url: [] };
     let publicAttachments = { url: [] };
     if (projectDetails.attachments) {
@@ -163,7 +164,7 @@ export async function addProject(req, res, err) {
     if (courseId) {
         projectDetails = {
             ...projectDetails,
-            event: { connect: { id: courseId } }
+            course: { connect: { id: courseId } }
         };
     }
     const details = cleanDeep(projectDetails);
