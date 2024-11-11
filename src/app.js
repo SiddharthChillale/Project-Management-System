@@ -20,7 +20,9 @@ const limiter = rateLimit({
 });
 
 // Apply the rate limiting middleware to all requests.
-app.use(limiter);
+if (process.env.NODE_ENV == "production") {
+    app.use(limiter);
+}
 
 // inform express how to deal with static files
 app.use(express.static("public"));
