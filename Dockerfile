@@ -4,17 +4,17 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install 
 
-ENV DATABASE_URL=postgresql://prisma:prisma@database:5432/prisma_dev?schema=public
+# ARG DATABASE_URL=postgresql://prisma:prisma@database:5432/prisma_dev?schema=public
 
 COPY ./src/alt_schema/sandbox.prisma /app/src/alt_schema/sandbox.prisma
 
 COPY . .
 
-RUN npx prisma generate
+# RUN npx prisma generate
 # RUN npx prisma migrate deploy
 # RUN npm run build-fake-db
 
-ENTRYPOINT ["npm"]
-CMD [ "start"]
+ENTRYPOINT ["./entrypoint.sh"]
+
 
 EXPOSE 3000

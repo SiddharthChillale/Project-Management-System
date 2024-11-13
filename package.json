@@ -4,11 +4,11 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env.production src/index.js",
+    "start": "node src/index.js",
     "test": "jest --watchAll --verbose",
     "test-debug": "jest -i -w=1 --verbose",
-    "dev": "nodemon --env-file=.env.dev src/index.js",
-    "debug": "node --env-file=.env.dev src/index.js",
+    "dev": "nodemon src/index.js",
+    "debug": "node src/index.js",
     "build-fake-db": "node test/sandbox/db-builder.sandbox.js"
   },
   "keywords": [],

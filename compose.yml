@@ -1,12 +1,8 @@
 services:
     server:
         container_name: pms_server
-        build:
-            context: .
-            dockerfile: Dockerfile
         depends_on:
             - database
-
         logging:
             driver: "json-file"
             options:
@@ -25,18 +21,8 @@ services:
     database:
         image: postgres:14.3
         container_name: pms_database
-        environment:
-            - POSTGRES_USER=prisma
-            - POSTGRES_PASSWORD=prisma
-            - POSTGRES_DB=prisma_dev
-        secrets:
-            - postgres_secrets
-
         volumes:
             - pgdata:/var/lib/postgresql/data
-secrets:
-    postgres_secrets:
-        file: ./.docker/postgres/.env
 
 volumes:
     pgdata:

@@ -2,16 +2,24 @@ services:
     server:
         image: muchimuchi/project-management-system:latest
         restart: unless-stopped
-        env_file:
-            - .env.production
-        command: ["start"]
+        environment:
+            - PORT=3000
+            - BASE_URL=http://localhost
+            - NODE_ENV=production
+        command: ["--prod"]
         ports:
             - 3002:3000
-
-    database:
-        restart: unless-stopped
+        env_file:
+            - ./.env.production
 
     prisma_studio:
         restart: unless-stopped
         ports:
             - 5557:5555
+        env_file:
+            - ./.env.production
+
+    database:
+        restart: unless-stopped
+        env_file:
+            - ./.env.production
