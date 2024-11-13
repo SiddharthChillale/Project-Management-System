@@ -11,7 +11,8 @@
 <body>
     <div class="hero is-fullheight-with-navbar has-background-white-bis">
         <div class="hero-head">
-            <nav class="navbar has-background-primary-light" role="navigation" aria-label="main navigation">
+            <nav class="navbar has-background-primary-light" role="navigation" id="navigation-bar"
+                aria-label="main navigation">
 
                 <!-- <div class="container"> -->
 
@@ -39,7 +40,7 @@
                 <!-- </div> -->
             </nav>
         </div>
-        <section class="is-flex-direction-column container section">
+        <section class="is-flex-direction-column container section mt-3" id="outer-box">
             <div class="title has-text-centered">
                 Welcome to Project Management System
             </div>
@@ -70,20 +71,12 @@
                 </sl-carousel>
             </div>
 
-            <section class="footer">
-                <p class="content ">
-                    Project Management System is a robust MVC application designed to streamline the assignment and
-                    management of projects within development teams. It enables project managers to efficiently oversee
-                    the relationships between team members and customers who submit projects. The system provides
-                    comprehensive tools for project tracking, resource allocation, and team collaboration, allowing
-                    managers to maintain full control over project progress, deliverables, and customer interactions.
-                </p>
-                <p class="content has-text-weight-light is-italic">
-                    Project Management System is a web application built using HTMX, Express, Ejs, and PostgreSQL
-                </p>
-            </section>
+
         </section>
+
     </div>
+
+    <%- include('../layouts/footer.ejs'); %>
 
 </body>
 <script>
