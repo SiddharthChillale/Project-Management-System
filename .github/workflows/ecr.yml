@@ -16,6 +16,14 @@ on:
         description: Docker build directory (default = '.')
         default: "."
         type: string
+      registry_alias: 
+        description: ECR registry alias or id
+        required: true
+        type: string
+      repository: 
+        description: ECR repository
+        required: true
+        default: 'pms/server'
 
 jobs:
   docker:
@@ -50,9 +58,10 @@ jobs:
         id: build-publish
         env:
           REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
-          REGISTRY_ALIAS: my-ecr-public-registry-alias
-          REPOSITORY: my-ecr-public-repo
+          REGISTRY_ALIAS: ${{ inputs.registry_alias}}
+          REPOSITORY: ${{ inputs.repository}}
           IMAGE_TAG: ${{ inputs.image_tag }}
         run: |
+          echo "$REGISTRY"
           docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
