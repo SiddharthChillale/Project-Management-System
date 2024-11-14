@@ -24,6 +24,13 @@ jobs:
       image_tag: ${{ steps.build-publish.outputs.image_tag }}
       full_image: ${{ steps.build-publish.outputs.full_image }}
     steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
