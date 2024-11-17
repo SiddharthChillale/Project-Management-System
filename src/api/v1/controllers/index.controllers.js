@@ -6,6 +6,7 @@ export async function rootHandler(req, res, err) {
     return res.status(200).render("common/landing.ejs");
 }
 
-export async function sandboxHandler(req, res, err) {
-    return res.status(200).render("partials2/modals/profile-chooser.ejs");
+export async function healthCheck(req, res, err) {
+    wlogger.info("Health check");
+    return res.status(200).json({ status: "ok" });
 }
