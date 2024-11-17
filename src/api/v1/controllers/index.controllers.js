@@ -1,3 +1,5 @@
+import wlogger from "../../../logger/winston.logger.js";
+
 export async function rootHandler(req, res, err) {
     const { user } = req;
     if (user) {
