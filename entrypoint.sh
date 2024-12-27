@@ -13,10 +13,9 @@ echo "Waiting for DB..."
 node waitForDB.js
 
 echo "Starting Server..."
-if [ "$1" == "--dev" ]; then
-    
+if [ "$1" = "--dev" ]; then
     npm run dev
-elif [ "$1" == "--prod" ]; then
+elif [ "$1" = "--prod" ]; then
     npm start
 else
     echo "Usage: $0 --dev | --prod"
