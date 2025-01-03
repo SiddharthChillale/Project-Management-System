@@ -8,9 +8,9 @@
     <tbody>
         <% for( let ui=0; ui < users.length; ui ++ ) { %>
             <tr>
-                <!-- <td>
-                    <sl-copy-button from="user-email-<%#ui%>"></sl-copy-button>
-                </td> -->
+                <td>
+                    <sl-copy-button from="user-email-<%=ui%>"></sl-copy-button>
+                </td>
                 <td>
                     <div id="user-email-<%=ui%>">
                         <%= users[ui].email %>
