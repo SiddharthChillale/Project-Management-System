@@ -51,7 +51,7 @@ async function dbCreateUser(email, password, role = undefined) {
                     email: email,
                     userName: email.split("@")[0],
                     profilePic: {
-                        url: "public/default.png"
+                        url: "https://teamassignnetwork.blob.core.windows.net/team-assign-container/default.png"
                     }
                 }
             }
@@ -274,7 +274,7 @@ async function dbDeleteProfileById(profile_id) {
     return [response, error];
 }
 
-async function dbCountUsers(clause){
+async function dbCountUsers(clause) {
     const goCount = goStyleExceptionWrapper(prisma.user.count);
     const [result, error] = await goCount(clause);
     return [result, error];
