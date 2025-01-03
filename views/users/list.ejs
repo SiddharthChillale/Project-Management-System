@@ -2,18 +2,18 @@
     <caption>Only for Demo Purposes</caption>
     <thead>
         <!-- <td></td> -->
-        <td>Email</td>
-        <td>Password</td>
+        <td class="has-text-centered">Email</td>
+        <td class="has-text-centered">Password</td>
     </thead>
     <tbody>
         <% for( let ui=0; ui < users.length; ui ++ ) { %>
             <tr>
                 <td>
-                    <sl-copy-button from="user-email-<%=ui%>"></sl-copy-button>
-                </td>
-                <td>
-                    <div id="user-email-<%=ui%>">
-                        <%= users[ui].email %>
+                    <div>
+                        <sl-copy-button from="user-email-<%=ui%>[data-email]"></sl-copy-button>
+                        <span id="user-email-<%=ui%>" data-email="<%=users[ui].email%>">
+                            <%= users[ui].email %>
+                        </span>
                     </div>
                 </td>
                 <td>

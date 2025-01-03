@@ -15,6 +15,11 @@
     padding-top: 60px;
 }
 
+span[id^="user-email-"] {
+    display: inline;
+    white-space: nowrap;
+  }
+
 .background-menu{
     position:fixed;
     z-index: 5;
